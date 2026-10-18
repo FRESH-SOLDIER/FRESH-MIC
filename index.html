@@ -38,6 +38,9 @@ label.cap,.cap{font:500 .72rem/1 var(--f-data);letter-spacing:.08em;text-transfo
 .seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .seg button{font:500 .85rem var(--f-data);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+#bar{scroll-margin-top:8px}
+.skip{position:absolute;left:12px;top:-60px;z-index:60;background:var(--accent);color:var(--accent-fg);padding:10px 14px;border-radius:8px;font:600 .9rem var(--f-data);text-decoration:none}
+.skip:focus{top:8px}
 button:focus-visible,a:focus-visible,.chip:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 16px;border-bottom:1px solid var(--line);padding-bottom:10px}
 .head h2{font:800 1.5rem/1.1 var(--f-display);margin:0;text-wrap:balance}
@@ -116,6 +119,7 @@ ul.res.grid .player{margin-inline:12px}
 @media (prefers-reduced-motion:no-preference){.row{animation:in .28s ease both}@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}}
 </style></head><body>
 
+<a class="skip" href="#bar">Skip to search and results</a>
 <main>
   <header>
     <h1>Fresh Mic</h1>
@@ -234,8 +238,11 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     if(undo){const b=document.createElement('button'); b.type='button'; b.textContent='Undo'; b.addEventListener('click',()=>{undo(); t.remove()}); t.appendChild(b)}
     document.body.appendChild(t); toastT=setTimeout(()=>t.remove(),6000);
   }
-  function hideArtist(k){
-    const id=N[k][0]; hid.add(id); saveHid(); refreshAll();
+  function hideArtist(k,btn){
+    const id=N[k][0];
+    const li=btn&&btn.closest('li'), ul=li&&li.parentElement, idx=ul?[...ul.children].indexOf(li):-1, ulid=ul&&ul.id;
+    hid.add(id); saveHid(); refreshAll();
+    if(ulid&&idx>=0){ const rows=[...document.querySelectorAll('#'+ulid+' > li.row')]; const t=rows[Math.min(idx,rows.length-1)]; const hb=t&&t.querySelector('.hide'); if(hb&&document.activeElement!==hb) hb.focus({preventScroll:true}); }
     toast(N[k][1]+' hidden.',()=>{hid.delete(id); saveHid(); refreshAll()});
   }
   function refreshAll(){ if(cur>=0){results=related(cur); render()} renderHome(); renderHidBar() }
@@ -355,7 +362,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
         const i=list.indexOf(a[0]); if(i>=0) list.splice(i,1); else list.push(a[0]);
         saveList(); e.target.setAttribute('aria-pressed',i<0); e.target.textContent=i<0?'Saved':'Save'; renderList();
       });
-      li.querySelector('.hide').addEventListener('click',()=>hideArtist(r.k));
+      li.querySelector('.hide').addEventListener('click',e=>hideArtist(r.k,e.currentTarget));
       res.appendChild(li);
     });
     $('more').hidden=results.length<=shown;
@@ -500,7 +507,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     sv.addEventListener('click',()=>{const i=list.indexOf(a[0]); if(i>=0) list.splice(i,1); else list.push(a[0]); saveList(); sv.setAttribute('aria-pressed',i<0); sv.textContent=i<0?'Saved':'Save'; renderList();});
     links.appendChild(sv);
     const hb=document.createElement('button'); hb.type='button'; hb.className='hide'; hb.textContent='Not for me'; hb.setAttribute('aria-label','Hide '+a[1]+' from my results');
-    hb.addEventListener('click',()=>hideArtist(item.k)); links.appendChild(hb);
+    hb.addEventListener('click',e=>hideArtist(item.k,e.currentTarget)); links.appendChild(hb);
     return li;
   }
 
