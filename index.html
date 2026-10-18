@@ -148,6 +148,7 @@ ul.res.grid .player{margin-inline:12px}
     <div>
       <div class="cap" id="genlab">Genre</div>
       <div class="chips scroll" id="genres" role="group" aria-labelledby="genlab"></div>
+      <div class="hidbar" id="mutebar" hidden><button type="button" id="mutebtn"></button><span id="mutenote"></span></div>
     </div>
     <div class="jump" id="jump"><span class="cap">Jump to</span></div>
     <section class="sec" id="secNew" aria-live="polite">
@@ -432,13 +433,26 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     return m;
   }
   let genre=0, newShown=24, gemSeed=Math.random();
+  let muted=new Set(); try{muted=new Set((JSON.parse(localStorage.getItem('freshmic:mute')||'[]')).map(Number))}catch(e){}
+  const saveMuted=()=>{try{localStorage.setItem('freshmic:mute',JSON.stringify([...muted]))}catch(e){}};
+  function renderMute(){
+    const bar=$('mutebar'), btn=$('mutebtn'), note=$('mutenote');
+    if(genre){ bar.hidden=false; const m=muted.has(genre); btn.textContent=m?'Show '+gname(genre)+' in All genres again':'Hide '+gname(genre)+' from All genres'; note.textContent=''; }
+    else if(muted.size){ bar.hidden=false; btn.textContent='Show hidden genres again'; note.textContent='Hidden here: '+[...muted].map(gname).join(', '); }
+    else bar.hidden=true;
+  }
+  $('mutebtn').addEventListener('click',()=>{
+    if(genre){ if(muted.has(genre)) muted.delete(genre); else muted.add(genre); }
+    else muted.clear();
+    saveMuted(); renderMute(); renderHome();
+  });
   const inLimit=f=>!limit||f<=limit;
 
   function homeData(){
     const fresh=[], soon=[];
     R.forEach(r=>{
       const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50||hid.has(N[k][0])) return;
-      if(genre&&r[1]!==genre) return;
+      if(genre?r[1]!==genre:muted.has(r[1])) return;
       const past=r[4].find(x=>x[2]<=TODAY), fut=r[4].filter(x=>x[2]>TODAY);
       if(past) fresh.push({k,f,rel:past,g:r[1]});
       fut.forEach(x=>soon.push({k,f,rel:x,g:r[1]}));
@@ -493,7 +507,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     soon.slice(0,12).forEach(x=>sl.appendChild(card(x)));
     // hidden gems: small artists with music out in the last year, in a stable shuffled order per Shuffle click
     const gems=[]; const yr=cutoff(365);
-    R.forEach(r=>{const k=r[0], f=N[k][2]; if(f<300||f>3000||!inLimit(f)||hid.has(N[k][0])) return; if(r[2]<yr||r[3]<2) return; if(genre&&r[1]!==genre) return; gems.push({k,f,g:r[1],last:r[2]})});
+    R.forEach(r=>{const k=r[0], f=N[k][2]; if(f<300||f>3000||!inLimit(f)||hid.has(N[k][0])) return; if(r[2]<yr||r[3]<2) return; if(genre?r[1]!==genre:muted.has(r[1])) return; gems.push({k,f,g:r[1],last:r[2]})});
     let x=gemSeed*2147483647|0; const rnd=()=>{x=(x*1103515245+12345)&0x7fffffff;return x/0x7fffffff};
     for(let i=gems.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[gems[i],gems[j]]=[gems[j],gems[i]]}
     const gl=$('gems'); gl.textContent='';
@@ -507,9 +521,10 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const entries=[...cnt.entries()].filter(([g,c])=>GN[g]&&c>=8).sort((a,b)=>b[1]-a[1]);
     const box=$('genres');
     const mkc=(id,label,c)=>{const b=document.createElement('button'); b.type='button'; b.className='chip'; b.setAttribute('aria-pressed',id===genre); b.textContent=label; if(c!=null){const sm=document.createElement('small'); sm.textContent=c; b.appendChild(sm)}
-      b.addEventListener('click',()=>{genre=id; newShown=24; [...box.children].forEach(y=>y.setAttribute('aria-pressed',y===b)); renderHome()}); box.appendChild(b)};
+      b.addEventListener('click',()=>{genre=id; newShown=24; [...box.children].forEach(y=>y.setAttribute('aria-pressed',y===b)); renderMute(); renderHome()}); box.appendChild(b)};
     mkc(0,'All genres');
     entries.forEach(([g,c])=>mkc(g,gname(g),c));
+    renderMute();
   })();
   $('newmore').addEventListener('click',()=>{newShown+=24;renderHome()});
   $('shuf').addEventListener('click',()=>{gemSeed=Math.random();renderHome()});
