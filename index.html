@@ -57,6 +57,12 @@ ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .links a{color:var(--accent);text-decoration:none;font-weight:500}
 .links a:hover{text-decoration:underline}
 .save{margin-left:auto;font:500 .82rem var(--f-data);color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+.hide{font:500 .82rem var(--f-data);color:var(--muted);background:transparent;border:1px solid transparent;border-radius:8px;padding:5px 8px;cursor:pointer}
+.hide:hover,.hide:focus-visible{color:var(--fg);border-color:var(--line)}
+.hidbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0 0;font:500 .86rem var(--f-data);color:var(--muted)}
+.hidbar button{font:inherit;color:var(--accent);background:transparent;border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 14px;border-radius:10px;font:500 .88rem var(--f-data);z-index:50;display:flex;gap:12px;align-items:center;max-width:calc(100vw - 32px)}
+.toast button{font:inherit;font-weight:700;color:inherit;background:transparent;border:0;text-decoration:underline;cursor:pointer;padding:0}
 .save[aria-pressed="true"]{background:var(--tiny);color:#14182B;border-color:var(--tiny)}
 .axis{display:flex;justify-content:space-between;font:400 .68rem var(--f-data);color:var(--muted);padding-top:6px}
 .empty{padding:28px 0;color:var(--muted)}
@@ -176,6 +182,8 @@ ul.res.grid .player{margin-inline:12px}
     <button class="more" id="more" hidden>Show more</button>
   </div>
 
+  <div class="hidbar" id="hidbar" hidden><span id="hidn"></span><button type="button" id="hidclear">Show hidden artists again</button></div>
+
   <details class="list" id="listbox">
     <summary id="listsum">Your shortlist</summary>
     <ol id="listol"></ol>
@@ -210,6 +218,25 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   let limit=100000, cur=-1, shown=24, results=[];
   let list=[]; try{list=JSON.parse(localStorage.getItem('freshmic:list')||localStorage.getItem('undertow:list')||'[]')}catch(e){}
   const saveList=()=>{try{localStorage.setItem('freshmic:list',JSON.stringify(list))}catch(e){}};
+  let hid=new Set(); try{hid=new Set(JSON.parse(localStorage.getItem('freshmic:hide')||'[]'))}catch(e){}
+  const saveHid=()=>{try{localStorage.setItem('freshmic:hide',JSON.stringify([...hid]))}catch(e){}};
+  let toastT=null;
+  function toast(msg,undo){
+    const old=document.getElementById('toast'); if(old) old.remove(); clearTimeout(toastT);
+    const t=document.createElement('div'); t.id='toast'; t.className='toast'; t.setAttribute('role','status');
+    const sp=document.createElement('span'); sp.textContent=msg; t.appendChild(sp);
+    if(undo){const b=document.createElement('button'); b.type='button'; b.textContent='Undo'; b.addEventListener('click',()=>{undo(); t.remove()}); t.appendChild(b)}
+    document.body.appendChild(t); toastT=setTimeout(()=>t.remove(),6000);
+  }
+  function hideArtist(k){
+    const id=N[k][0]; hid.add(id); saveHid(); refreshAll();
+    toast(N[k][1]+' hidden.',()=>{hid.delete(id); saveHid(); refreshAll()});
+  }
+  function refreshAll(){ if(cur>=0){results=related(cur); render()} renderHome(); renderHidBar() }
+  function renderHidBar(){
+    const b=$('hidbar'); b.hidden=!hid.size; if(!hid.size) return;
+    $('hidn').textContent=hid.size+' artist'+(hid.size===1?'':'s')+' hidden';
+  }
   $('snap').textContent='Snapshot: '+G.date+' · '+N.length.toLocaleString()+' artists';
 
   const LMIN=2, LMAX=7; // log10 fans range for the strip
@@ -229,6 +256,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     s.forEach((sc,k)=>{
       const f=N[k][2]; if(f==null||f<50) return;
       if(limit && f>limit) return;
+      if(hid.has(N[k][0])) return;
       out.push({k,sc,f,direct:direct.has(k),via:(via.get(k)||[]).sort((x,y)=>y[0]-x[0]).slice(0,2).map(x=>N[x[1]][1])});
     });
     out.sort((a,b)=>(b.sc-a.sc)||(a.f-b.f));
@@ -305,7 +333,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
         +'<a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+enc(a[1]+' music')+'">YouTube</a>'
         +'<a target="_blank" rel="noopener" href="https://bandcamp.com/search?q='+enc(a[1])+'">Bandcamp</a>'
         +'<a target="_blank" rel="noopener" href="https://open.spotify.com/search/'+enc(a[1])+'">Spotify</a>'
-        +'<button class="save" type="button" aria-pressed="'+saved+'">'+(saved?'Saved':'Save')+'</button></div>';
+        +'<button class="save" type="button" aria-pressed="'+saved+'">'+(saved?'Saved':'Save')+'</button>'
+        +'<button class="hide" type="button" aria-label="Hide '+a[1].replace(/[&<>"]/g,'')+' from my results">Not for me</button></div>';
       li.insertBefore(pic(r.k),li.firstChild);
       li.querySelector('.name').textContent=a[1];
       const rr=RI.get(r.k); previewBtn(li,a,(rr&&rr[4].length&&rr[4][0][2]<=TODAY)?rr[4][0][0]:null); if(rr&&rr[4].length&&rr[4][0][2]<=TODAY&&rr[4][0][2]>=cutoff(60)){const bd=document.createElement('span');bd.className='badge';bd.textContent='New '+rr[4][0][3];li.querySelector('.name').appendChild(bd)}
@@ -314,6 +343,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
         const i=list.indexOf(a[0]); if(i>=0) list.splice(i,1); else list.push(a[0]);
         saveList(); e.target.setAttribute('aria-pressed',i<0); e.target.textContent=i<0?'Saved':'Save'; renderList();
       });
+      li.querySelector('.hide').addEventListener('click',()=>hideArtist(r.k));
       res.appendChild(li);
     });
     $('more').hidden=results.length<=shown;
@@ -327,6 +357,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     $('copy').hidden=!list.length;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
   }
+
+  $('hidclear').addEventListener('click',()=>{hid.clear(); saveHid(); refreshAll(); toast('All artists are visible again.')});
+  renderHidBar();
 
   function pick(k,stay){ if(!stay) setTab('find'); cur=k; shown=24; $('q').value=N[k][1]; hideSug(); results=related(k); render(); }
 
@@ -388,7 +421,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   function homeData(){
     const fresh=[], soon=[];
     R.forEach(r=>{
-      const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50) return;
+      const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50||hid.has(N[k][0])) return;
       if(genre&&r[1]!==genre) return;
       const past=r[4].find(x=>x[2]<=TODAY), fut=r[4].filter(x=>x[2]>TODAY);
       if(past) fresh.push({k,f,rel:past,g:r[1]});
@@ -426,6 +459,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const sv=document.createElement('button'); sv.type='button'; sv.className='save'; sv.setAttribute('aria-pressed',saved); sv.textContent=saved?'Saved':'Save';
     sv.addEventListener('click',()=>{const i=list.indexOf(a[0]); if(i>=0) list.splice(i,1); else list.push(a[0]); saveList(); sv.setAttribute('aria-pressed',i<0); sv.textContent=i<0?'Saved':'Save'; renderList();});
     links.appendChild(sv);
+    const hb=document.createElement('button'); hb.type='button'; hb.className='hide'; hb.textContent='Not for me'; hb.setAttribute('aria-label','Hide '+a[1]+' from my results');
+    hb.addEventListener('click',()=>hideArtist(item.k)); links.appendChild(hb);
     return li;
   }
 
@@ -442,7 +477,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     soon.slice(0,12).forEach(x=>sl.appendChild(card(x)));
     // hidden gems: small artists with music out in the last year, in a stable shuffled order per Shuffle click
     const gems=[]; const yr=cutoff(365);
-    R.forEach(r=>{const k=r[0], f=N[k][2]; if(f<300||f>3000||!inLimit(f)) return; if(r[2]<yr||r[3]<2) return; if(genre&&r[1]!==genre) return; gems.push({k,f,g:r[1],last:r[2]})});
+    R.forEach(r=>{const k=r[0], f=N[k][2]; if(f<300||f>3000||!inLimit(f)||hid.has(N[k][0])) return; if(r[2]<yr||r[3]<2) return; if(genre&&r[1]!==genre) return; gems.push({k,f,g:r[1],last:r[2]})});
     let x=gemSeed*2147483647|0; const rnd=()=>{x=(x*1103515245+12345)&0x7fffffff;return x/0x7fffffff};
     for(let i=gems.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[gems[i],gems[j]]=[gems[j],gems[i]]}
     const gl=$('gems'); gl.textContent='';
