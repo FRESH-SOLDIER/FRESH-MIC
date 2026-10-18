@@ -199,6 +199,7 @@ ul.res.grid .player{margin-inline:12px}
     <summary id="listsum">Your shortlist</summary>
     <ol id="listol"></ol>
     <button class="copy" id="copy" type="button">Copy list</button>
+    <button class="copy" id="copylink" type="button">Copy shortlist link</button>
     <span class="cap" id="copied" style="margin-left:10px"></span>
   </details>
 
@@ -372,9 +373,14 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   function renderList(){
     const ol=$('listol'); ol.textContent='';
     const idx=new Map(N.map((a,i)=>[a[0],i]));
-    list.forEach(id=>{const k=idx.get(id); if(k==null) return; const li=document.createElement('li'); li.textContent=N[k][1]+' ('+fmt(N[k][2]||0)+' fans)'; ol.appendChild(li)});
+    list.forEach(id=>{const k=idx.get(id); if(k==null) return; const li=document.createElement('li');
+      const a=document.createElement('a'); a.href='https://www.deezer.com/artist/'+id; a.target='_blank'; a.rel='noopener'; a.textContent=N[k][1]; li.appendChild(a);
+      li.appendChild(document.createTextNode(' ('+fmt(N[k][2]||0)+' fans) '));
+      const x=document.createElement('button'); x.type='button'; x.className='hide'; x.textContent='Remove'; x.setAttribute('aria-label','Remove '+N[k][1]+' from shortlist');
+      x.addEventListener('click',()=>{const i=list.indexOf(id); if(i>=0) list.splice(i,1); saveList(); refreshAll(); renderList(); toast(N[k][1]+' removed.',()=>{list.splice(Math.min(i,list.length),0,id); saveList(); refreshAll(); renderList()})});
+      li.appendChild(x); ol.appendChild(li)});
     $('listsum').textContent='Your shortlist ('+list.length+')';
-    $('copy').hidden=!list.length;
+    $('copy').hidden=!list.length; $('copylink').hidden=!list.length;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
   }
 
@@ -600,6 +606,19 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   if(ui.tab==='find') setTab('find');
   { const m=/^#like=(\d+)$/.exec(location.hash); if(m){ const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&(E[k]||REV[k].length)) pick(k,false,true); } }
 
+  $('copylink').addEventListener('click',()=>{
+    const u=location.href.split('#')[0]+'#list='+list.join(',');
+    const done=m=>{$('copied').textContent=m; setTimeout(()=>$('copied').textContent='',3000)};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(u).then(()=>done('Link copied. Open it on any device to load this shortlist.'),()=>done('Copy failed'))}
+    else done('Copy failed');
+  });
+  { const m=/^#list=([\d,]+)$/.exec(location.hash);
+    if(m){ const idx=new Map(N.map((a,i)=>[a[0],i]));
+      const ids=m[1].split(',').map(Number).filter(id=>idx.has(id)).slice(0,200); const before=list.slice();
+      ids.forEach(id=>{ if(!list.includes(id)) list.push(id) });
+      if(list.length!==before.length){ saveList(); renderList(); refreshAll(); $('listbox').open=true;
+        toast('Added '+(list.length-before.length)+' artists from a shared shortlist.',()=>{list=before; saveList(); renderList(); refreshAll()}); }
+      try{history.replaceState(null,'',location.pathname+location.search)}catch(e){} } }
   $('copy').addEventListener('click',()=>{
     const idx=new Map(N.map((a,i)=>[a[0],i]));
     const txt=list.map(id=>{const k=idx.get(id);return k==null?'':N[k][1]}).filter(Boolean).join('\n');
