@@ -175,7 +175,7 @@ ul.res.grid .player{margin-inline:12px}
       <div class="chips" id="chips"><span class="cap">Try</span></div>
     </section>
     <section aria-live="polite">
-      <div class="head"><h2 id="title"></h2><span class="meta" id="meta"></span></div>
+      <div class="head"><h2 id="title"></h2><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button></div>
       <ul class="res" id="res"></ul>
       <div class="axis" id="axis" aria-hidden="true"><span>100 fans</span><span>10K</span><span>1M</span><span>10M</span></div>
     </section>
@@ -361,7 +361,17 @@ const G = /*DATA*/;
   $('hidclear').addEventListener('click',()=>{hid.clear(); saveHid(); refreshAll(); toast('All artists are visible again.')});
   renderHidBar();
 
-  function pick(k,stay){ if(!stay) setTab('find'); cur=k; shown=24; $('q').value=N[k][1]; hideSug(); results=related(k); render(); }
+  function pick(k,stay,nohash){ if(!stay) setTab('find'); cur=k; shown=24; $('q').value=N[k][1]; hideSug(); results=related(k); render();
+    $('sharelink').hidden=false;
+    if(!nohash){ try{history.replaceState(null,'','#like='+N[k][0])}catch(e){} }
+  }
+  $('sharelink').addEventListener('click',()=>{
+    const u=location.href;
+    const done=()=>toast('Link copied. Anyone who opens it sees these results.');
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(done,()=>toast('Copy this link from the address bar.'));
+    else toast('Copy this link from the address bar.');
+  });
+
 
   // limit buttons
   LIMS.forEach(([v,l])=>{
@@ -530,9 +540,10 @@ const G = /*DATA*/;
   const start=present.length?present[0]:N.findIndex((a,i)=>E[i]);
   renderList();
   renderHome();
-  if(start>=0) pick(start,true);
+  if(start>=0) pick(start,true,true);
   $('q').value='';
   if(ui.tab==='find') setTab('find');
+  { const m=/^#like=(\d+)$/.exec(location.hash); if(m){ const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&(E[k]||REV[k].length)) pick(k,false,true); } }
 
   $('copy').addEventListener('click',()=>{
     const idx=new Map(N.map((a,i)=>[a[0],i]));

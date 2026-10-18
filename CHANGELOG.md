@@ -3,3 +3,4 @@
 - 2026-10-18: Served as a full HTML document (standards mode, charset, mobile viewport) plus SEO: description, canonical, Open Graph, JSON-LD, sitemap.xml, noscript text. Research: Google indexes JS-rendered pages but needs these tags and a sitemap to understand them.
 - 2026-10-18: Added a social share preview image (og.png) so links shared in chats and social posts show a picture. Research: pages with a 1200x630 image get larger, more clickable previews.
 - 2026-10-18: Added a "Not for me" button on every artist (saved in the browser, with Undo and a "show hidden artists again" link). Research: music-discovery users complain about repeats and things they already know, and ask to block or dismiss items.
+- 2026-10-18: Find-similar results now have a shareable link (#like=ID) and a "Copy link to these results" button; opening a link shows those results. Research: Bandcamp pages feel like disconnected islands, while Music-Map is praised for simple, passable results.
