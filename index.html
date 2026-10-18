@@ -119,6 +119,7 @@ ul.res.grid .player{margin-inline:12px}
 @media (prefers-reduced-motion:no-preference){.row{animation:in .28s ease both}@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}}
 </style></head><body>
 
+<script>try{var t=(JSON.parse(localStorage.getItem("freshmic:ui")||"{}")).theme;if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <a class="skip" href="#bar">Skip to search and results</a>
 <main>
   <header>
@@ -145,6 +146,10 @@ ul.res.grid .player{margin-inline:12px}
     <div>
       <div class="cap" id="vlab">View</div>
       <div class="seg" id="vseg" role="group" aria-labelledby="vlab"></div>
+    </div>
+    <div>
+      <div class="cap" id="tlab">Theme</div>
+      <div class="seg" id="tseg" role="group" aria-labelledby="tlab"></div>
     </div>
     <div id="autowrap" hidden>
       <div class="cap" id="alab">Previews</div>
@@ -567,6 +572,12 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
 
   if(G.embed){ const ab=$('autobtn'); $('autowrap').hidden=false; ab.setAttribute('aria-pressed',auto);
     ab.addEventListener('click',()=>{auto=!auto; ui.auto=auto; saveUi(); ab.setAttribute('aria-pressed',auto); toast(auto?'Autoplay on: the next artist\u2019s preview starts when one ends.':'Autoplay off.')}); }
+
+  const THEMES=[['auto','Auto'],['light','Light'],['dark','Dark']];
+  function applyTheme(t){ const r=document.documentElement; if(t==='light'||t==='dark') r.setAttribute('data-theme',t); else r.removeAttribute('data-theme'); [...$('tseg').children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===t)); }
+  THEMES.forEach(([v,l])=>{const b=document.createElement('button'); b.type='button'; b.textContent=l; b.dataset.v=v;
+    b.addEventListener('click',()=>{ui.theme=v; saveUi(); applyTheme(v)}); $('tseg').appendChild(b)});
+  applyTheme(ui.theme==='light'||ui.theme==='dark'?ui.theme:'auto');
 
   // tabs
   function setTab(t){
