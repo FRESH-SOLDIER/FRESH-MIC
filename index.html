@@ -548,7 +548,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
         const i=list.indexOf(a[0]); if(i>=0) list.splice(i,1); else list.push(a[0]);
         saveList(); e.target.setAttribute('aria-pressed',i<0); e.target.textContent=i<0?'Saved':'Save'; renderList();
       });
-      li.querySelector('.sim').addEventListener('click',()=>{pick(r.k); window.scrollTo(0,0)});
+      li.querySelector('.sim').addEventListener('click',()=>{hop(r.k)});
       li.querySelector('.hide').addEventListener('click',e=>hideArtist(r.k,e.currentTarget));
       res.appendChild(li);
     });
@@ -585,6 +585,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     c.addEventListener('click',()=>{recent=[]; saveRecent(); renderRecent()}); box.appendChild(c);
   }
   const BASE_TITLE=document.title;
+  function hop(k){ try{ if(cur>=0) history.pushState(null,'','#like='+N[cur][0]); }catch(e){} pick(k); window.scrollTo(0,0); }
+  window.addEventListener('popstate',()=>{ const m=/^#like=(\d+)$/.exec(location.hash); if(!m) return; const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&k!==cur&&(E[k]||REV[k].length)){ pick(k,false,true); window.scrollTo(0,0); } });
   function pick(k,stay,nohash){ if(!stay) setTab('find'); cur=k;
     if(!nohash){ recent=[N[k][0]].concat(recent.filter(x=>x!==N[k][0])).slice(0,8); saveRecent(); renderRecent(); } shown=24; $('q').value=N[k][1]; qsync(); hideSug(); results=related(k); render();
     $('sharelink').hidden=false;
@@ -721,7 +723,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     mk('YouTube','https://www.youtube.com/results?search_query='+enc(a[1]+(item.rel?' '+item.rel[1]:' music')));
     mk('Bandcamp','https://bandcamp.com/search?q='+enc(a[1]));
     const sim=document.createElement('button'); sim.type='button'; sim.className='sim'; sim.textContent='Find similar';
-    sim.addEventListener('click',()=>{pick(item.k); window.scrollTo(0,0)});
+    sim.addEventListener('click',()=>{hop(item.k)});
     links.appendChild(sim);
     const sv=document.createElement('button'); sv.type='button'; sv.className='save'; sv.setAttribute('aria-pressed',saved); sv.textContent=saved?'Saved':'Save';
     sv.addEventListener('click',()=>{const i=list.indexOf(a[0]); if(i>=0) list.splice(i,1); else list.push(a[0]); saveList(); sv.setAttribute('aria-pressed',i<0); sv.textContent=i<0?'Saved':'Save'; renderList();});
