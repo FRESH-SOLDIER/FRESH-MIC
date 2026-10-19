@@ -80,6 +80,7 @@ details.list ol{margin:10px 0;padding-left:1.2em}
 .bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:4px 16px;border-bottom:2px solid var(--line);padding-top:6px}
 body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:19}
 .tabs{display:flex;gap:6px}
+#surp{margin-top:14px;font-size:.95rem;padding:10px 16px}
 .bsearch{position:relative;flex:1 1 200px;max-width:300px;margin-bottom:8px}
 #gq{width:100%;font:500 .95rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 14px}
 .jump{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
@@ -125,6 +126,7 @@ ul.res.grid .player{margin-inline:12px}
   <header>
     <h1>Fresh Mic</h1>
     <p class="lede">New and upcoming artists you probably haven't heard of, plus a way to find more like the ones you love. Everything here has far fewer listeners than the big names.</p>
+    <button type="button" class="shuf" id="surp">Surprise me: open a random artist</button>
   </header>
 
   <div class="bar" id="bar">
@@ -589,6 +591,14 @@ const G = /*DATA*/;
     const b=document.createElement('button'); b.type='button'; b.textContent=l; b.dataset.v=v; b.setAttribute('aria-pressed',v===rtype);
     b.addEventListener('click',()=>{rtype=v; ui.rtype=v; saveUi(); [...$('rtseg').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); newShown=24; renderHome()});
     $('rtseg').appendChild(b);
+  });
+
+  let lastSurp=-1;
+  $('surp').addEventListener('click',()=>{
+    const pool=[]; R.forEach(r=>{const k=r[0], f=N[k][2]; if(f==null||f<300||!inLimit(f)||hid.has(N[k][0])||muted.has(r[1])||k===lastSurp) return; if(!(E[k]||REV[k].length)) return; pool.push(k)});
+    if(!pool.length){ toast('Nothing to pick at this size. Raise the fan limit.'); return }
+    const k=pool[Math.floor(Math.random()*pool.length)]; lastSurp=k;
+    pick(k); window.scrollTo(0,0); toast('Surprise: '+N[k][1]+' ('+fmt(N[k][2])+' fans). Showing artists like them.');
   });
 
   // tabs
