@@ -163,6 +163,10 @@ ul.res.grid .player{margin-inline:12px}
       <div class="chips scroll" id="genres" role="group" aria-labelledby="genlab"></div>
       <div class="hidbar" id="mutebar" hidden><button type="button" id="mutebtn"></button><span id="mutenote"></span></div>
     </div>
+    <div>
+      <div class="cap" id="rtlab">Release type</div>
+      <div class="seg" id="rtseg" role="group" aria-labelledby="rtlab"></div>
+    </div>
     <div class="jump" id="jump"><span class="cap">Jump to</span></div>
     <section class="sec" id="secNew" aria-live="polite">
       <div class="head"><h2>New releases</h2><span class="meta" id="newmeta"></span></div>
@@ -474,6 +478,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     return m;
   }
   let genre=0, newShown=24, gemSeed=Math.random();
+  let rtype=(['album','ep','single'].includes(ui.rtype)?ui.rtype:'');
   let muted=new Set(); try{muted=new Set((JSON.parse(localStorage.getItem('freshmic:mute')||'[]')).map(Number))}catch(e){}
   const saveMuted=()=>{try{localStorage.setItem('freshmic:mute',JSON.stringify([...muted]))}catch(e){}};
   function renderMute(){
@@ -494,7 +499,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     R.forEach(r=>{
       const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50||hid.has(N[k][0])) return;
       if(genre?r[1]!==genre:muted.has(r[1])) return;
-      const past=r[4].find(x=>x[2]<=TODAY), fut=r[4].filter(x=>x[2]>TODAY);
+      const okT=x=>!rtype||x[3]===rtype;
+      const past=r[4].find(x=>x[2]<=TODAY&&okT(x)), fut=r[4].filter(x=>x[2]>TODAY&&okT(x));
       if(past) fresh.push({k,f,rel:past,g:r[1]});
       fut.forEach(x=>soon.push({k,f,rel:x,g:r[1]}));
     });
@@ -539,7 +545,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const {fresh,soon}=homeData();
     const nl=$('newlist'); nl.textContent='';
     $('newmeta').textContent=fresh.length+' release'+(fresh.length===1?'':'s');
-    if(!fresh.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No recent releases at this size in that genre. Raise the fan limit above or pick another genre.'; nl.appendChild(li)}
+    if(!fresh.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No recent releases match these filters. Raise the fan limit, pick another genre or choose a different release type.'; nl.appendChild(li)}
     fresh.slice(0,newShown).forEach(x=>nl.appendChild(card(x)));
     $('newmore').hidden=fresh.length<=newShown;
     const sl=$('soonlist'); sl.textContent='';
@@ -578,6 +584,12 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   THEMES.forEach(([v,l])=>{const b=document.createElement('button'); b.type='button'; b.textContent=l; b.dataset.v=v;
     b.addEventListener('click',()=>{ui.theme=v; saveUi(); applyTheme(v)}); $('tseg').appendChild(b)});
   applyTheme(ui.theme==='light'||ui.theme==='dark'?ui.theme:'auto');
+
+  [['','All types'],['album','Albums'],['ep','EPs'],['single','Singles']].forEach(([v,l])=>{
+    const b=document.createElement('button'); b.type='button'; b.textContent=l; b.dataset.v=v; b.setAttribute('aria-pressed',v===rtype);
+    b.addEventListener('click',()=>{rtype=v; ui.rtype=v; saveUi(); [...$('rtseg').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); newShown=24; renderHome()});
+    $('rtseg').appendChild(b);
+  });
 
   // tabs
   function setTab(t){
