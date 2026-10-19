@@ -542,7 +542,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       li.insertBefore(pic(r.k),li.firstChild);
       li.querySelector('.name').textContent=a[1];
       const rr=RI.get(r.k); previewBtn(li,a,(rr&&rr[4].length&&rr[4][0][2]<=TODAY)?rr[4][0][0]:null); if(rr&&rr[4].length&&rr[4][0][2]<=TODAY&&rr[4][0][2]>=cutoff(60)){const bd=document.createElement('span');bd.className='badge';bd.textContent='New '+rr[4][0][3];li.querySelector('.name').appendChild(bd)}
-      li.querySelector('.why').textContent=r.direct?'Deezer lists this artist as related to '+N[cur][1]+'.':(r.via.length?'A step further out, through '+r.via.join(' and ')+'.':'A step further out.');
+      li.querySelector('.why').textContent=(r.direct?'Deezer lists this artist as related to '+N[cur][1]+'.':(r.via.length?'A step further out, through '+r.via.join(' and ')+'.':'A step further out.')) + ((rr&&rr[4].length&&rr[4][0][2]<=TODAY)?' Latest release: '+when(rr[4][0][2])+'.':'');
       li.querySelector('.save').addEventListener('click',e=>{
         const i=list.indexOf(a[0]); if(i>=0) list.splice(i,1); else list.push(a[0]);
         saveList(); e.target.setAttribute('aria-pressed',i<0); e.target.textContent=i<0?'Saved':'Save'; renderList();

@@ -25,3 +25,4 @@
 - 2026-10-19: Find-similar search box now has a × clear button, and Escape closes suggestions first, then clears the text. Research: users expect a one-tap clear in search fields, especially on phones.
 - 2026-10-19: Added a one-line legend under Find-similar results explaining the fan-count bars and the dark tick for the searched artist. Research: the bars were unlabeled and hidden from screen readers, so first-time visitors had to guess what they meant.
 - 2026-10-19: Added "Print shortlist": prints just your numbered shortlist (artist and fan count) with all the page chrome hidden. Research: people use saved-artist lists away from the screen, for example at record shops and gigs.
+- 2026-10-19: Find-similar rows now add "Latest release: <date>" when the snapshot has release data for that artist (about a fifth of rows). Research: users of release-tracking apps want recency visible without opening each artist.
