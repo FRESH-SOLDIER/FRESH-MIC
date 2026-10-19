@@ -409,7 +409,7 @@ const G = /*DATA*/;
   const $=id=>document.getElementById(id);
   const fmt=n=>n>=1e6?(n/1e6).toFixed(n>=1e7?0:1)+'M':n>=1e3?(n/1e3).toFixed(n>=1e5?0:1)+'K':String(n);
   const LIMS=[[0,'Any size'],[500000,'500K fans'],[100000,'100K'],[25000,'25K'],[5000,'5K']];
-  let limit=100000, cur=-1, shown=24, results=[], sortMode=(ui.sort==='small'?'small':'best'), directOnly=ui.direct===true;
+  let limit=100000, cur=-1, shown=24, results=[], sortMode=(ui.sort==='small'?'small':'best'), directOnly=ui.direct===true, freshOnly=ui.fresh===true;
   let list=[]; try{list=JSON.parse(localStorage.getItem('freshmic:list')||localStorage.getItem('undertow:list')||'[]')}catch(e){}
   const saveList=()=>{try{localStorage.setItem('freshmic:list',JSON.stringify(list))}catch(e){}};
   let hid=new Set(); try{hid=new Set(JSON.parse(localStorage.getItem('freshmic:hide')||'[]'))}catch(e){}
@@ -455,6 +455,7 @@ const G = /*DATA*/;
       if(limit && f>limit) return;
       if(hid.has(N[k][0])) return;
       if(directOnly&&!direct.has(k)) return;
+      if(freshOnly){ const rr=RI.get(k); if(!(rr&&rr[4].length&&rr[4][0][2]<=TODAY&&rr[4][0][2]>=cutoff(90))) return; }
       out.push({k,sc,f,direct:direct.has(k),via:(via.get(k)||[]).sort((x,y)=>y[0]-x[0]).slice(0,2).map(x=>N[x[1]][1])});
     });
     if(sortMode==='small') out.sort((a,b)=>(a.f-b.f)||(b.sc-a.sc)); else out.sort((a,b)=>(b.sc-a.sc)||(a.f-b.f));
@@ -622,7 +623,9 @@ const G = /*DATA*/;
 
   { const w=document.createElement('div'); w.className='seg'; w.style.marginTop='8px'; const b=document.createElement('button'); b.type='button'; b.textContent='Only artists Deezer links directly'; b.setAttribute('aria-pressed',directOnly);
     b.addEventListener('click',()=>{directOnly=!directOnly; ui.direct=directOnly; saveUi(); b.setAttribute('aria-pressed',directOnly); shown=24; if(cur>=0){results=related(cur);render()}});
-    w.appendChild(b); $('sortctl').appendChild(w); }
+    const b2=document.createElement('button'); b2.type='button'; b2.textContent='Released in the last 90 days'; b2.setAttribute('aria-pressed',freshOnly);
+    b2.addEventListener('click',()=>{freshOnly=!freshOnly; ui.fresh=freshOnly; saveUi(); b2.setAttribute('aria-pressed',freshOnly); shown=24; if(cur>=0){results=related(cur);render()}});
+    w.appendChild(b); w.appendChild(b2); $('sortctl').appendChild(w); }
 
   // autocomplete (page search and top-bar search share one implementation)
   const hiders=[]; const hideSug=()=>hiders.forEach(f=>f());
