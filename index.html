@@ -561,10 +561,12 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const c=document.createElement('button'); c.type='button'; c.className='clr hide'; c.textContent='Clear'; c.setAttribute('aria-label','Clear recent searches');
     c.addEventListener('click',()=>{recent=[]; saveRecent(); renderRecent()}); box.appendChild(c);
   }
+  const BASE_TITLE=document.title;
   function pick(k,stay,nohash){ if(!stay) setTab('find'); cur=k;
     if(!nohash){ recent=[N[k][0]].concat(recent.filter(x=>x!==N[k][0])).slice(0,8); saveRecent(); renderRecent(); } shown=24; $('q').value=N[k][1]; hideSug(); results=related(k); render();
     $('sharelink').hidden=false;
     if(!nohash){ try{history.replaceState(null,'','#like='+N[k][0])}catch(e){} }
+    if(!(stay&&nohash)) document.title='Artists like '+N[k][1]+' | '+BASE_TITLE;
   }
   $('sharelink').addEventListener('click',()=>{
     const u=location.href;
