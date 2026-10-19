@@ -184,6 +184,13 @@ button.ptag2{cursor:pointer}
   .psec{transition:transform .2s,box-shadow .2s}
 }
 .foot kbd{font:600 .8em var(--f-data);border:1px solid var(--line);border-radius:4px;padding:0 5px;background:var(--surface)}
+@media print{
+  body.printlist>*:not(main),body.printlist main>*:not(#listbox){display:none!important}
+  body.printlist #listbox{display:block!important;border:0}
+  body.printlist #listbox .copy,body.printlist #listbox .cap,body.printlist #listbox button{display:none!important}
+  body.printlist #listbox>summary{font-size:1.4rem;font-weight:700;list-style:none}
+  body.printlist{background:#fff!important;color:#000!important}
+}
 .skip{position:absolute;left:12px;top:-60px;z-index:60;background:var(--accent);color:var(--accent-fg);padding:10px 14px;border-radius:8px;font:600 .9rem var(--f-data);text-decoration:none}
 .skip:focus{top:8px}
 button:focus-visible,a:focus-visible,.chip:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
@@ -372,6 +379,7 @@ ul.res.grid .player{margin-inline:12px}
     <button class="copy" id="copy" type="button">Copy list</button>
     <button class="copy" id="copylink" type="button">Copy shortlist link</button>
     <button class="copy" id="dlcsv" type="button">Download as spreadsheet (CSV)</button>
+    <button class="copy" id="prlist" type="button">Print shortlist</button>
     <span class="cap" id="copied" style="margin-left:10px"></span>
   </details>
 
@@ -1354,6 +1362,11 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   initMyPage();
   { const m=/^#like=(\d+)$/.exec(location.hash); if(m){ const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&(E[k]||REV[k].length)) pick(k,false,true); } }
 
+  $('prlist').addEventListener('click',()=>{
+    const box=$('listbox'); const wasOpen=box.open; box.open=true; document.body.classList.add('printlist');
+    const done=()=>{document.body.classList.remove('printlist'); box.open=wasOpen; removeEventListener('afterprint',done)};
+    addEventListener('afterprint',done); window.print();
+  });
   $('dlcsv').addEventListener('click',()=>{
     const q=s=>{s=String(s); if(/^[=+\-@\t\r]/.test(s)) s="'"+s; return '"'+s.replace(/"/g,'""')+'"'};
     const rows=[['Artist','Deezer fans','Deezer link']];
