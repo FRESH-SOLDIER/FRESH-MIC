@@ -326,6 +326,10 @@ ul.res.grid .player{margin-inline:12px}
       <div class="cap" id="rtlab">Release type</div>
       <div class="seg" id="rtseg" role="group" aria-labelledby="rtlab"></div>
     </div>
+    <div>
+      <div class="cap" id="rwlab">Released within</div>
+      <div class="seg" id="rwseg" role="group" aria-labelledby="rwlab"></div>
+    </div>
     <div class="jump" id="jump"><span class="cap">Jump to</span></div>
     <section class="sec" id="secNew" aria-live="polite">
       <div class="head"><h2>New releases</h2><span class="meta" id="newmeta"></span></div>
@@ -678,6 +682,7 @@ const G = /*DATA*/;
     return m;
   }
   let genre=0, newShown=24, gemSeed=Math.random();
+  let rwin=([7,30].includes(ui.rwin)?ui.rwin:0);
   let rtype=(['album','ep','single'].includes(ui.rtype)?ui.rtype:'');
   let muted=new Set(); try{muted=new Set((JSON.parse(localStorage.getItem('freshmic:mute')||'[]')).map(Number))}catch(e){}
   const saveMuted=()=>{try{localStorage.setItem('freshmic:mute',JSON.stringify([...muted]))}catch(e){}};
@@ -701,7 +706,7 @@ const G = /*DATA*/;
       if(genre?r[1]!==genre:muted.has(r[1])) return;
       const okT=x=>!rtype||x[3]===rtype;
       const past=r[4].find(x=>x[2]<=TODAY&&okT(x)), fut=r[4].filter(x=>x[2]>TODAY&&okT(x));
-      if(past) fresh.push({k,f,rel:past,g:r[1]});
+      if(past&&(!rwin||past[2]>=cutoff(rwin))) fresh.push({k,f,rel:past,g:r[1]});
       fut.forEach(x=>soon.push({k,f,rel:x,g:r[1]}));
     });
     fresh.sort((a,b)=>b.rel[2].localeCompare(a.rel[2])||a.f-b.f);
@@ -789,6 +794,12 @@ const G = /*DATA*/;
     const b=document.createElement('button'); b.type='button'; b.textContent=l; b.dataset.v=v; b.setAttribute('aria-pressed',v===rtype);
     b.addEventListener('click',()=>{rtype=v; ui.rtype=v; saveUi(); [...$('rtseg').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); newShown=24; renderHome()});
     $('rtseg').appendChild(b);
+  });
+
+  [[0,'Any time'],[7,'Last 7 days'],[30,'Last 30 days']].forEach(([v,l])=>{
+    const b=document.createElement('button'); b.type='button'; b.textContent=l; b.dataset.v=v; b.setAttribute('aria-pressed',v===rwin);
+    b.addEventListener('click',()=>{rwin=v; ui.rwin=v; saveUi(); [...$('rwseg').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); newShown=24; renderHome()});
+    $('rwseg').appendChild(b);
   });
 
   let lastSurp=-1;
