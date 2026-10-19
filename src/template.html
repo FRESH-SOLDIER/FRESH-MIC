@@ -533,6 +533,7 @@ const G = /*DATA*/;
       res.appendChild(li);
     });
     $('more').hidden=results.length<=shown;
+    $('more').textContent='Show '+Math.max(0,Math.min(24,results.length-shown))+' more ('+Math.min(shown,results.length)+' of '+results.length+' shown)';
   }
 
   function renderList(){
@@ -584,7 +585,7 @@ const G = /*DATA*/;
     b.addEventListener('click',()=>{limit=v; [...$('seg').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); shown=24; if(cur>=0){results=related(cur);render()} newShown=24; renderHome();});
     $('seg').appendChild(b);
   });
-  $('more').addEventListener('click',()=>{shown+=24;render()});
+  $('more').addEventListener('click',()=>{const prev=shown; shown+=24; render(); const rows=$('res').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
   [['best','Closest match'],['small','Smallest first']].forEach(([v,l])=>{
     const b=document.createElement('button'); b.type='button'; b.textContent=l; b.dataset.v=v; b.setAttribute('aria-pressed',v===sortMode);
     b.addEventListener('click',()=>{sortMode=v; ui.sort=v; saveUi(); [...$('sortseg').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); shown=24; if(cur>=0){results=related(cur);render()}});
