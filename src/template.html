@@ -537,6 +537,7 @@ const G = /*DATA*/;
         +'<a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+enc(a[1]+' music')+'">YouTube</a>'
         +'<a target="_blank" rel="noopener" href="https://bandcamp.com/search?q='+enc(a[1])+'">Bandcamp</a>'
         +'<a target="_blank" rel="noopener" href="https://open.spotify.com/search/'+enc(a[1])+'">Spotify</a>'
+        +'<button class="sim" type="button" aria-label="Find artists similar to '+a[1].replace(/[&<>"]/g,'')+'">Find similar</button>'
         +'<button class="save" type="button" aria-pressed="'+saved+'">'+(saved?'Saved':'Save')+'</button>'
         +'<button class="hide" type="button" aria-label="Hide '+a[1].replace(/[&<>"]/g,'')+' from my results">Not for me</button></div>';
       li.insertBefore(pic(r.k),li.firstChild);
@@ -547,6 +548,7 @@ const G = /*DATA*/;
         const i=list.indexOf(a[0]); if(i>=0) list.splice(i,1); else list.push(a[0]);
         saveList(); e.target.setAttribute('aria-pressed',i<0); e.target.textContent=i<0?'Saved':'Save'; renderList();
       });
+      li.querySelector('.sim').addEventListener('click',()=>{pick(r.k); window.scrollTo(0,0)});
       li.querySelector('.hide').addEventListener('click',e=>hideArtist(r.k,e.currentTarget));
       res.appendChild(li);
     });
