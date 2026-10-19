@@ -197,6 +197,7 @@ ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .why{color:var(--muted);font-size:.86rem;margin-top:2px;text-wrap:pretty}
 .fans{font:500 .86rem var(--f-data);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .fans small{display:block;color:var(--muted);font-weight:400;font-size:.7rem}
+.legend{margin:8px 0 14px;font-size:.82rem;color:var(--muted)}
 .scale{grid-column:2 / 4;position:relative;height:6px;border-radius:3px;background:var(--bar);margin-top:8px}
 .scale i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--accent);opacity:1}
 .scale b{position:absolute;top:-4px;width:2px;height:14px;background:var(--fg);border-radius:1px}
@@ -349,6 +350,7 @@ ul.res.grid .player{margin-inline:12px}
     </section>
     <section aria-live="polite">
       <div class="head"><h2 id="title"></h2><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button></div>
+      <p class="legend" id="legend" hidden>Each bar is an artist's fan count on a log scale: longer means bigger. The dark tick marks the artist you searched for, so bars that stop short of it are smaller.</p>
     <div class="ctl" id="sortctl" style="margin:0 0 12px"><div class="cap" id="sortlab">Order results by</div><div class="seg" id="sortseg" role="group" aria-labelledby="sortlab"></div></div>
       <ul class="res" id="res"></ul>
       <div class="axis" id="axis" aria-hidden="true"><span>100 fans</span><span>10K</span><span>1M</span><span>10M</span></div>
@@ -511,6 +513,7 @@ const G = /*DATA*/;
     $('title').textContent='Like '+N[cur][1];
     const qf=N[cur][2]||0;
     $('meta').textContent=fmt(qf)+' fans · '+results.length+' match'+(results.length===1?'':'es');
+    $('legend').hidden=!results.length;
     if(!results.length){
       const li=document.createElement('li'); li.className='empty';
       li.textContent='Nothing this small is linked to '+N[cur][1]+' in the snapshot. Raise the fan limit above.';
