@@ -19,3 +19,10 @@ Music data and similarity come from Deezer; this site is non-commercial because 
 - Keep a visible "Listen on SoundCloud" link under every embed and do not store or download SoundCloud audio or artwork.
 - SoundCloud's terms do not allow embedding its player next to ads. If ads are ever added to the site, remove or rethink the SoundCloud embed first.
 - Do not add uploads of audio or images, accounts, or any server calls without the owner's decision (copyright takedown duties, privacy duties and costs apply).
+
+## My page v2 (deep customization) rules
+- Every setting is an enum, a fixed-range number, a validated #rrggbb color or a short cleaned string. No user CSS, HTML or script, ever.
+- Video: only the 11-character YouTube id is stored; the embed address is built in code on youtube-nocookie.com. SoundCloud as before.
+- Sound is synthesized with Web Audio (no files). It never starts without a click. Respect prefers-reduced-motion (no particles, no background video, no animation).
+- No image uploads or remote image URLs (they leak visitors' IPs and need a server). Emoji avatars only.
+- Share links are compressed (#page=z...) and capped; decompression is size-limited.
