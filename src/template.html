@@ -1384,6 +1384,7 @@ const G = /*DATA*/;
   if(ui.tab==='find'||ui.tab==='page') setTab(ui.tab);
   initMyPage();
   { const m=/^#like=(\d+)$/.exec(location.hash); if(m){ const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&(E[k]||REV[k].length)) pick(k,false,true); } }
+  if(ui.tab==='find'&&!location.hash&&recent.length){ const k=N.findIndex(a=>a[0]===recent[0]); if(k>=0&&(E[k]||REV[k].length)) pick(k,true,true); }
 
   $('prlist').addEventListener('click',()=>{
     const box=$('listbox'); const wasOpen=box.open; box.open=true; document.body.classList.add('printlist');
