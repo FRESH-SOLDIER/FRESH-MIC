@@ -39,6 +39,41 @@ label.cap,.cap{font:500 .72rem/1 var(--f-data);letter-spacing:.08em;text-transfo
 .seg button{font:500 .85rem var(--f-data);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
 #bar{scroll-margin-top:8px}
+.pedit{display:flex;flex-direction:column;gap:14px;max-width:640px}
+.pedit h2{font:700 1.5rem var(--f-display);margin:0}
+.pf{display:flex;flex-direction:column;gap:6px}
+.pf label,.pf .cap{font:500 .8rem var(--f-data);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.pf input[type=text],.pf input[type=url],.pf textarea{font:1rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+.pf textarea{resize:vertical}
+.pnote{font-size:.85rem;color:var(--muted);margin:0}
+.perr{font-size:.85rem;color:#C0392B;margin:0;min-height:0}
+.psw{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.swatch{width:32px;height:32px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}
+.swatch[aria-pressed="true"]{outline:3px solid var(--fg);outline-offset:2px}
+.psw input[type=color]{width:40px;height:34px;padding:0;border:1px solid var(--line);border-radius:8px;background:var(--surface);cursor:pointer}
+.prow{display:flex;gap:8px;flex-wrap:wrap}
+.prow input{flex:1 1 160px;min-width:0}
+.pact{margin-top:4px}
+.ptoggle{font:500 .95rem var(--f-body)!important;text-transform:none!important;color:var(--fg)!important;letter-spacing:0!important}
+.pitems{list-style:none;margin:0;padding:0;font:.85rem var(--f-data);color:var(--muted);word-break:break-all}
+.pitems li{padding:3px 0}
+.prof{border:1px solid var(--line);border-radius:18px;overflow:hidden;max-width:760px}
+.prof.sharp{border-radius:0}
+.pban{background:var(--pa);color:var(--pon);padding:28px 22px}
+.pban h2{margin:0;font:800 clamp(1.6rem,5vw,2.6rem)/1.05 var(--f-display);overflow-wrap:anywhere}
+.ptag{margin:8px 0 0;font-size:1.05rem;opacity:.92}
+.pbody{padding:18px 22px 24px;display:flex;flex-direction:column;gap:18px}
+.pbio{margin:0;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.plinks{display:flex;flex-wrap:wrap;gap:8px}
+.plinks a{background:var(--pa);color:var(--pon);padding:7px 12px;border-radius:999px;text-decoration:none;font-weight:600;font-size:.9rem}
+.prof.sharp .plinks a{border-radius:0}
+.psec h3{margin:0 0 8px;font:700 1.05rem var(--f-display)}
+.pembed{margin-bottom:12px}
+.pembed iframe{width:100%;border:0;display:block;border-radius:10px;background:rgba(127,127,127,.12)}
+.prof.sharp .pembed iframe{border-radius:0}
+.pscl{display:block;margin-top:4px;font-size:.8rem;color:inherit;opacity:.8;overflow-wrap:anywhere}
+.plist{margin:0;padding-left:1.1em}
+.plist a{color:inherit}
 .skip{position:absolute;left:12px;top:-60px;z-index:60;background:var(--accent);color:var(--accent-fg);padding:10px 14px;border-radius:8px;font:600 .9rem var(--f-data);text-decoration:none}
 .skip:focus{top:8px}
 button:focus-visible,a:focus-visible,.chip:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
@@ -100,6 +135,7 @@ ul.res.grid .empty{grid-column:1/-1}
 
 .tabs button{font:700 1rem var(--f-display);color:var(--muted);background:transparent;border:0;border-bottom:4px solid transparent;margin-bottom:-2px;padding:10px 14px;cursor:pointer}
 .tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+@media (max-width:480px){.tabs{max-width:100%;overflow-x:auto;scrollbar-width:none;gap:2px}.tabs button{white-space:nowrap;font-size:.72rem;padding:10px 6px}}
 .chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
 .chip small{font:400 .72rem var(--f-data);opacity:.75;margin-left:4px}
 .badge{display:inline-block;margin-left:8px;font:500 .66rem/1 var(--f-data);letter-spacing:.06em;text-transform:uppercase;color:#14182B;background:var(--tiny);border-radius:5px;padding:3px 6px;vertical-align:middle}
@@ -116,7 +152,7 @@ ul.res.grid .empty{grid-column:1/-1}
 .player .prog{height:4px;border-radius:2px;background:var(--bar);margin-top:6px;overflow:hidden}
 .player .prog i{display:block;height:100%;width:0;background:var(--accent)}
 ul.res.grid .player{margin-inline:12px}
-@media (max-width:480px){.row{grid-template-columns:44px minmax(0,1fr)}.pic{width:44px;font-size:.95rem}.bsearch{max-width:none;flex-basis:100%}.tabs button{padding:8px 10px;font-size:.9rem}.fans{grid-column:2;text-align:left}.fans small{display:inline;margin-left:6px}.scale,.links{grid-column:1 / 3}}
+@media (max-width:480px){.row{grid-template-columns:44px minmax(0,1fr)}.pic{width:44px;font-size:.95rem}.bsearch{max-width:none;flex-basis:100%}.fans{grid-column:2;text-align:left}.fans small{display:inline;margin-left:6px}.scale,.links{grid-column:1 / 3}}
 @media (prefers-reduced-motion:no-preference){.row{animation:in .28s ease both}@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}}
 </style>
 
@@ -133,6 +169,7 @@ ul.res.grid .player{margin-inline:12px}
     <nav class="tabs" role="tablist" aria-label="Sections">
       <button type="button" role="tab" id="tabHome" aria-selected="true" aria-controls="viewHome">Discover</button>
       <button type="button" role="tab" id="tabFind" aria-selected="false" aria-controls="viewFind">Find similar</button>
+      <button type="button" role="tab" id="tabPage" aria-selected="false" aria-controls="viewPage">My page</button>
     </nav>
     <div class="bsearch">
       <input id="gq" type="search" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="gsug" aria-autocomplete="list" aria-label="Search for an artist to find similar ones" placeholder="Search an artist">
@@ -140,7 +177,7 @@ ul.res.grid .player{margin-inline:12px}
     </div>
   </div>
 
-  <section class="controls" aria-label="How small">
+  <section class="controls" id="controls" aria-label="How small">
     <div>
       <div class="cap" id="limlab">Show artists with at most</div>
       <div class="seg" id="seg" role="group" aria-labelledby="limlab"></div>
@@ -202,6 +239,12 @@ ul.res.grid .player{margin-inline:12px}
       <div class="axis" id="axis" aria-hidden="true"><span>100 fans</span><span>10K</span><span>1M</span><span>10M</span></div>
     </section>
     <button class="more" id="more" hidden>Show more</button>
+  </div>
+
+  <div id="viewPage" role="tabpanel" aria-labelledby="tabPage" class="panel" hidden>
+    <div class="hidbar" id="pbanner" hidden></div>
+    <div id="pedit" class="pedit"></div>
+    <div id="pview"></div>
   </div>
 
   <div class="hidbar" id="hidbar" hidden><span id="hidn"></span><button type="button" id="hidclear">Show hidden artists again</button></div>
@@ -601,13 +644,179 @@ const G = /*DATA*/;
     pick(k); window.scrollTo(0,0); toast('Surprise: '+N[k][1]+' ('+fmt(N[k][2])+' fans). Showing artists like them.');
   });
 
+  // ---------- My page (customizable profile, stored in this browser, shareable by link) ----------
+  const IDX=new Map(N.map((a,i)=>[a[0],i]));
+  const PBG={default:['var(--surface)','var(--fg)','Default'],midnight:['#0F1220','#E8EAF4','Midnight'],paper:['#FBF7EE','#2B2118','Paper'],sunset:['linear-gradient(135deg,#FFB88C,#FF7E85)','#2B0F0F','Sunset'],ocean:['linear-gradient(135deg,#16222A,#3A6073)','#F2F7FA','Ocean'],mint:['#E3F4E8','#10281A','Mint']};
+  const PFONT={modern:['var(--f-body)','Modern'],serif:['Georgia,"Times New Roman",serif','Serif'],mono:['var(--f-data)','Mono'],rounded:['ui-rounded,"Trebuchet MS",sans-serif','Rounded']};
+  const PSW=['#2B3BF0','#E0245E','#F2994A','#1FA463','#8E44AD','#00A3C4','#111111','#FFC400'];
+  const GSTYLE={132:['#E0245E','sunset','rounded'],116:['#FFC400','midnight','modern'],122:['#F2994A','sunset','rounded'],152:['#E0245E','paper','serif'],113:['#00A3C4','ocean','modern'],165:['#8E44AD','midnight','rounded'],85:['#1FA463','mint','modern'],106:['#00A3C4','midnight','mono'],466:['#1FA463','paper','serif'],129:['#F2994A','paper','serif'],98:['#111111','paper','serif'],464:['#E0245E','midnight','mono']};
+  const clean=(v,n)=>typeof v==='string'?v.replace(/[\u0000-\u001f\u007f]/g,' ').trim().slice(0,n):'';
+  // Only real soundcloud.com permalinks are accepted. We build the player address ourselves, so nothing else can be embedded.
+  function scClean(u){
+    if(typeof u!=='string'||u.length>300) return '';
+    let x; try{x=new URL(u.trim())}catch(e){return ''}
+    if(x.protocol!=='https:'||x.username||x.password||x.port) return '';
+    if(x.hostname!=='soundcloud.com'&&x.hostname!=='www.soundcloud.com') return '';
+    if(!/^\/[A-Za-z0-9_-]{1,60}(\/(sets\/)?[A-Za-z0-9_-]{1,100})?\/?$/.test(x.pathname)) return '';
+    return 'https://soundcloud.com'+x.pathname.replace(/\/$/,'');
+  }
+  function urlClean(u){
+    if(typeof u!=='string'||u.length>200) return '';
+    let x; try{x=new URL(u.trim())}catch(e){return ''}
+    if(x.protocol!=='https:'||x.username||x.password||x.hostname.indexOf('.')<1) return '';
+    return x.href;
+  }
+  function sanitizeProfile(o){
+    o=(o&&typeof o==='object')?o:{};
+    const p={n:clean(o.n,40),t:clean(o.t,120),b:clean(o.b,400),
+      c:(typeof o.c==='string'&&/^#[0-9a-fA-F]{6}$/.test(o.c))?o.c.toLowerCase():'#2b3bf0',
+      bg:(typeof o.bg==='string'&&Object.prototype.hasOwnProperty.call(PBG,o.bg))?o.bg:'default',
+      f:(typeof o.f==='string'&&Object.prototype.hasOwnProperty.call(PFONT,o.f))?o.f:'modern',
+      sh:o.sh==='sharp'?'sharp':'round', m:[], l:[], sl:[], rc:[],
+      o:{sl:!(o.o&&o.o.sl===false), rc:!(o.o&&o.o.rc===false)}};
+    (Array.isArray(o.m)?o.m:[]).slice(0,6).forEach(u=>{const c=scClean(u); if(c&&!p.m.includes(c)) p.m.push(c)});
+    (Array.isArray(o.l)?o.l:[]).slice(0,4).forEach(x=>{ if(Array.isArray(x)){const lab=clean(x[0],24), u=urlClean(x[1]); if(lab&&u) p.l.push([lab,u])}});
+    ['sl','rc'].forEach(k=>{ (Array.isArray(o[k])?o[k]:[]).slice(0,30).forEach(id=>{ if(Number.isInteger(id)&&IDX.has(id)&&!p[k].includes(id)) p[k].push(id)})});
+    return p;
+  }
+  let prof=sanitizeProfile((()=>{try{return JSON.parse(localStorage.getItem('freshmic:profile')||'{}')}catch(e){return {}}})());
+  const saveProf=()=>{try{localStorage.setItem('freshmic:profile',JSON.stringify(prof))}catch(e){}};
+  const onColor=hex=>{const n=parseInt(hex.slice(1),16),r=n>>16,g=(n>>8)&255,b=n&255; return (0.299*r+0.587*g+0.114*b)>150?'#14182B':'#FFFFFF'};
+  const el=(tag,cls,txt)=>{const e=document.createElement(tag); if(cls) e.className=cls; if(txt!=null) e.textContent=txt; return e};
+  function artistLinks(ids){
+    const ul=el('ul','plist');
+    ids.forEach(id=>{const k=IDX.get(id); if(k==null) return; const li=el('li'); const a=el('a',null,N[k][1]); a.href='https://www.deezer.com/artist/'+id; a.target='_blank'; a.rel='noopener'; li.appendChild(a); li.appendChild(document.createTextNode(' ('+fmt(N[k][2]||0)+' fans)')); ul.appendChild(li)});
+    return ul;
+  }
+  function styleCard(card,p){
+    card.className='prof'+(p.sh==='sharp'?' sharp':'');
+    card.style.setProperty('--pa',p.c); card.style.setProperty('--pon',onColor(p.c));
+    card.style.background=PBG[p.bg][0]; card.style.color=PBG[p.bg][1]; card.style.fontFamily=PFONT[p.f][0];
+  }
+  function patchOwn(){
+    const card=$('pview').querySelector('.prof'); if(!card||card.dataset.hasbio!==(prof.b?'1':'0')) return renderOwn();
+    styleCard(card,prof);
+    card.querySelector('.pban h2').textContent=prof.n||'Your name';
+    card.querySelector('.ptag').textContent=prof.t||'Add a tagline in the editor above.';
+    const bp=card.querySelector('[data-bio]'); if(bp) bp.textContent=prof.b;
+  }
+  function renderProfile(p,box,ids){
+    box.textContent='';
+    const card=el('article','prof'); styleCard(card,p); card.dataset.hasbio=p.b?'1':'0';
+    const ban=el('header','pban'); ban.appendChild(el('h2',null,p.n||'Your name')); ban.appendChild(el('p','ptag',p.t||'Add a tagline in the editor above.')); card.appendChild(ban);
+    const body=el('div','pbody');
+    if(p.b){const bp=el('p','pbio',p.b); bp.dataset.bio='1'; body.appendChild(bp)}
+    if(p.l.length){const row=el('div','plinks'); p.l.forEach(([lab,u])=>{const a=el('a',null,lab); a.href=u; a.target='_blank'; a.rel='noopener noreferrer nofollow ugc'; row.appendChild(a)}); body.appendChild(row)}
+    if(p.m.length){
+      const sec=el('section','psec'); sec.appendChild(el('h3',null,'My music'));
+      p.m.forEach(u=>{
+        const parts=u.split('/').slice(3), wrap=el('div','pembed');
+        const f=document.createElement('iframe'); f.loading='lazy'; f.title='SoundCloud player: '+parts.join(' / ');
+        f.height=(parts.length===1||parts[1]==='sets')?'300':'166'; f.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups'); f.referrerPolicy='strict-origin-when-cross-origin';
+        f.src='https://w.soundcloud.com/player/?url='+encodeURIComponent(u)+'&color=%23'+p.c.slice(1)+'&auto_play=false&show_artwork=true&single_active=true';
+        wrap.appendChild(f);
+        const a=el('a','pscl','Listen on SoundCloud: '+parts.join(' / ')); a.href=u; a.target='_blank'; a.rel='noopener'; wrap.appendChild(a);
+        sec.appendChild(wrap);
+      });
+      body.appendChild(sec);
+    }
+    if(p.o.sl&&ids.sl.length){const sec=el('section','psec'); sec.appendChild(el('h3',null,'Artists I saved')); sec.appendChild(artistLinks(ids.sl)); body.appendChild(sec)}
+    if(p.o.rc&&ids.rc.length){const sec=el('section','psec'); sec.appendChild(el('h3',null,'Recently looked up')); sec.appendChild(artistLinks(ids.rc)); body.appendChild(sec)}
+    if(!body.children.length) body.appendChild(el('p','pbio','Nothing here yet. Add a bio, links or SoundCloud tracks in the editor above.'));
+    card.appendChild(body); box.appendChild(card);
+  }
+  const b64e=s=>{const by=new TextEncoder().encode(s); let t=''; by.forEach(c=>t+=String.fromCharCode(c)); return btoa(t).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+  const b64d=s=>{s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; const t=atob(s), by=new Uint8Array(t.length); for(let i=0;i<t.length;i++) by[i]=t.charCodeAt(i); return new TextDecoder().decode(by)};
+  function renderOwn(){ renderProfile(prof,$('pview'),{sl:list.slice(0,30),rc:recent.slice(0,8)}) }
+  function buildEditor(){
+    const ed=$('pedit'); ed.textContent='';
+    const upd=(fn,rerender,full)=>{fn(); prof=sanitizeProfile(prof); saveProf(); if(full) renderOwn(); else patchOwn(); if(rerender) buildEditor()};
+    const field=(label,input)=>{const w=el('div','pf'); const l=el('label',null,label); if(input.id) l.htmlFor=input.id; w.appendChild(l); w.appendChild(input); return w};
+    const txt=(id,key,max,ph,multi)=>{const i=document.createElement(multi?'textarea':'input'); i.id=id; i.maxLength=max; i.placeholder=ph; if(multi) i.rows=3; else i.type='text'; i.value=prof[key]; i.addEventListener('input',()=>{prof[key]=i.value.slice(0,max); prof=sanitizeProfile(prof); saveProf(); patchOwn()}); return i};
+    ed.appendChild(el('h2',null,'My page'));
+    ed.appendChild(el('p','pnote','Make a page that is yours. It is saved in this browser. To show it to anyone, copy your page link. Sign-in with saved accounts is not available yet.'));
+    ed.appendChild(field('Display name',txt('pn','n',40,'Your name or artist name')));
+    ed.appendChild(field('Tagline',txt('pt','t',120,'One line about you')));
+    ed.appendChild(field('Bio',txt('pb','b',400,'A short bio',true)));
+    // colors
+    const sw=el('div','psw'); sw.setAttribute('role','group'); sw.setAttribute('aria-label','Accent color');
+    PSW.forEach(c=>{const b=el('button','swatch'); b.type='button'; b.style.background=c; b.setAttribute('aria-label','Accent '+c); b.setAttribute('aria-pressed',prof.c===c.toLowerCase()); b.addEventListener('click',()=>upd(()=>{prof.c=c},true)); sw.appendChild(b)});
+    const ci=document.createElement('input'); ci.type='color'; ci.id='pc'; ci.value=prof.c; ci.setAttribute('aria-label','Custom accent color'); ci.addEventListener('input',()=>upd(()=>{prof.c=ci.value})); sw.appendChild(ci);
+    const segf=(label,opts,key)=>{const w=el('div','pf'); w.appendChild(el('div','cap',label)); const g=el('div','seg'); g.setAttribute('role','group'); g.setAttribute('aria-label',label);
+      opts.forEach(([v,l])=>{const b=el('button',null,l); b.type='button'; b.setAttribute('aria-pressed',prof[key]===v); b.addEventListener('click',()=>upd(()=>{prof[key]=v},true)); g.appendChild(b)}); w.appendChild(g); return w};
+    const cw=el('div','pf'); cw.appendChild(el('div','cap','Accent color')); cw.appendChild(sw); ed.appendChild(cw);
+    ed.appendChild(segf('Background',Object.keys(PBG).map(k=>[k,PBG[k][2]]),'bg'));
+    ed.appendChild(segf('Font',Object.keys(PFONT).map(k=>[k,PFONT[k][1]]),'f'));
+    ed.appendChild(segf('Corners',[['round','Rounded'],['sharp','Sharp']],'sh'));
+    // sections
+    const tg=el('div','pf'); tg.appendChild(el('div','cap','Show on my page'));
+    [['sl','My saved artists'],['rc','My recent lookups']].forEach(([k,l])=>{const lab=el('label','ptoggle'); const cb=document.createElement('input'); cb.type='checkbox'; cb.checked=prof.o[k]; cb.addEventListener('change',()=>upd(()=>{prof.o[k]=cb.checked},false,true)); lab.appendChild(cb); lab.appendChild(document.createTextNode(' '+l)); tg.appendChild(lab)});
+    ed.appendChild(tg);
+    // SoundCloud
+    const mw=el('div','pf'); mw.appendChild(el('label',null,'My music (SoundCloud links, up to 6)')); mw.lastChild.htmlFor='pm';
+    const mr=el('div','prow'); const mi=document.createElement('input'); mi.type='url'; mi.id='pm'; mi.placeholder='https://soundcloud.com/your-name/your-track'; const mb=el('button','shuf','Add'); mb.type='button'; mr.appendChild(mi); mr.appendChild(mb); mw.appendChild(mr);
+    const merr=el('p','perr'); merr.setAttribute('role','alert'); mw.appendChild(merr);
+    const add=()=>{ if(prof.m.length>=6){merr.textContent='You can add up to 6.'; return} const c=scClean(mi.value); if(!c){merr.textContent='That is not a SoundCloud link. Use a link that starts with https://soundcloud.com/'; return} merr.textContent=''; upd(()=>{prof.m.push(c)},true,true); };
+    mb.addEventListener('click',add); mi.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();add()}});
+    const ml=el('ul','pitems'); prof.m.forEach((u,i)=>{const li=el('li',null,u.replace('https://soundcloud.com/','')+' '); const rb=el('button','hide','Remove'); rb.type='button'; rb.setAttribute('aria-label','Remove '+u); rb.addEventListener('click',()=>upd(()=>{prof.m.splice(i,1)},true,true)); li.appendChild(rb); ml.appendChild(li)}); mw.appendChild(ml);
+    mw.appendChild(el('p','pnote','Music plays in SoundCloud’s own player and stays on SoundCloud with its uploader. Only add music you made or have the right to share.'));
+    ed.appendChild(mw);
+    // links
+    const lw=el('div','pf'); lw.appendChild(el('div','cap','My links (up to 4)'));
+    const lr=el('div','prow'); const ll=document.createElement('input'); ll.type='text'; ll.maxLength=24; ll.placeholder='Label'; ll.setAttribute('aria-label','Link label'); const lu=document.createElement('input'); lu.type='url'; lu.placeholder='https://'; lu.setAttribute('aria-label','Link address'); const lb=el('button','shuf','Add'); lb.type='button'; lr.appendChild(ll); lr.appendChild(lu); lr.appendChild(lb); lw.appendChild(lr);
+    const lerr=el('p','perr'); lerr.setAttribute('role','alert'); lw.appendChild(lerr);
+    lb.addEventListener('click',()=>{ if(prof.l.length>=4){lerr.textContent='You can add up to 4.'; return} const lab=clean(ll.value,24), u=urlClean(lu.value); if(!lab||!u){lerr.textContent='Add a label and a full https:// address.'; return} lerr.textContent=''; upd(()=>{prof.l.push([lab,u])},true,true) });
+    const li2=el('ul','pitems'); prof.l.forEach(([lab,u],i)=>{const li=el('li',null,lab+' → '+u+' '); const rb=el('button','hide','Remove'); rb.type='button'; rb.setAttribute('aria-label','Remove link '+lab); rb.addEventListener('click',()=>upd(()=>{prof.l.splice(i,1)},true,true)); li.appendChild(rb); li2.appendChild(li)}); lw.appendChild(li2);
+    ed.appendChild(lw);
+    // actions
+    const act=el('div','prow pact');
+    const ab=el('button','shuf','Auto-style from my taste'); ab.type='button'; ab.addEventListener('click',autoStyle);
+    const cb2=el('button','shuf','Copy my page link'); cb2.type='button'; cb2.addEventListener('click',copyPageLink);
+    const rs=el('button','hide','Reset page'); rs.type='button'; rs.addEventListener('click',()=>{const before=prof; prof=sanitizeProfile({}); saveProf(); buildEditor(); renderOwn(); toast('Page reset.',()=>{prof=before; saveProf(); buildEditor(); renderOwn()})});
+    act.appendChild(ab); act.appendChild(cb2); act.appendChild(rs); ed.appendChild(act);
+    ed.appendChild(el('p','pnote','Auto-style is a simple helper, not an AI: it reads the genres of the artists you saved and looked up, then picks colors, a font and a tagline that fit, differently each time.'));
+  }
+  function autoStyle(){
+    const before=JSON.parse(JSON.stringify(prof));
+    const cnt=new Map(); list.concat(recent).forEach(id=>{const k=IDX.get(id); const r=k!=null&&RI.get(k); if(r&&GN[r[1]]) cnt.set(r[1],(cnt.get(r[1])||0)+1)});
+    const top=[...cnt.entries()].sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+    const pickR=a=>a[Math.floor(Math.random()*a.length)];
+    const base=top.length&&GSTYLE[top[0]]?GSTYLE[top[0]]:GSTYLE[pickR(Object.keys(GSTYLE))];
+    prof.c=(Math.random()<.5?base[0]:pickR(PSW)).toLowerCase();
+    const bgs=Object.keys(PBG); prof.bg=Math.random()<.6?base[1]:pickR(bgs);
+    const fonts=Object.keys(PFONT); prof.f=Math.random()<.6?base[2]:pickR(fonts);
+    prof.sh=Math.random()<.5?'round':'sharp';
+    if(!prof.t&&top.length) prof.t='Into '+top.slice(0,3).map(gname).join(', ').replace(/, ([^,]*)$/,' and $1');
+    if(!prof.b&&list.length){const names=list.slice(0,3).map(id=>{const k=IDX.get(id);return k!=null?N[k][1]:''}).filter(Boolean); if(names.length) prof.b='Always digging for artists most people have not heard yet. Lately into '+names.join(', ').replace(/, ([^,]*)$/,' and $1')+'.'}
+    prof=sanitizeProfile(prof); saveProf(); buildEditor(); renderOwn();
+    toast('Styled your page. Tap again for a different look.',()=>{prof=sanitizeProfile(before); saveProf(); buildEditor(); renderOwn()});
+  }
+  function copyPageLink(){
+    const o=JSON.parse(JSON.stringify(prof)); o.sl=prof.o.sl?list.slice(0,30):[]; o.rc=prof.o.rc?recent.slice(0,8):[];
+    const u=location.href.split('#')[0]+'#page='+b64e(JSON.stringify(o));
+    const done=m=>toast(m);
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(()=>done('Page link copied. Anyone with it can see your page.'),()=>done('Copy failed.')); else done('Copy failed.');
+  }
+  function showShared(p){
+    $('pedit').hidden=true; const bn=$('pbanner'); bn.hidden=false; bn.textContent='';
+    bn.appendChild(el('span',null,'You are viewing a page someone shared. It is read-only.'));
+    const b=el('button',null,'Make my own page'); b.type='button'; b.addEventListener('click',()=>{try{history.replaceState(null,'',location.pathname+location.search)}catch(e){} bn.hidden=true; $('pedit').hidden=false; buildEditor(); renderOwn()}); bn.appendChild(b);
+    renderProfile(p,$('pview'),{sl:p.sl,rc:p.rc});
+  }
+  function initMyPage(){
+    const m=/^#page=([A-Za-z0-9_-]{1,8000})$/.exec(location.hash);
+    if(m){ try{ const p=sanitizeProfile(JSON.parse(b64d(m[1]))); setTab('page'); showShared(p); return }catch(e){ toast('That page link could not be opened.') } }
+    buildEditor(); renderOwn();
+  }
+
   // tabs
   function setTab(t){
+    if(t!=='find'&&t!=='page') t='home';
     ui.tab=t; saveUi();
-    const home=t==='home';
-    $('viewHome').hidden=!home; $('viewFind').hidden=home;
-    $('tabHome').setAttribute('aria-selected',home); $('tabFind').setAttribute('aria-selected',!home);
+    $('viewHome').hidden=t!=='home'; $('viewFind').hidden=t!=='find'; $('viewPage').hidden=t!=='page'; $('controls').hidden=t==='page';
+    $('tabHome').setAttribute('aria-selected',t==='home'); $('tabFind').setAttribute('aria-selected',t==='find'); $('tabPage').setAttribute('aria-selected',t==='page');
   }
+  $('tabPage').addEventListener('click',()=>{setTab('page'); if(!$('pedit').hidden) renderOwn()});
   $('tabHome').addEventListener('click',()=>setTab('home'));
   $('tabFind').addEventListener('click',()=>setTab('find'));
 
@@ -636,7 +845,8 @@ const G = /*DATA*/;
   renderRecent();
   if(start>=0) pick(start,true,true);
   $('q').value='';
-  if(ui.tab==='find') setTab('find');
+  if(ui.tab==='find'||ui.tab==='page') setTab(ui.tab);
+  initMyPage();
   { const m=/^#like=(\d+)$/.exec(location.hash); if(m){ const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&(E[k]||REV[k].length)) pick(k,false,true); } }
 
   $('copylink').addEventListener('click',()=>{

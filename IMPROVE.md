@@ -7,8 +7,15 @@ Music data and similarity come from Deezer; this site is non-commercial because 
 - Edit `src/template.html` (design, layout, behavior). Never hand-edit `index.html`; run `python3 build.py` to regenerate it.
 - Make ONE focused improvement per run. Test it in a browser (Playwright, Chromium at /opt/pw-browsers/chromium) at desktop (1100px) and phone (400px) width, with no console errors, before pushing.
 - Do NOT add ads, affiliate links, analytics or trackers. The owner has not signed up for any program.
-- Do NOT add new external hosts or API calls. Keep every required credit and link back (see footer).
+- Do NOT add new external hosts or API calls. The only exceptions are the Deezer preview call and the SoundCloud player (`w.soundcloud.com`), which loads only when a visitor adds their own SoundCloud link on the My page tab. Keep every required credit and link back (see footer).
 - Do NOT copy or re-host audio or artwork beyond the picture sheets already in `sheets/`.
 - Do not put the owner's real name or email anywhere. Commit as `FRESH-SOLDIER <FRESH-SOLDIER@users.noreply.github.com>`.
 - After pushing, wait 2 minutes and check that the live page returns 200 and its title is correct. If it is broken, revert the commit and push the revert.
 - Append one line to `CHANGELOG.md`: date, what changed, why.
+
+## My page (profile) rules
+- It is client-side only: data lives in the visitor's browser (`freshmic:profile`) and in share links (`#page=...`). There are no accounts and no server.
+- Everything read from a share link goes through `sanitizeProfile()`. Never insert it with innerHTML; use textContent. Only https://soundcloud.com permalinks may be embedded, and the player address is built in code, never copied from input.
+- Keep a visible "Listen on SoundCloud" link under every embed and do not store or download SoundCloud audio or artwork.
+- SoundCloud's terms do not allow embedding its player next to ads. If ads are ever added to the site, remove or rethink the SoundCloud embed first.
+- Do not add uploads of audio or images, accounts, or any server calls without the owner's decision (copyright takedown duties, privacy duties and costs apply).
