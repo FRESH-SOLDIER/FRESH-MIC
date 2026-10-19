@@ -571,8 +571,11 @@ const G = /*DATA*/;
     if(!nohash){ try{history.replaceState(null,'','#like='+N[k][0])}catch(e){} }
     if(!(stay&&nohash)) document.title='Artists like '+N[k][1]+' | '+BASE_TITLE;
   }
+  const canShare=!!navigator.share&&window.matchMedia&&matchMedia('(pointer: coarse)').matches;
+  if(canShare) $('sharelink').textContent='Share these results';
   $('sharelink').addEventListener('click',()=>{
     const u=location.href;
+    if(canShare){ navigator.share({title:document.title,text:'Artists like '+(cur>=0?N[cur][1]:'this one')+' on Fresh Mic',url:u}).catch(()=>{}); return }
     const done=()=>toast('Link copied. Anyone who opens it sees these results.');
     if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(done,()=>toast('Copy this link from the address bar.'));
     else toast('Copy this link from the address bar.');
