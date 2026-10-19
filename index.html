@@ -564,6 +564,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       li.appendChild(document.createTextNode(' ('+fmt(N[k][2]||0)+' fans) '));
       const x=document.createElement('button'); x.type='button'; x.className='hide'; x.textContent='Remove'; x.setAttribute('aria-label','Remove '+N[k][1]+' from shortlist');
       x.addEventListener('click',()=>{const i=list.indexOf(id); if(i>=0) list.splice(i,1); saveList(); refreshAll(); renderList(); toast(N[k][1]+' removed.',()=>{list.splice(Math.min(i,list.length),0,id); saveList(); refreshAll(); renderList()})});
+      if(E[k]||REV[k].length){ const f=document.createElement('button'); f.type='button'; f.className='sim'; f.textContent='Find similar'; f.setAttribute('aria-label','Find artists similar to '+N[k][1]); f.addEventListener('click',()=>hop(k)); li.appendChild(f); li.appendChild(document.createTextNode(' ')); }
       li.appendChild(x); ol.appendChild(li)});
     $('listsum').textContent='Your shortlist ('+list.length+')';
     $('copy').hidden=!list.length; $('copylink').hidden=!list.length;
