@@ -25,6 +25,10 @@ main.pagewide{max-width:1240px}
 h1{font:800 clamp(2.4rem,9vw,3.6rem)/0.95 var(--f-display);letter-spacing:-.02em;margin:0}
 .lede{margin:10px 0 0;color:var(--muted);max-width:56ch;text-wrap:pretty}
 .search{position:relative}
+.qwrap{position:relative}
+.qwrap #q{padding-right:48px}
+.qclear{position:absolute;right:8px;top:calc(50% + 4px);transform:translateY(-50%);width:34px;height:34px;border:0;border-radius:50%;background:transparent;color:var(--muted);font:600 1.4rem/1 var(--f-body);cursor:pointer}
+.qclear:hover{background:var(--line);color:var(--fg)}
 label.cap,.cap{font:500 .72rem/1 var(--f-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 #q{width:100%;margin-top:8px;font:500 1.15rem var(--f-body);color:var(--fg);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:14px 16px}
 #q:focus-visible{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
@@ -335,7 +339,10 @@ ul.res.grid .player{margin-inline:12px}
   <div id="viewFind" role="tabpanel" aria-labelledby="tabFind" class="panel" hidden>
     <section class="search" aria-label="Find similar artists">
       <label class="cap" for="q">Artist you already like</label>
-      <input id="q" type="text" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sug" aria-autocomplete="list" placeholder="Start typing a name">
+      <div class="qwrap">
+        <input id="q" type="text" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="sug" aria-autocomplete="list" placeholder="Start typing a name">
+        <button type="button" class="qclear" id="qclear" aria-label="Clear search" hidden>×</button>
+      </div>
       <ul id="sug" role="listbox" hidden></ul>
       <div class="chips" id="chips"><span class="cap">Try</span></div>
       <div class="chips" id="recent" hidden><span class="cap">Recent</span></div>
@@ -566,7 +573,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   }
   const BASE_TITLE=document.title;
   function pick(k,stay,nohash){ if(!stay) setTab('find'); cur=k;
-    if(!nohash){ recent=[N[k][0]].concat(recent.filter(x=>x!==N[k][0])).slice(0,8); saveRecent(); renderRecent(); } shown=24; $('q').value=N[k][1]; hideSug(); results=related(k); render();
+    if(!nohash){ recent=[N[k][0]].concat(recent.filter(x=>x!==N[k][0])).slice(0,8); saveRecent(); renderRecent(); } shown=24; $('q').value=N[k][1]; qsync(); hideSug(); results=related(k); render();
     $('sharelink').hidden=false;
     if(!nohash){ try{history.replaceState(null,'','#like='+N[k][0])}catch(e){} }
     if(!(stay&&nohash)) document.title='Artists like '+N[k][1]+' | '+BASE_TITLE;
@@ -626,6 +633,10 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       else if(e.key==='Escape') hide();
     });
   }
+  function qsync(){ $('qclear').hidden=!$('q').value }
+  $('q').addEventListener('input',qsync);
+  $('q').addEventListener('keydown',e=>{ if(e.key==='Escape'&&$('sug').hidden&&$('q').value){ $('q').value=''; qsync() } });
+  $('qclear').addEventListener('click',()=>{ $('q').value=''; qsync(); hideSug(); $('q').focus() });
   attachSearch($('q'),$('sug'),k=>pick(k));
   attachSearch($('gq'),$('gsug'),k=>{pick(k); $('gq').value=''; $('gq').blur(); window.scrollTo(0,0)});
 
@@ -1335,7 +1346,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   renderHome();
   renderRecent();
   if(start>=0) pick(start,true,true);
-  $('q').value='';
+  $('q').value=''; qsync();
   if(ui.tab==='find'||ui.tab==='page') setTab(ui.tab);
   initMyPage();
   { const m=/^#like=(\d+)$/.exec(location.hash); if(m){ const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&(E[k]||REV[k].length)) pick(k,false,true); } }
