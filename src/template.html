@@ -267,8 +267,9 @@ ul.res.grid .empty{grid-column:1/-1}
 .links a.play:hover{text-decoration:none;filter:brightness(1.1)}
 .player{grid-column:1 / -1;margin-top:6px}
 .player .now{font-size:.8rem;color:var(--muted)}
-.player .prog{height:4px;border-radius:2px;background:var(--bar);margin-top:6px;overflow:hidden}
+.player .prog{height:10px;border-radius:5px;background:var(--bar);margin-top:6px;overflow:hidden;cursor:pointer}
 .player .prog i{display:block;height:100%;width:0;background:var(--accent)}
+.player .prog:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 ul.res.grid .player{margin-inline:12px}
 @media (max-width:480px){.row{grid-template-columns:44px minmax(0,1fr)}.pic{width:44px;font-size:.95rem}.bsearch{max-width:none;flex-basis:100%}.fans{grid-column:2;text-align:left}.fans small{display:inline;margin-left:6px}.scale,.links{grid-column:1 / 3}}
 @media (prefers-reduced-motion:no-preference){.row{animation:in .28s ease both}@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}}
@@ -505,8 +506,11 @@ const G = /*DATA*/;
           bar.innerHTML='<div class="now"></div><div class="prog"><i></i></div>';
           bar.querySelector('.now').textContent='Now playing: '+t.title_short+' \u2014 '+a[1]+' (30-second preview from Deezer)';
           li.appendChild(bar);
-          NOW={el,au,bar}; el.textContent='\u25A0 Stop'; el.setAttribute('aria-pressed','true');
-          au.addEventListener('timeupdate',()=>{const i=bar.querySelector('i'); if(i&&au.duration) i.style.width=(au.currentTime/au.duration*100)+'%'});
+          { const pr=bar.querySelector('.prog'); pr.setAttribute('role','slider'); pr.tabIndex=0; pr.setAttribute('aria-label','Seek within the preview'); pr.setAttribute('aria-valuemin','0'); pr.setAttribute('aria-valuemax','100'); pr.setAttribute('aria-valuenow','0');
+            pr.addEventListener('click',e=>{ const r=pr.getBoundingClientRect(); if(au.duration&&r.width) au.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*au.duration });
+            pr.addEventListener('keydown',e=>{ if(!au.duration) return; if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); au.currentTime=Math.max(0,Math.min(au.duration,au.currentTime+(e.key==='ArrowRight'?5:-5))) } }); }
+                    NOW={el,au,bar}; el.textContent='\u25A0 Stop'; el.setAttribute('aria-pressed','true');
+          au.addEventListener('timeupdate',()=>{const i=bar.querySelector('i'); if(i&&au.duration){ const v=au.currentTime/au.duration*100; i.style.width=v+'%'; bar.querySelector('.prog').setAttribute('aria-valuenow',Math.round(v)) }});
           au.addEventListener('ended',()=>{
             const wasLi=li; stopNow();
             if(!auto) return;
