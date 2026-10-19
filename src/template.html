@@ -1341,9 +1341,9 @@ const G = /*DATA*/;
     $('viewHome').hidden=t!=='home'; $('viewFind').hidden=t!=='find'; $('viewPage').hidden=t!=='page'; $('controls').hidden=t==='page';
     $('tabHome').setAttribute('aria-selected',t==='home'); $('tabFind').setAttribute('aria-selected',t==='find'); $('tabPage').setAttribute('aria-selected',t==='page');
   }
-  $('tabPage').addEventListener('click',()=>{setTab('page'); if(!$('pedit').hidden) renderOwn()});
-  $('tabHome').addEventListener('click',()=>setTab('home'));
-  $('tabFind').addEventListener('click',()=>setTab('find'));
+  $('tabPage').addEventListener('click',()=>{setTab('page'); window.scrollTo(0,0); if(!$('pedit').hidden) renderOwn()});
+  $('tabHome').addEventListener('click',()=>{setTab('home'); window.scrollTo(0,0)});
+  $('tabFind').addEventListener('click',()=>{setTab('find'); window.scrollTo(0,0)});
 
   // view toggle
   const LISTS=['newlist','soonlist','gems','res'];
