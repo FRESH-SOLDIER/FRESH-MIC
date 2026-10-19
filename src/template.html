@@ -380,6 +380,7 @@ ul.res.grid .player{margin-inline:12px}
     <button class="copy" id="copylink" type="button">Copy shortlist link</button>
     <button class="copy" id="dlcsv" type="button">Download as spreadsheet (CSV)</button>
     <button class="copy" id="prlist" type="button">Print shortlist</button>
+    <button class="copy" id="clrlist" type="button" hidden>Clear shortlist</button>
     <span class="cap" id="copied" style="margin-left:10px"></span>
   </details>
 
@@ -567,10 +568,11 @@ const G = /*DATA*/;
       if(E[k]||REV[k].length){ const f=document.createElement('button'); f.type='button'; f.className='sim'; f.textContent='Find similar'; f.setAttribute('aria-label','Find artists similar to '+N[k][1]); f.addEventListener('click',()=>hop(k)); li.appendChild(f); li.appendChild(document.createTextNode(' ')); }
       li.appendChild(x); ol.appendChild(li)});
     $('listsum').textContent='Your shortlist ('+list.length+')';
-    $('copy').hidden=!list.length; $('copylink').hidden=!list.length;
+    $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
   }
 
+  $('clrlist').addEventListener('click',()=>{ const old=list.slice(); if(!old.length) return; list.length=0; saveList(); refreshAll(); renderList(); toast('Shortlist cleared ('+old.length+' artists).',()=>{ list.push(...old); saveList(); refreshAll(); renderList() }); });
   $('hidclear').addEventListener('click',()=>{hid.clear(); saveHid(); refreshAll(); toast('All artists are visible again.')});
   renderHidBar();
 
