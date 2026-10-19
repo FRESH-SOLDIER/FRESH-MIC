@@ -356,7 +356,7 @@ ul.res.grid .player{margin-inline:12px}
       <div class="chips" id="recent" hidden><span class="cap">Recent</span></div>
     </section>
     <section aria-live="polite">
-      <div class="head"><h2 id="title"></h2><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button></div>
+      <div class="head"><h2 id="title"></h2><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button></div>
       <p class="legend" id="legend" hidden>Each bar is an artist's fan count on a log scale: longer means bigger. The dark tick marks the artist you searched for, so bars that stop short of it are smaller.</p>
     <div class="ctl" id="sortctl" style="margin:0 0 12px"><div class="cap" id="sortlab">Order results by</div><div class="seg" id="sortseg" role="group" aria-labelledby="sortlab"></div></div>
       <ul class="res" id="res"></ul>
@@ -524,7 +524,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     $('title').textContent='Like '+N[cur][1];
     const qf=N[cur][2]||0;
     $('meta').textContent=fmt(qf)+' fans · '+results.length+' match'+(results.length===1?'':'es');
-    $('legend').hidden=!results.length;
+    $('legend').hidden=!results.length; $('saveall').hidden=!results.length;
     if(!results.length){
       const li=document.createElement('li'); li.className='empty';
       li.textContent='Nothing this small is linked to '+N[cur][1]+' in the snapshot. Raise the fan limit above.';
@@ -575,6 +575,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   }
 
   $('clrlist').addEventListener('click',()=>{ const old=list.slice(); if(!old.length) return; list.length=0; saveList(); refreshAll(); renderList(); toast('Shortlist cleared ('+old.length+' artists).',()=>{ list.push(...old); saveList(); refreshAll(); renderList() }); });
+  $('saveall').addEventListener('click',()=>{ const add=results.slice(0,shown).map(r=>N[r.k][0]).filter(id=>!list.includes(id)); if(!add.length){ toast('Everything shown is already in your shortlist.'); return } list.push(...add); saveList(); refreshAll(); renderList(); render(); toast('Saved '+add.length+' artists to your shortlist.',()=>{ add.forEach(id=>{const i=list.indexOf(id); if(i>=0) list.splice(i,1)}); saveList(); refreshAll(); renderList(); render() }); });
   $('hidclear').addEventListener('click',()=>{hid.clear(); saveHid(); refreshAll(); toast('All artists are visible again.')});
   renderHidBar();
 
