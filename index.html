@@ -760,6 +760,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     if(!fresh.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No recent releases match these filters. Raise the fan limit, pick another genre or choose a different release type.'; nl.appendChild(li)}
     fresh.slice(0,newShown).forEach(x=>nl.appendChild(card(x)));
     $('newmore').hidden=fresh.length<=newShown;
+    $('newmore').textContent='Show '+Math.max(0,Math.min(24,fresh.length-newShown))+' more ('+Math.min(newShown,fresh.length)+' of '+fresh.length+' shown)';
     const sl=$('soonlist'); sl.textContent='';
     $('soonsec').hidden=!soon.length;
     $('soonmeta').textContent=soon.length+' announced';
@@ -788,7 +789,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     entries.forEach(([g,c])=>mkc(g,gname(g),c));
     renderMute();
   })();
-  $('newmore').addEventListener('click',()=>{newShown+=24;renderHome()});
+  $('newmore').addEventListener('click',()=>{const prev=newShown; newShown+=24; renderHome(); const rows=$('newlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
   $('shuf').addEventListener('click',()=>{gemSeed=Math.random();gemShown=8;renderHome()});
   $('gemmore').addEventListener('click',()=>{const prev=gemShown; gemShown+=8; renderHome(); const rows=$('gems').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
 
