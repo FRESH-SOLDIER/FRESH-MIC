@@ -1384,6 +1384,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   function setTab(t){
     if(t!=='find'&&t!=='page') t='home';
     ui.tab=t; saveUi(); if(t!=='page') sndOff();
+    document.title=t==='page'?'My page | '+BASE_TITLE:(t==='find'&&cur>=0?'Artists like '+N[cur][1]+' | '+BASE_TITLE:(t==='find'?'Find similar artists | '+BASE_TITLE:BASE_TITLE));
     document.querySelector('main').classList.toggle('pagewide',t==='page');
     $('viewHome').hidden=t!=='home'; $('viewFind').hidden=t!=='find'; $('viewPage').hidden=t!=='page'; $('controls').hidden=t==='page';
     $('tabHome').setAttribute('aria-selected',t==='home'); $('tabFind').setAttribute('aria-selected',t==='find'); $('tabPage').setAttribute('aria-selected',t==='page');
