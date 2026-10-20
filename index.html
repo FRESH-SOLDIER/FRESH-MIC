@@ -257,6 +257,7 @@ ul.res.grid .empty{grid-column:1/-1}
 
 .tabs button{font:700 1rem var(--f-display);color:var(--muted);background:transparent;border:0;border-bottom:4px solid transparent;margin-bottom:-2px;padding:10px 14px;cursor:pointer}
 .tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+@media (forced-colors:active){button.shuf,a.shuf,.toast button,.qclear{border:1px solid ButtonText}.tabs button[aria-selected="true"]{border-bottom:3px solid Highlight;forced-color-adjust:none;color:CanvasText}#sug li[aria-selected="true"],#gsug li[aria-selected="true"]{outline:2px solid Highlight;outline-offset:-2px}#totop{border:2px solid ButtonText}}
 @media (max-width:480px){.tabs{max-width:100%;overflow-x:auto;scrollbar-width:none;gap:2px}.tabs button{white-space:nowrap;font-size:.72rem;padding:10px 6px}}
 .chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
 .chip small{font:400 .72rem var(--f-data);opacity:.75;margin-left:4px}
