@@ -688,7 +688,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     if(days>180) return m+', '+d.getUTCFullYear();
     return m;
   }
-  let genre=0, newShown=24, gemSeed=Math.random(), gemShown=8;
+  let genre=(Number.isInteger(ui.genre)&&ui.genre>0?ui.genre:0), newShown=24, gemSeed=Math.random(), gemShown=8;
   let rwin=([7,30].includes(ui.rwin)?ui.rwin:0);
   let rtype=(['album','ep','single'].includes(ui.rtype)?ui.rtype:'');
   let muted=new Set(); try{muted=new Set((JSON.parse(localStorage.getItem('freshmic:mute')||'[]')).map(Number))}catch(e){}
@@ -783,8 +783,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const cnt=new Map(); R.forEach(r=>{ if(r[4].some(x=>x[2]<=TODAY)) cnt.set(r[1],(cnt.get(r[1])||0)+1) });
     const entries=[...cnt.entries()].filter(([g,c])=>GN[g]&&c>=8).sort((a,b)=>b[1]-a[1]);
     const box=$('genres');
+    if(genre&&!entries.some(e=>e[0]===genre)) genre=0;
     const mkc=(id,label,c)=>{const b=document.createElement('button'); b.type='button'; b.className='chip'; b.setAttribute('aria-pressed',id===genre); b.textContent=label; if(c!=null){const sm=document.createElement('small'); sm.textContent=c; b.appendChild(sm)}
-      b.addEventListener('click',()=>{genre=id; newShown=24; gemShown=8; [...box.children].forEach(y=>y.setAttribute('aria-pressed',y===b)); renderMute(); renderHome()}); box.appendChild(b)};
+      b.addEventListener('click',()=>{genre=id; ui.genre=id; saveUi(); newShown=24; gemShown=8; [...box.children].forEach(y=>y.setAttribute('aria-pressed',y===b)); renderMute(); renderHome()}); box.appendChild(b)};
     mkc(0,'All genres');
     entries.forEach(([g,c])=>mkc(g,gname(g),c));
     renderMute();
