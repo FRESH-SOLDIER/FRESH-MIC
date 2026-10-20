@@ -1376,6 +1376,8 @@ const G = /*DATA*/;
     setEditMode(true); buildEditor(); renderOwn();
   }
 
+  // show the / shortcut in the search boxes on devices with a keyboard-like pointer
+  if(matchMedia('(hover:hover) and (pointer:fine)').matches){ $('gq').placeholder='Search an artist (press / anytime)'; $('q').placeholder='Start typing a name (press / anytime)' }
   // tabs
   addEventListener('keydown',e=>{
     if(e.ctrlKey||e.metaKey||e.altKey||e.defaultPrevented) return;
