@@ -480,7 +480,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
 
   // Preview: Deezer's own player (licensed by Deezer, so nothing is copied or re-hosted here).
   let NOW=null, auto=(ui.auto===true);
-  function stopNow(){ if(!NOW) return; try{NOW.au.pause()}catch(e){} NOW.bar.remove(); NOW.el.textContent='\u25B6 Play 30s'; NOW.el.setAttribute('aria-pressed','false'); NOW=null }
+  function playNextFrom(li){ let nx=li.nextElementSibling; while(nx&&!nx.querySelector('button.play')) nx=nx.nextElementSibling; if(nx){ nx.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); nx.querySelector('button.play').click(); } }
+  function mediaClear(){ try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=null; ['play','pause','nexttrack'].forEach(a=>{try{navigator.mediaSession.setActionHandler(a,null)}catch(e){}}) } }catch(e){} }
+  function stopNow(){ if(!NOW) return; try{NOW.au.pause()}catch(e){} NOW.bar.remove(); NOW.el.textContent='\u25B6 Play 30s'; NOW.el.setAttribute('aria-pressed','false'); NOW=null; mediaClear() }
   let jid=0;
   function jsonp(url,cb){
     const name='__dz'+(++jid), sc=document.createElement('script'); let done=false;
@@ -509,14 +511,13 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
           { const pr=bar.querySelector('.prog'); pr.setAttribute('role','slider'); pr.tabIndex=0; pr.setAttribute('aria-label','Seek within the preview'); pr.setAttribute('aria-valuemin','0'); pr.setAttribute('aria-valuemax','100'); pr.setAttribute('aria-valuenow','0');
             pr.addEventListener('click',e=>{ const r=pr.getBoundingClientRect(); if(au.duration&&r.width) au.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*au.duration });
             pr.addEventListener('keydown',e=>{ if(!au.duration) return; if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); au.currentTime=Math.max(0,Math.min(au.duration,au.currentTime+(e.key==='ArrowRight'?5:-5))) } }); }
-                    NOW={el,au,bar}; el.textContent='\u25A0 Stop'; el.setAttribute('aria-pressed','true');
+                    try{ if('mediaSession' in navigator&&window.MediaMetadata){ navigator.mediaSession.metadata=new MediaMetadata({title:t.title_short,artist:a[1],album:'Fresh Mic \u00B7 30-second preview'}); const ms=navigator.mediaSession; ms.setActionHandler('play',()=>{au.play().catch(()=>{})}); ms.setActionHandler('pause',()=>{au.pause()}); ms.setActionHandler('nexttrack',()=>{ const l=li; stopNow(); playNextFrom(l) }); } }catch(e){}
+          NOW={el,au,bar}; el.textContent='\u25A0 Stop'; el.setAttribute('aria-pressed','true');
           au.addEventListener('timeupdate',()=>{const i=bar.querySelector('i'); if(i&&au.duration){ const v=au.currentTime/au.duration*100; i.style.width=v+'%'; bar.querySelector('.prog').setAttribute('aria-valuenow',Math.round(v)) }});
           au.addEventListener('ended',()=>{
             const wasLi=li; stopNow();
             if(!auto) return;
-            let nx=wasLi.nextElementSibling;
-            while(nx&&!nx.querySelector('button.play')) nx=nx.nextElementSibling;
-            if(nx){ nx.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); nx.querySelector('button.play').click(); }
+            playNextFrom(wasLi);
           });
           au.play().catch(()=>{stopNow(); el.textContent='Tap again to play'});
         });
