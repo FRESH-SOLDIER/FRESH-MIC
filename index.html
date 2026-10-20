@@ -583,6 +583,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     $('more').textContent='Show '+Math.max(0,Math.min(24,results.length-shown))+' more ('+Math.min(shown,results.length)+' of '+results.length+' shown)';
   }
 
+  function updateJump(){ const bs=$('jump').querySelectorAll('button'); const jb=bs[bs.length-1]; if(jb) jb.textContent='My shortlist'+(list.length?' ('+list.length+')':'') }
   function renderList(){
     const ol=$('listol'); ol.textContent='';
     const idx=new Map(N.map((a,i)=>[a[0],i]));
@@ -594,6 +595,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       if(E[k]||REV[k].length){ const f=document.createElement('button'); f.type='button'; f.className='sim'; f.textContent='Find similar'; f.setAttribute('aria-label','Find artists similar to '+N[k][1]); f.addEventListener('click',()=>hop(k)); li.appendChild(f); li.appendChild(document.createTextNode(' ')); }
       li.appendChild(x); ol.appendChild(li)});
     $('listsum').textContent='Your shortlist ('+list.length+')';
+    updateJump();
     $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
   }
@@ -1412,6 +1414,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   [['secNew','New releases'],['soonsec','Coming soon'],['secGems','Hidden gems'],['listbox','My shortlist']].forEach(([id,l])=>{
     const b=document.createElement('button'); b.type='button'; b.textContent=l;
     b.addEventListener('click',()=>{const el=$(id); if(el.tagName==='DETAILS') el.open=true; el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})}); $('jump').appendChild(b); if(id==='soonsec'){const sync=()=>{b.hidden=$('soonsec').hidden}; sync(); new MutationObserver(sync).observe($('soonsec'),{attributes:true,attributeFilter:['hidden']})}});
+  updateJump();
   $('top').addEventListener('click',()=>window.scrollTo({top:0,behavior:reduce?'auto':'smooth'}));
   addEventListener('scroll',()=>{$('top').hidden=window.scrollY<700},{passive:true});
 
