@@ -394,7 +394,7 @@ ul.res.grid .player{margin-inline:12px}
   <footer class="foot">
     <span>Similarity and release data come from Deezer. Fan counts are Deezer followers as of the snapshot date below, so an artist can be bigger elsewhere. A new release here may be missing if Deezer has not listed it.</span>
     <span id="snap"></span>
-    <span>Keyboard: press <kbd>/</kbd> to search, <kbd>S</kbd> for a random artist.</span>
+    <span>Keyboard: press <kbd>/</kbd> to search, <kbd>S</kbd> for a random artist, <kbd>Esc</kbd> to stop a preview.</span>
     <span>Only artists in this snapshot can be searched. If yours is missing, try a similar one.</span>
   </footer>
 </main>
@@ -1347,6 +1347,7 @@ const G = /*DATA*/;
     if(e.ctrlKey||e.metaKey||e.altKey||e.defaultPrevented) return;
     const a=document.activeElement, typing=a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable);
     if(typing||$('viewPage').hidden===false) return;
+    if(e.key==='Escape'&&NOW){ e.preventDefault(); stopNow(); return }
     if(e.key==='/'){ e.preventDefault(); setTab('find'); $('q').focus(); $('q').select() }
     else if(e.key==='s'||e.key==='S'){ e.preventDefault(); $('surp').click() }
   });
