@@ -344,6 +344,7 @@ ul.res.grid .player{margin-inline:12px}
     <section class="sec" id="soonsec" hidden>
       <div class="head"><h2>Coming soon</h2><span class="meta" id="soonmeta"></span></div>
       <ul class="res" id="soonlist"></ul>
+      <button class="more" id="soonmore" type="button" hidden>Show more</button>
     </section>
     <section class="sec" id="secGems">
       <div class="head"><h2>Hidden gems</h2><span class="meta" id="gemmeta"></span><button class="shuf" id="shuf" type="button">Shuffle</button></div>
@@ -695,7 +696,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     if(days>180) return m+', '+d.getUTCFullYear();
     return m;
   }
-  let genre=(Number.isInteger(ui.genre)&&ui.genre>0?ui.genre:0), newShown=24, gemSeed=Math.random(), gemShown=8;
+  let genre=(Number.isInteger(ui.genre)&&ui.genre>0?ui.genre:0), newShown=24, gemSeed=Math.random(), gemShown=8, soonShown=12;
   let rwin=([7,30].includes(ui.rwin)?ui.rwin:0);
   let rtype=(['album','ep','single'].includes(ui.rtype)?ui.rtype:'');
   let muted=new Set(); try{muted=new Set((JSON.parse(localStorage.getItem('freshmic:mute')||'[]')).map(Number))}catch(e){}
@@ -771,7 +772,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const sl=$('soonlist'); sl.textContent='';
     $('soonsec').hidden=!soon.length;
     $('soonmeta').textContent=soon.length+' announced';
-    soon.slice(0,12).forEach(x=>sl.appendChild(card(x)));
+    soon.slice(0,soonShown).forEach(x=>sl.appendChild(card(x)));
+    $('soonmore').hidden=soon.length<=soonShown;
+    $('soonmore').textContent='Show '+Math.max(0,Math.min(12,soon.length-soonShown))+' more ('+Math.min(soonShown,soon.length)+' of '+soon.length+' shown)';
     // hidden gems: small artists with music out in the last year, in a stable shuffled order per Shuffle click
     const gems=[]; const yr=cutoff(365);
     R.forEach(r=>{const k=r[0], f=N[k][2]; if(f<300||f>3000||!inLimit(f)||hid.has(N[k][0])) return; if(r[2]<yr||r[3]<2) return; if(genre?r[1]!==genre:muted.has(r[1])) return; gems.push({k,f,g:r[1],last:r[2]})});
@@ -798,6 +801,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     renderMute();
   })();
   $('newmore').addEventListener('click',()=>{const prev=newShown; newShown+=24; renderHome(); const rows=$('newlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
+  $('soonmore').addEventListener('click',()=>{const prev=soonShown; soonShown+=12; renderHome(); const rows=$('soonlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
   $('shuf').addEventListener('click',()=>{gemSeed=Math.random();gemShown=8;renderHome()});
   $('gemmore').addEventListener('click',()=>{const prev=gemShown; gemShown+=8; renderHome(); const rows=$('gems').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
 
