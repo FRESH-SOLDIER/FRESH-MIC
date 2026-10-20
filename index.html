@@ -263,6 +263,7 @@ ul.res.grid .empty{grid-column:1/-1}
 .badge{display:inline-block;margin-left:8px;font:500 .66rem/1 var(--f-data);letter-spacing:.06em;text-transform:uppercase;color:#14182B;background:var(--tiny);border-radius:5px;padding:3px 6px;vertical-align:middle}
 .sec{display:flex;flex-direction:column;gap:2px}
 .sec .sub{color:var(--muted);font-size:.9rem;margin:6px 0 0;max-width:60ch}
+a.shuf{text-decoration:none;display:inline-block}
 .shuf{font:500 .85rem var(--f-body);color:var(--accent-fg);background:var(--accent);border:0;border-radius:8px;padding:7px 12px;cursor:pointer}
 .links button.sim{font:500 .86rem var(--f-body);color:var(--accent);background:transparent;border:0;padding:0;cursor:pointer}
 .links button.sim:hover{text-decoration:underline}
@@ -368,7 +369,7 @@ ul.res.grid .player{margin-inline:12px}
       <div class="chips" id="recent" hidden><span class="cap">Recent</span></div>
     </section>
     <section aria-live="polite">
-      <div class="head"><h2 id="title"></h2><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button></div>
+      <div class="head"><h2 id="title"></h2><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button><a class="shuf" id="seedlink" target="_blank" rel="noopener" hidden>Listen on Deezer</a></div>
       <p class="legend" id="legend" hidden>Each bar is an artist's fan count on a log scale: longer means bigger. The dark tick marks the artist you searched for, so bars that stop short of it are smaller.</p>
     <div class="ctl" id="sortctl" style="margin:0 0 12px"><div class="cap" id="sortlab">Order results by</div><div class="seg" id="sortseg" role="group" aria-labelledby="sortlab"></div></div>
       <ul class="res" id="res"></ul>
@@ -538,6 +539,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const res=$('res'); res.textContent='';
     if(cur<0){return}
     $('title').textContent='Like '+N[cur][1];
+    { const sl=$('seedlink'); sl.href='https://www.deezer.com/artist/'+N[cur][0]; sl.textContent='Listen to '+N[cur][1]+' on Deezer'; sl.hidden=false }
     const qf=N[cur][2]||0;
     $('meta').textContent=fmt(qf)+' fans · '+results.length+' match'+(results.length===1?'':'es');
     $('legend').hidden=!results.length; $('saveall').hidden=!results.length;
