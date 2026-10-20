@@ -448,7 +448,8 @@ const G = /*DATA*/;
     const b=$('hidbar'); b.hidden=!hid.size; if(!hid.size) return;
     $('hidn').textContent=hid.size+' artist'+(hid.size===1?'':'s')+' hidden';
   }
-  $('snap').textContent='Snapshot: '+G.date+' · '+N.length.toLocaleString()+' artists';
+  const NOWD=(()=>{ try{ const r=new Date().toISOString().slice(0,10); return r>G.today?r:G.today }catch(e){ return G.today } })();
+  { const age=Math.round((new Date(NOWD+'T00:00:00Z')-new Date(G.date+'T00:00:00Z'))/864e5); $('snap').textContent='Snapshot: '+G.date+(age>0?' ('+age+(age===1?' day':' days')+' old)':'')+' · '+N.length.toLocaleString()+' artists'; }
 
   const LMIN=2, LMAX=7; // log10 fans range for the strip
   const pos=f=>Math.max(0,Math.min(1,(Math.log10(Math.max(f,100))-LMIN)/(LMAX-LMIN)));
@@ -695,9 +696,9 @@ const G = /*DATA*/;
   const gname=id=>GN[id]||'Other';
   function cutoff(days){const d=new Date(TODAY+'T00:00:00Z');d.setUTCDate(d.getUTCDate()-days);return d.toISOString().slice(0,10)}
   function when(date){
-    const days=Math.round((new Date(TODAY+'T00:00:00Z')-new Date(date+'T00:00:00Z'))/864e5);
     const d=new Date(date+'T00:00:00Z'), m=d.toLocaleString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
-    if(days<0) return 'Out '+m;
+    if(date>TODAY) return 'Out '+m;
+    const days=Math.round((new Date(NOWD+'T00:00:00Z')-d)/864e5);
     if(days===0) return 'Today';
     if(days<=30) return days+(days===1?' day ago':' days ago');
     if(days>180) return m+', '+d.getUTCFullYear();
