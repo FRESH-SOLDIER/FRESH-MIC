@@ -1386,7 +1386,13 @@ const G = /*DATA*/;
     document.querySelector('main').classList.toggle('pagewide',t==='page');
     $('viewHome').hidden=t!=='home'; $('viewFind').hidden=t!=='find'; $('viewPage').hidden=t!=='page'; $('controls').hidden=t==='page';
     $('tabHome').setAttribute('aria-selected',t==='home'); $('tabFind').setAttribute('aria-selected',t==='find'); $('tabPage').setAttribute('aria-selected',t==='page');
+    [['tabHome','home'],['tabFind','find'],['tabPage','page']].forEach(([id,n])=>{ $(id).tabIndex=(n===t?0:-1) });
   }
+  $('tabHome').parentElement.addEventListener('keydown',e=>{
+    const tabs=[$('tabHome'),$('tabFind'),$('tabPage')], i=tabs.indexOf(document.activeElement); if(i<0) return;
+    let j=-1; if(e.key==='ArrowRight') j=(i+1)%tabs.length; else if(e.key==='ArrowLeft') j=(i+tabs.length-1)%tabs.length; else if(e.key==='Home') j=0; else if(e.key==='End') j=tabs.length-1;
+    if(j<0) return; e.preventDefault(); tabs[j].focus(); tabs[j].click();
+  });
   $('tabPage').addEventListener('click',()=>{setTab('page'); window.scrollTo(0,0); if(!$('pedit').hidden) renderOwn()});
   $('tabHome').addEventListener('click',()=>{setTab('home'); window.scrollTo(0,0)});
   $('tabFind').addEventListener('click',()=>{setTab('find'); window.scrollTo(0,0)});
@@ -1416,7 +1422,7 @@ const G = /*DATA*/;
   renderRecent();
   if(start>=0) pick(start,true,true);
   $('q').value=''; qsync();
-  if(ui.tab==='find'||ui.tab==='page') setTab(ui.tab);
+  setTab(ui.tab==='find'||ui.tab==='page'?ui.tab:'home');
   initMyPage();
   { const m=/^#like=(\d+)$/.exec(location.hash); if(m){ const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&(E[k]||REV[k].length)) pick(k,false,true); } }
   if(ui.tab==='find'&&!location.hash&&recent.length){ const k=N.findIndex(a=>a[0]===recent[0]); if(k>=0&&(E[k]||REV[k].length)) pick(k,true,true); }
