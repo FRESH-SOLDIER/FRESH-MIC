@@ -36,6 +36,8 @@ label.cap,.cap{font:500 .72rem/1 var(--f-data);letter-spacing:.08em;text-transfo
 #sug li,#gsug li{display:flex;justify-content:space-between;gap:12px;padding:9px 12px;border-radius:7px;cursor:pointer}
 #sug li[aria-selected="true"],#sug li:hover,#gsug li[aria-selected="true"],#gsug li:hover{background:var(--accent);color:var(--accent-fg)}
 #sug mark,#gsug mark{background:transparent;color:inherit;font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+#sug .nomatch,#gsug .nomatch{flex-wrap:wrap;align-items:baseline}
+#sug .nomatch a,#gsug .nomatch a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
 #sug .f,#gsug .f{font:400 .78rem var(--f-data);opacity:.8;white-space:nowrap}
 .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
 .chip{font:500 .88rem var(--f-body);color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
@@ -652,7 +654,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       const by=(a,b)=>(N[b][2]||0)-(N[a][2]||0);
       items=pre.sort(by).concat(sub.sort(by)).slice(0,8);
       ul.textContent='';
-      if(!items.length){const li=document.createElement('li'); li.textContent='Not in the snapshot yet'; li.style.cursor='default'; ul.appendChild(li)}
+      if(!items.length){const li=document.createElement('li'); li.className='nomatch'; li.style.cursor='default'; li.setAttribute('role','status');
+        const sp=document.createElement('span'); sp.textContent='No artist matching \u201C'+v.trim().slice(0,40)+'\u201D in the snapshot. Try fewer letters.'; li.appendChild(sp);
+        const a=document.createElement('a'); a.href='https://www.deezer.com/search/'+encodeURIComponent(v.trim().slice(0,80)); a.target='_blank'; a.rel='noopener'; a.textContent='Search Deezer'; a.addEventListener('mousedown',e=>e.preventDefault()); li.appendChild(a); ul.appendChild(li)}
       items.forEach(k=>{const li=document.createElement('li'); li.setAttribute('role','option'); li.setAttribute('aria-selected','false');
         li.innerHTML='<span></span><span class="f"></span>'; li.lastChild.textContent=fmt(N[k][2]||0)+' fans';
         { const nm=N[k][1], q0=v.trim(), at=q0?nm.toLowerCase().indexOf(q0.toLowerCase()):-1, host=li.firstChild;
