@@ -543,7 +543,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     $('legend').hidden=!results.length; $('saveall').hidden=!results.length;
     if(!results.length){
       const li=document.createElement('li'); li.className='empty';
-      li.textContent='Nothing this small is linked to '+N[cur][1]+' in the snapshot. Raise the fan limit above.';
+      li.textContent='No matches for '+N[cur][1]+' with the current filters.';
+      const fixes=[]; if(limit) fixes.push(['Show any size',()=>$('seg').children[0].click()]); if(directOnly||freshOnly){ const bs=$('sortctl').querySelectorAll('.seg')[1]; if(directOnly&&bs) fixes.push(['Include indirect matches',()=>bs.children[0].click()]); if(freshOnly&&bs) fixes.push(['Include older releases',()=>bs.children[1].click()]) }
+      fixes.forEach(([t,fn])=>{ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent=t; b.addEventListener('click',fn); li.appendChild(b) });
       res.appendChild(li); $('more').hidden=true; return;
     }
     results.slice(0,shown).forEach(r=>{
