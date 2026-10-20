@@ -684,6 +684,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     if(days<0) return 'Out '+m;
     if(days===0) return 'Today';
     if(days<=30) return days+(days===1?' day ago':' days ago');
+    if(days>180) return m+', '+d.getUTCFullYear();
     return m;
   }
   let genre=0, newShown=24, gemSeed=Math.random();
