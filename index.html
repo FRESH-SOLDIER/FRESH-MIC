@@ -264,6 +264,9 @@ ul.res.grid .empty{grid-column:1/-1}
 .sec{display:flex;flex-direction:column;gap:2px}
 .sec .sub{color:var(--muted);font-size:.9rem;margin:6px 0 0;max-width:60ch}
 a.shuf{text-decoration:none;display:inline-block}
+#totop{position:fixed;right:16px;bottom:16px;z-index:40;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:700 1.2rem var(--f-body);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+#totop[hidden]{display:none}
+#totop:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
 .shuf{font:500 .85rem var(--f-body);color:var(--accent-fg);background:var(--accent);border:0;border-radius:8px;padding:7px 12px;cursor:pointer}
 .links button.sim{font:500 .86rem var(--f-body);color:var(--accent);background:transparent;border:0;padding:0;cursor:pointer}
 .links button.sim:hover{text-decoration:underline}
@@ -406,6 +409,7 @@ ul.res.grid .player{margin-inline:12px}
     <span>Keyboard: press <kbd>/</kbd> to search, <kbd>S</kbd> for a random artist, <kbd>Esc</kbd> to stop a preview.</span>
     <span>Only artists in this snapshot can be searched. If yours is missing, try a similar one.</span>
   </footer>
+  <button type="button" id="totop" aria-label="Back to top" hidden>↑</button>
 </main>
 
 <script>
@@ -1378,6 +1382,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
 
   // show the / shortcut in the search boxes on devices with a keyboard-like pointer
   if(matchMedia('(hover:hover) and (pointer:fine)').matches){ $('gq').placeholder='Search an artist (press / anytime)'; $('q').placeholder='Start typing a name (press / anytime)' }
+  // back-to-top button after scrolling a long way
+  { const tt=$('totop'); let tk=false; addEventListener('scroll',()=>{ if(tk) return; tk=true; requestAnimationFrame(()=>{ tk=false; tt.hidden=scrollY<1200 }) },{passive:true}); tt.addEventListener('click',()=>{ scrollTo({top:0,behavior:REDUCE?'auto':'smooth'}); }) }
   // tabs
   addEventListener('keydown',e=>{
     if(e.ctrlKey||e.metaKey||e.altKey||e.defaultPrevented) return;
