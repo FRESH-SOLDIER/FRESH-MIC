@@ -343,9 +343,10 @@ ul.res.grid .player{margin-inline:12px}
       <ul class="res" id="soonlist"></ul>
     </section>
     <section class="sec" id="secGems">
-      <div class="head"><h2>Hidden gems</h2><button class="shuf" id="shuf" type="button">Shuffle</button></div>
+      <div class="head"><h2>Hidden gems</h2><span class="meta" id="gemmeta"></span><button class="shuf" id="shuf" type="button">Shuffle</button></div>
       <p class="sub">Artists with a few thousand fans or fewer who have put music out in the last year.</p>
       <ul class="res" id="gems"></ul>
+      <button class="more" id="gemmore" type="button" hidden>Show more</button>
     </section>
   </div>
 
@@ -687,7 +688,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     if(days>180) return m+', '+d.getUTCFullYear();
     return m;
   }
-  let genre=0, newShown=24, gemSeed=Math.random();
+  let genre=0, newShown=24, gemSeed=Math.random(), gemShown=8;
   let rwin=([7,30].includes(ui.rwin)?ui.rwin:0);
   let rtype=(['album','ep','single'].includes(ui.rtype)?ui.rtype:'');
   let muted=new Set(); try{muted=new Set((JSON.parse(localStorage.getItem('freshmic:mute')||'[]')).map(Number))}catch(e){}
@@ -770,7 +771,10 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     for(let i=gems.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[gems[i],gems[j]]=[gems[j],gems[i]]}
     const gl=$('gems'); gl.textContent='';
     if(!gems.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No hidden gems match this filter.'; gl.appendChild(li)}
-    gems.slice(0,8).forEach(g=>gl.appendChild(card(g)));
+    gems.slice(0,gemShown).forEach(g=>gl.appendChild(card(g)));
+    $('gemmeta').textContent=gems.length?gems.length+' match':'';
+    $('gemmore').hidden=gems.length<=gemShown;
+    $('gemmore').textContent='Show '+Math.max(0,Math.min(8,gems.length-gemShown))+' more ('+Math.min(gemShown,gems.length)+' of '+gems.length+' shown)';
   }
 
   // genre chips (only genres with enough recent releases)
@@ -779,13 +783,14 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const entries=[...cnt.entries()].filter(([g,c])=>GN[g]&&c>=8).sort((a,b)=>b[1]-a[1]);
     const box=$('genres');
     const mkc=(id,label,c)=>{const b=document.createElement('button'); b.type='button'; b.className='chip'; b.setAttribute('aria-pressed',id===genre); b.textContent=label; if(c!=null){const sm=document.createElement('small'); sm.textContent=c; b.appendChild(sm)}
-      b.addEventListener('click',()=>{genre=id; newShown=24; [...box.children].forEach(y=>y.setAttribute('aria-pressed',y===b)); renderMute(); renderHome()}); box.appendChild(b)};
+      b.addEventListener('click',()=>{genre=id; newShown=24; gemShown=8; [...box.children].forEach(y=>y.setAttribute('aria-pressed',y===b)); renderMute(); renderHome()}); box.appendChild(b)};
     mkc(0,'All genres');
     entries.forEach(([g,c])=>mkc(g,gname(g),c));
     renderMute();
   })();
   $('newmore').addEventListener('click',()=>{newShown+=24;renderHome()});
-  $('shuf').addEventListener('click',()=>{gemSeed=Math.random();renderHome()});
+  $('shuf').addEventListener('click',()=>{gemSeed=Math.random();gemShown=8;renderHome()});
+  $('gemmore').addEventListener('click',()=>{const prev=gemShown; gemShown+=8; renderHome(); const rows=$('gems').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
 
   if(G.embed){ const ab=$('autobtn'); $('autowrap').hidden=false; ab.setAttribute('aria-pressed',auto);
     ab.addEventListener('click',()=>{auto=!auto; ui.auto=auto; saveUi(); ab.setAttribute('aria-pressed',auto); toast(auto?'Autoplay on: the next artist\u2019s preview starts when one ends.':'Autoplay off.')}); }
