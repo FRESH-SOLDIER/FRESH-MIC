@@ -423,7 +423,7 @@ ul.res.grid .player{margin-inline:12px}
     <span>Only artists in this snapshot can be searched. If yours is missing, try a similar one.</span>
   </footer>
   <dialog id="keys" aria-labelledby="keysT"><h2 id="keysT">Keyboard shortcuts</h2>
-    <dl><dt><kbd>/</kbd></dt><dd>Search for an artist</dd><dt><kbd>S</kbd></dt><dd>Random artist</dd><dt><kbd>J</kbd> <kbd>K</kbd></dt><dd>Next and previous result</dd><dt><kbd>P</kbd></dt><dd>Preview the selected result</dd><dt><kbd>B</kbd></dt><dd>Save it to your shortlist</dd><dt><kbd>X</kbd></dt><dd>Hide it</dd><dt><kbd>F</kbd></dt><dd>Find artists like it</dd><dt><kbd>Z</kbd></dt><dd>Undo the last hide, remove or clear</dd><dt><kbd>Esc</kbd></dt><dd>Stop a preview, dismiss a message or close this</dd><dt><kbd>?</kbd></dt><dd>Show this list</dd></dl>
+    <dl><dt><kbd>/</kbd></dt><dd>Search for an artist</dd><dt><kbd>S</kbd></dt><dd>Random artist</dd><dt><kbd>J</kbd> <kbd>K</kbd></dt><dd>Next and previous result</dd><dt><kbd>P</kbd></dt><dd>Preview the selected result</dd><dt><kbd>B</kbd></dt><dd>Save it to your shortlist</dd><dt><kbd>O</kbd></dt><dd>Open it on Deezer</dd><dt><kbd>X</kbd></dt><dd>Hide it</dd><dt><kbd>F</kbd></dt><dd>Find artists like it</dd><dt><kbd>Z</kbd></dt><dd>Undo the last hide, remove or clear</dd><dt><kbd>Esc</kbd></dt><dd>Stop a preview, dismiss a message or close this</dd><dt><kbd>?</kbd></dt><dd>Show this list</dd></dl>
     <button type="button" class="shuf" id="keysX">Close</button></dialog>
 </main>
 
@@ -1409,10 +1409,11 @@ const G = /*DATA*/;
     if(typing||$('viewPage').hidden===false) return;
     if(e.key==='Escape'&&NOW){ e.preventDefault(); stopNow(); return }
     if(e.key==='Escape'){ const tz=document.getElementById('toast'); if(tz){ e.preventDefault(); clearTimeout(toastT); tz.remove(); return } }
-    if((e.key==='j'||e.key==='k'||e.key==='p'||e.key==='b'||e.key==='x'||e.key==='f')&&$('viewFind').hidden===false){
+    if((e.key==='j'||e.key==='k'||e.key==='p'||e.key==='b'||e.key==='x'||e.key==='f'||e.key==='o')&&$('viewFind').hidden===false){
       const rows=[...document.querySelectorAll('#res .row')]; if(!rows.length) return;
       const here=a&&a.closest&&a.closest('#res .row'); let i=rows.indexOf(here);
       if(e.key==='x'||e.key==='f'){ if(i<0) return; const xb=rows[i].querySelector(e.key==='x'?'.hide':'.sim'); if(xb){ e.preventDefault(); xb.click() } return }
+      if(e.key==='o'){ if(i<0) return; const ob=rows[i].querySelector('.links a'); if(ob){ e.preventDefault(); window.open(ob.href,'_blank','noopener') } return }
       if(e.key==='b'){ if(i<0) return; const sb=rows[i].querySelector('.save'); if(sb){ e.preventDefault(); sb.click() } return }
       if(e.key==='p'){ if(i<0) return; const pb=rows[i].querySelector('.play'); if(pb){ e.preventDefault(); pb.click() } return }
       e.preventDefault(); i=e.key==='j'?Math.min(rows.length-1,i+1):Math.max(0,i-1);
