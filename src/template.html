@@ -272,6 +272,8 @@ ul.res.grid .empty{grid-column:1/-1}
 .sec .sub{color:var(--muted);font-size:.9rem;margin:6px 0 0;max-width:60ch}
 a.shuf{text-decoration:none;display:inline-block}
 a[target="_blank"]::after{content:"";content:"" / " (opens in a new tab)"}
+button.linkbtn{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer}
+button.linkbtn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
 #keys{border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--fg);padding:20px 24px;max-width:min(92vw,420px)}
 #keys h2{margin:0 0 12px;font:800 1.2rem var(--f-display)}
 #keys dl{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0 0 16px}
@@ -417,7 +419,7 @@ ul.res.grid .player{margin-inline:12px}
   <footer class="foot">
     <span>Similarity and release data come from Deezer. Fan counts are Deezer followers as of the snapshot date below, so an artist can be bigger elsewhere. A new release here may be missing if Deezer has not listed it.</span>
     <span id="snap"></span>
-    <span>Keyboard: press <kbd>/</kbd> to search, <kbd>S</kbd> for a random artist, <kbd>J</kbd> and <kbd>K</kbd> to move through results, <kbd>P</kbd> to preview the one you are on, <kbd>B</kbd> to save it, <kbd>X</kbd> to hide it, <kbd>F</kbd> to find artists like it, <kbd>Esc</kbd> to stop a preview, <kbd>?</kbd> for this list.</span>
+    <span>Keyboard: press <kbd>?</kbd> for the list of shortcuts, or <button type="button" class="linkbtn" id="keysOpen">show shortcuts</button>.</span>
     <span>Only artists in this snapshot can be searched. If yours is missing, try a similar one.</span>
   </footer>
   <dialog id="keys" aria-labelledby="keysT"><h2 id="keysT">Keyboard shortcuts</h2>
@@ -1399,6 +1401,7 @@ const G = /*DATA*/;
   // fade the edges of the genre chip row when more chips are hidden off-screen
   { const g=$('genres'); const fade=()=>{ const m=g.scrollWidth-g.clientWidth; g.classList.toggle('fl',g.scrollLeft>4); g.classList.toggle('fr',m>4&&g.scrollLeft<m-4) }; g.addEventListener('scroll',fade,{passive:true}); addEventListener('resize',fade); new MutationObserver(fade).observe(g,{childList:true}); fade() }
   $('keysX').addEventListener('click',()=>$('keys').close());
+  $('keysOpen').addEventListener('click',()=>{ const d=$('keys'); if(d.showModal&&!d.open){ d.showModal(); $('keysX').focus() } });
   // tabs
   addEventListener('keydown',e=>{
     if(e.ctrlKey||e.metaKey||e.altKey||e.defaultPrevented) return;
