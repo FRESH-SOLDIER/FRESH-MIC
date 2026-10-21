@@ -858,10 +858,11 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   });
 
   let lastSurp=-1;
+  const surpSeen=new Set();
   $('surp').addEventListener('click',()=>{
-    const pool=[]; R.forEach(r=>{const k=r[0], f=N[k][2]; if(f==null||f<300||!inLimit(f)||hid.has(N[k][0])||muted.has(r[1])||k===lastSurp) return; if(!(E[k]||REV[k].length)) return; pool.push(k)});
+    let pool; const build=()=>{ pool=[]; R.forEach(r=>{const k=r[0], f=N[k][2]; if(f==null||f<300||!inLimit(f)||hid.has(N[k][0])||muted.has(r[1])||surpSeen.has(k)) return; if(!(E[k]||REV[k].length)) return; pool.push(k)}); }; build(); if(!pool.length&&surpSeen.size){ surpSeen.clear(); build() }
     if(!pool.length){ toast('Nothing to pick at this size. Raise the fan limit.'); return }
-    const k=pool[Math.floor(Math.random()*pool.length)]; lastSurp=k;
+    const k=pool[Math.floor(Math.random()*pool.length)]; lastSurp=k; surpSeen.add(k); if(surpSeen.size>40) surpSeen.delete(surpSeen.values().next().value);
     pick(k); window.scrollTo(0,0); toast('Surprise: '+N[k][1]+' ('+fmt(N[k][2])+' fans). Showing artists like them.');
   });
 
