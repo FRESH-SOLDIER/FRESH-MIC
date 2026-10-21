@@ -247,6 +247,9 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area
 .jump button{font:500 .85rem var(--f-body);color:var(--accent);background:transparent;border:0;padding:4px 2px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .chips.scroll{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
 .chips.scroll .chip{flex:none;white-space:nowrap}
+.chips.scroll.fr{-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 36px),transparent)}
+.chips.scroll.fl{-webkit-mask-image:linear-gradient(to left,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to left,#000 calc(100% - 36px),transparent)}
+.chips.scroll.fl.fr{-webkit-mask-image:linear-gradient(to right,transparent,#000 36px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(to right,transparent,#000 36px,#000 calc(100% - 36px),transparent)}
 .sec,#soonsec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 76px)}
 .pic{width:56px;aspect-ratio:1;border-radius:10px;display:grid;place-items:center;color:#fff;font:800 1.1rem var(--f-display);text-shadow:0 1px 2px rgba(0,0,0,.35);background-repeat:no-repeat;background-size:1000% auto;background-color:var(--bar)}
 ul.res.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
@@ -1397,6 +1400,8 @@ const G = /*DATA*/;
 
   // show the / shortcut in the search boxes on devices with a keyboard-like pointer
   if(matchMedia('(hover:hover) and (pointer:fine)').matches){ $('gq').placeholder='Search an artist (press / anytime)'; $('q').placeholder='Start typing a name (press / anytime)' }
+  // fade the edges of the genre chip row when more chips are hidden off-screen
+  { const g=$('genres'); const fade=()=>{ const m=g.scrollWidth-g.clientWidth; g.classList.toggle('fl',g.scrollLeft>4); g.classList.toggle('fr',m>4&&g.scrollLeft<m-4) }; g.addEventListener('scroll',fade,{passive:true}); addEventListener('resize',fade); new MutationObserver(fade).observe(g,{childList:true}); fade() }
   // back-to-top button after scrolling a long way
   { const tt=$('totop'); let tk=false; addEventListener('scroll',()=>{ if(tk) return; tk=true; requestAnimationFrame(()=>{ tk=false; tt.hidden=scrollY<1200 }) },{passive:true}); tt.addEventListener('click',()=>{ scrollTo({top:0,behavior:REDUCE?'auto':'smooth'}); }) }
   $('keysX').addEventListener('click',()=>$('keys').close());
