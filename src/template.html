@@ -419,7 +419,7 @@ ul.res.grid .player{margin-inline:12px}
     <span>Only artists in this snapshot can be searched. If yours is missing, try a similar one.</span>
   </footer>
   <dialog id="keys" aria-labelledby="keysT"><h2 id="keysT">Keyboard shortcuts</h2>
-    <dl><dt><kbd>/</kbd></dt><dd>Search for an artist</dd><dt><kbd>S</kbd></dt><dd>Random artist</dd><dt><kbd>J</kbd> <kbd>K</kbd></dt><dd>Next and previous result</dd><dt><kbd>P</kbd></dt><dd>Preview the selected result</dd><dt><kbd>B</kbd></dt><dd>Save it to your shortlist</dd><dt><kbd>X</kbd></dt><dd>Hide it</dd><dt><kbd>F</kbd></dt><dd>Find artists like it</dd><dt><kbd>Esc</kbd></dt><dd>Stop a preview or close this</dd><dt><kbd>?</kbd></dt><dd>Show this list</dd></dl>
+    <dl><dt><kbd>/</kbd></dt><dd>Search for an artist</dd><dt><kbd>S</kbd></dt><dd>Random artist</dd><dt><kbd>J</kbd> <kbd>K</kbd></dt><dd>Next and previous result</dd><dt><kbd>P</kbd></dt><dd>Preview the selected result</dd><dt><kbd>B</kbd></dt><dd>Save it to your shortlist</dd><dt><kbd>X</kbd></dt><dd>Hide it</dd><dt><kbd>F</kbd></dt><dd>Find artists like it</dd><dt><kbd>Z</kbd></dt><dd>Undo the last hide, remove or clear</dd><dt><kbd>Esc</kbd></dt><dd>Stop a preview or close this</dd><dt><kbd>?</kbd></dt><dd>Show this list</dd></dl>
     <button type="button" class="shuf" id="keysX">Close</button></dialog>
   <button type="button" id="totop" aria-label="Back to top" hidden>↑</button>
 </main>
@@ -449,7 +449,7 @@ const G = /*DATA*/;
     const old=document.getElementById('toast'); if(old) old.remove(); clearTimeout(toastT);
     const t=document.createElement('div'); t.id='toast'; t.className='toast'; t.setAttribute('role','status');
     const sp=document.createElement('span'); sp.textContent=msg; t.appendChild(sp);
-    if(undo){const b=document.createElement('button'); b.type='button'; b.textContent='Undo'; b.addEventListener('click',()=>{undo(); t.remove()}); t.appendChild(b)}
+    if(undo){const b=document.createElement('button'); b.type='button'; b.textContent='Undo'; b.setAttribute('aria-keyshortcuts','Z'); b.addEventListener('click',()=>{undo(); t.remove()}); t.appendChild(b)}
     document.body.appendChild(t);
     const arm=()=>{ clearTimeout(toastT); toastT=setTimeout(()=>t.remove(),undo?10000:6000) }, hold=()=>clearTimeout(toastT);
     t.addEventListener('mouseenter',hold); t.addEventListener('focusin',hold); t.addEventListener('mouseleave',arm); t.addEventListener('focusout',arm); arm();
@@ -1413,6 +1413,7 @@ const G = /*DATA*/;
       e.preventDefault(); i=e.key==='j'?Math.min(rows.length-1,i+1):Math.max(0,i-1);
       rows[i].tabIndex=-1; rows[i].focus(); rows[i].scrollIntoView({block:'nearest',behavior:REDUCE?'auto':'smooth'}); return
     }
+    if(e.key==='z'||e.key==='Z'){ const ub=document.querySelector('#toast button'); if(ub){ e.preventDefault(); ub.click() } return }
     if(e.key==='?'){ const d=$('keys'); if(d.showModal&&!d.open){ e.preventDefault(); d.showModal(); $('keysX').focus() } return }
     if(e.key==='/'){ e.preventDefault(); setTab('find'); $('q').focus(); $('q').select() }
     else if(e.key==='s'||e.key==='S'){ e.preventDefault(); $('surp').click() }
