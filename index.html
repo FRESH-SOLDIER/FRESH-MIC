@@ -831,6 +831,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     mkc(0,'All genres');
     entries.forEach(([g,c])=>mkc(g,gname(g),c));
     renderMute();
+    // bring a remembered genre into view inside the sideways-scrolling row
+    { const on=box.querySelector('[aria-pressed="true"]'); if(on&&genre){ const x=on.offsetLeft-(box.clientWidth-on.offsetWidth)/2; box.scrollLeft=Math.max(0,x) } }
   })();
   $('newmore').addEventListener('click',()=>{const prev=newShown; newShown+=24; renderHome(); const rows=$('newlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
   $('soonmore').addEventListener('click',()=>{const prev=soonShown; soonShown+=12; renderHome(); const rows=$('soonlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
