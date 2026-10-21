@@ -287,6 +287,7 @@ button.linkbtn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
 .links a.play{color:var(--accent-fg)}
 .links a.play:hover{text-decoration:none;filter:brightness(1.1)}
 .player{grid-column:1 / -1;margin-top:6px}
+.player .tm{font:500 .78rem var(--f-data);color:var(--muted);margin-top:4px;font-variant-numeric:tabular-nums}
 .player .pvol{width:120px;max-width:100%;margin-top:8px;accent-color:var(--accent)}
 .player .now{font-size:.8rem;color:var(--muted)}
 .player .prog{height:10px;border-radius:5px;background:var(--bar);margin-top:6px;overflow:hidden;cursor:pointer}
@@ -537,7 +538,7 @@ const G = /*DATA*/;
           if(!t||!t.preview){ if(!d){ el.textContent='Couldn\u2019t reach Deezer. Tap to retry'; toast('Couldn\u2019t reach Deezer for the preview. Check your connection or an ad blocker, then try again.'); setTimeout(()=>{ if(!NOW||NOW.el!==el) el.textContent='\u25B6 Play 30s' },4000); return } el.textContent='No preview'; setTimeout(()=>{el.textContent='\u25B6 Play 30s'},2000); return}
           const au=new Audio(t.preview); const vol0=(Number.isInteger(ui.vol)&&ui.vol>=0&&ui.vol<=100)?ui.vol:90; au.volume=vol0/100;
           bar=document.createElement('div'); bar.className='player';
-          bar.innerHTML='<div class="now"></div><div class="prog"><i></i></div>';
+          bar.innerHTML='<div class="now"></div><div class="prog"><i></i></div><div class="tm" aria-hidden="true">0:00 / 0:30</div>';
           { const vr=document.createElement('input'); vr.type='range'; vr.min=0; vr.max=100; vr.step=5; vr.value=vol0; vr.className='pvol'; vr.setAttribute('aria-label','Preview volume'); vr.addEventListener('input',()=>{ const v=+vr.value; au.volume=v/100; ui.vol=v; saveUi() }); bar.appendChild(vr); }
           bar.querySelector('.now').textContent='Now playing: '+t.title_short+' \u2014 '+a[1]+' (30-second preview from Deezer)';
           li.appendChild(bar);
@@ -546,7 +547,7 @@ const G = /*DATA*/;
             pr.addEventListener('keydown',e=>{ if(!au.duration) return; if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); au.currentTime=Math.max(0,Math.min(au.duration,au.currentTime+(e.key==='ArrowRight'?5:-5))) } }); }
                     try{ if('mediaSession' in navigator&&window.MediaMetadata){ navigator.mediaSession.metadata=new MediaMetadata({title:t.title_short,artist:a[1],album:'Fresh Mic \u00B7 30-second preview'}); const ms=navigator.mediaSession; ms.setActionHandler('play',()=>{au.play().catch(()=>{})}); ms.setActionHandler('pause',()=>{au.pause()}); ms.setActionHandler('nexttrack',()=>{ const l=li; stopNow(); playNextFrom(l) }); } }catch(e){}
           NOW={el,au,bar}; el.textContent='\u25A0 Stop'; el.setAttribute('aria-pressed','true');
-          au.addEventListener('timeupdate',()=>{const i=bar.querySelector('i'); if(i&&au.duration){ const v=au.currentTime/au.duration*100; i.style.width=v+'%'; bar.querySelector('.prog').setAttribute('aria-valuenow',Math.round(v)) }});
+          au.addEventListener('timeupdate',()=>{ const tmE=bar.querySelector('.tm'); if(tmE&&au.duration){ const f=n=>Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0'); tmE.textContent=f(au.currentTime)+' / '+f(au.duration) } const i=bar.querySelector('i'); if(i&&au.duration){ const v=au.currentTime/au.duration*100; i.style.width=v+'%'; bar.querySelector('.prog').setAttribute('aria-valuenow',Math.round(v)) }});
           au.addEventListener('ended',()=>{
             const wasLi=li; stopNow();
             if(!auto) return;
