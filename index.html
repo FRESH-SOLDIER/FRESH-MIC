@@ -533,7 +533,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
         const ep=albumId?'album/'+albumId+'/tracks?limit=1':'artist/'+a[0]+'/top?limit=1';
         jsonp('https://api.deezer.com/'+ep,d=>{
           const t=d&&d.data&&d.data[0];
-          if(!t||!t.preview){el.textContent='No preview'; setTimeout(()=>{el.textContent='\u25B6 Play 30s'},2000); return}
+          if(!t||!t.preview){ if(!d){ el.textContent='Couldn\u2019t reach Deezer. Tap to retry'; toast('Couldn\u2019t reach Deezer for the preview. Check your connection or an ad blocker, then try again.'); setTimeout(()=>{ if(!NOW||NOW.el!==el) el.textContent='\u25B6 Play 30s' },4000); return } el.textContent='No preview'; setTimeout(()=>{el.textContent='\u25B6 Play 30s'},2000); return}
           const au=new Audio(t.preview); au.volume=.9;
           bar=document.createElement('div'); bar.className='player';
           bar.innerHTML='<div class="now"></div><div class="prog"><i></i></div>';
