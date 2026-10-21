@@ -574,7 +574,7 @@ const G = /*DATA*/;
       const a=N[r.k], li=document.createElement('li'); li.className='row';
       const saved=list.includes(a[0]);
       li.innerHTML='<div><div class="name"></div><div class="why"></div></div>'
-        +'<div class="fans">'+fmt(r.f)+'<small>fans</small></div>'
+        +'<div class="fans" title="'+Number(r.f).toLocaleString('en-US')+' Deezer fans">'+fmt(r.f)+'<small>fans</small></div>'
         +'<div class="scale'+(r.f<5000?' tiny':'')+'" aria-hidden="true"><i style="width:'+(pos(r.f)*100).toFixed(1)+'%"></i><b style="left:calc('+(pos(qf)*100).toFixed(1)+'% - 1px)"></b></div>'
         +'<div class="links"><a target="_blank" rel="noopener" href="https://www.deezer.com/artist/'+a[0]+'">Deezer</a>'
         +'<a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+enc(a[1]+' music')+'">YouTube</a>'
@@ -761,7 +761,7 @@ const G = /*DATA*/;
     const a=N[item.k], li=document.createElement('li'); li.className='row';
     const saved=list.includes(a[0]);
     li.innerHTML='<div><div class="name"></div><div class="why"></div></div>'
-      +'<div class="fans">'+fmt(item.f)+'<small>fans</small></div>'
+      +'<div class="fans" title="'+Number(item.f).toLocaleString('en-US')+' Deezer fans">'+fmt(item.f)+'<small>fans</small></div>'
       +'<div class="scale'+(item.f<5000?' tiny':'')+'" aria-hidden="true"><i style="width:'+(pos(item.f)*100).toFixed(1)+'%"></i></div>'
       +'<div class="links"></div>';
     li.insertBefore(pic(item.k),li.firstChild);
