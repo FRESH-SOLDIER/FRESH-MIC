@@ -265,6 +265,7 @@ ul.res.grid .empty{grid-column:1/-1}
 .sec{display:flex;flex-direction:column;gap:2px}
 .sec .sub{color:var(--muted);font-size:.9rem;margin:6px 0 0;max-width:60ch}
 a.shuf{text-decoration:none;display:inline-block}
+a[target="_blank"]::after{content:"";content:"" / " (opens in a new tab)"}
 #totop{position:fixed;right:16px;bottom:16px;z-index:40;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:700 1.2rem var(--f-body);cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25)}
 #totop[hidden]{display:none}
 #totop:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
