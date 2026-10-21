@@ -7,15 +7,15 @@
 <style>
 /* Layout: one narrow column. A shared fan-count scale (log) runs through every result so "smaller" is something you see, not just read. */
 :root{
-  --bg:#E8EBF2; --surface:#F6F7FB; --fg:#14182B; --muted:#5A6079; --line:#C9CEDC;
+  --ctl:#7A819B; --bg:#E8EBF2; --surface:#F6F7FB; --fg:#14182B; --muted:#5A6079; --line:#C9CEDC;
   --accent:#2B3BF0; --accent-fg:#FFFFFF; --tiny:#E0A100; --bar:#B9C0D8;
   --f-display:'Syne','Trebuchet MS',sans-serif; --f-body:'DM Sans',system-ui,sans-serif; --f-data:'JetBrains Mono',ui-monospace,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0F1220; --surface:#171B2E; --fg:#E8EAF4; --muted:#9AA1BD; --line:#2A3050;
+  --ctl:#6A7396; --bg:#0F1220; --surface:#171B2E; --fg:#E8EAF4; --muted:#9AA1BD; --line:#2A3050;
   --accent:#8F9BFF; --accent-fg:#0F1220; --tiny:#F2C14B; --bar:#3A4268; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0F1220; --surface:#171B2E; --fg:#E8EAF4; --muted:#9AA1BD; --line:#2A3050;
+  --ctl:#6A7396; --bg:#0F1220; --surface:#171B2E; --fg:#E8EAF4; --muted:#9AA1BD; --line:#2A3050;
   --accent:#8F9BFF; --accent-fg:#0F1220; --tiny:#F2C14B; --bar:#3A4268; color-scheme:dark}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
@@ -33,7 +33,7 @@ h1{font:800 clamp(2.4rem,9vw,3.6rem)/0.95 var(--f-display);letter-spacing:-.02em
 .qclear{position:absolute;right:8px;top:calc(50% + 4px);transform:translateY(-50%);width:34px;height:34px;border:0;border-radius:50%;background:transparent;color:var(--muted);font:600 1.4rem/1 var(--f-body);cursor:pointer}
 .qclear:hover{background:var(--line);color:var(--fg)}
 label.cap,.cap{font:500 .72rem/1 var(--f-data);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-#q{width:100%;margin-top:8px;font:500 1.15rem var(--f-body);color:var(--fg);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:14px 16px}
+#q{width:100%;margin-top:8px;font:500 1.15rem var(--f-body);color:var(--fg);background:var(--surface);border:2px solid var(--ctl);border-radius:10px;padding:14px 16px}
 #q:focus-visible{outline:3px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
 #sug,#gsug{position:absolute;left:0;right:0;top:100%;z-index:5;margin:6px 0 0;padding:4px;list-style:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px rgba(10,14,40,.18)}
 #sug li,#gsug li{display:flex;justify-content:space-between;gap:12px;padding:9px 12px;border-radius:7px;cursor:pointer}
@@ -43,14 +43,14 @@ label.cap,.cap{font:500 .72rem/1 var(--f-data);letter-spacing:.08em;text-transfo
 #sug .nomatch a,#gsug .nomatch a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
 #sug .f,#gsug .f{font:400 .78rem var(--f-data);opacity:.8;white-space:nowrap}
 .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
-.chip{font:500 .88rem var(--f-body);color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
+.chip{font:500 .88rem var(--f-body);color:var(--fg);background:transparent;border:1px solid var(--ctl);border-radius:999px;padding:6px 12px;cursor:pointer}
 .chip:hover{border-color:var(--accent);color:var(--accent)}
 .controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between}
 .disp{flex-basis:100%;border-top:1px solid var(--line);padding-top:8px}
 .disp>summary{cursor:pointer;font:500 .85rem var(--f-data);color:var(--muted);padding:4px 0}
 .dispbody{display:flex;flex-wrap:wrap;gap:12px 24px;padding:10px 0 4px}
 .seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.seg button{font:500 .85rem var(--f-data);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
+.seg button{font:500 .85rem var(--f-data);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:8px;padding:8px 12px;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
 #bar{scroll-margin-top:8px}
 .pedit{display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -244,7 +244,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area
 .tabs{display:flex;gap:6px}
 #surp{margin-top:14px;font-size:.95rem;padding:10px 16px}
 .bsearch{position:relative;flex:1 1 200px;max-width:300px;margin-bottom:8px}
-#gq{width:100%;font:500 .95rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 14px}
+#gq{width:100%;font:500 .95rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:999px;padding:8px 14px}
 .jump{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
 .jump button{font:500 .85rem var(--f-body);color:var(--accent);background:transparent;border:0;padding:4px 2px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .chips.scroll{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
@@ -1404,7 +1404,7 @@ const G = /*DATA*/;
   }
 
   // show the / shortcut in the search boxes on devices with a keyboard-like pointer
-  if(matchMedia('(hover:hover) and (pointer:fine)').matches){ $('gq').placeholder='Search an artist (press / anytime)'; $('q').placeholder='Start typing a name (press / anytime)' }
+  if(matchMedia('(hover:hover) and (pointer:fine)').matches){ $('gq').placeholder='Search an artist (press /)'; $('q').placeholder='Start typing a name (press /)' }
   // fade the edges of the genre chip row when more chips are hidden off-screen
   { const g=$('genres'); const fade=()=>{ const m=g.scrollWidth-g.clientWidth; g.classList.toggle('fl',g.scrollLeft>4); g.classList.toggle('fr',m>4&&g.scrollLeft<m-4) }; g.addEventListener('scroll',fade,{passive:true}); addEventListener('resize',fade); new MutationObserver(fade).observe(g,{childList:true}); fade() }
   $('keysX').addEventListener('click',()=>$('keys').close());
