@@ -392,7 +392,7 @@ ul.res.grid .player{margin-inline:12px}
       <div class="chips" id="recent" hidden><span class="cap">Recent</span></div>
     </section>
     <section aria-live="polite">
-      <div class="head"><h2 id="title"></h2><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button><a class="shuf" id="seedlink" target="_blank" rel="noopener" hidden>Listen on Deezer</a></div>
+      <div class="head"><h2 id="title"></h2><button class="shuf" id="hopback" type="button" hidden></button><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button><a class="shuf" id="seedlink" target="_blank" rel="noopener" hidden>Listen on Deezer</a></div>
       <p class="legend" id="legend" hidden>Each bar is an artist's fan count on a log scale: longer means bigger. The dark tick marks the artist you searched for, so bars that stop short of it are smaller.</p>
     <div class="ctl" id="sortctl" style="margin:0 0 12px"><div class="cap" id="sortlab">Order results by</div><div class="seg" id="sortseg" role="group" aria-labelledby="sortlab"></div></div>
       <ul class="res" id="res"></ul>
@@ -643,8 +643,10 @@ const G = /*DATA*/;
     c.addEventListener('click',()=>{recent=[]; saveRecent(); renderRecent()}); box.appendChild(c);
   }
   const BASE_TITLE=document.title;
-  function hop(k){ try{ if(cur>=0) history.pushState(null,'','#like='+N[cur][0]); }catch(e){} pick(k); window.scrollTo(0,0); }
-  window.addEventListener('popstate',()=>{ const m=/^#like=(\d+)$/.exec(location.hash); if(!m) return; const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&k!==cur&&(E[k]||REV[k].length)){ pick(k,false,true); window.scrollTo(0,0); } });
+  const hops=[]; function updHop(){ const b=$('hopback'); if(!b) return; const k=hops[hops.length-1]; b.hidden=k==null; if(k!=null) b.textContent='\u2190 Back to '+N[k][1] }
+  function hop(k){ try{ if(cur>=0){ history.replaceState(null,'','#like='+N[cur][0]); history.pushState(null,'','#like='+N[k][0]); hops.push(cur) } }catch(e){} pick(k,false,true); window.scrollTo(0,0); updHop() }
+  window.addEventListener('popstate',()=>{ const m=/^#like=(\d+)$/.exec(location.hash); if(!m) return; const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&k!==cur&&(E[k]||REV[k].length)){ if(hops[hops.length-1]===k) hops.pop(); else hops.length=0; pick(k,false,true); window.scrollTo(0,0); updHop() } });
+  $('hopback').addEventListener('click',()=>{ if(hops.length) history.back() });
   function pick(k,stay,nohash){ if(!stay) setTab('find'); cur=k;
     if(!nohash){ recent=[N[k][0]].concat(recent.filter(x=>x!==N[k][0])).slice(0,8); saveRecent(); renderRecent(); } shown=24; $('q').value=N[k][1]; qsync(); hideSug(); results=related(k); render();
     $('sharelink').hidden=false;
