@@ -1010,6 +1010,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     sel.addEventListener('change',()=>{ sg=+sel.value; ui.sg=sg; saveUi(); surpSeen.clear() }) }
   $('surp').addEventListener('click',()=>{
     let pool; const build=()=>{ pool=[]; R.forEach(r=>{const k=r[0], f=N[k][2]; if(f==null||f<300||(ss==='any'?false:SBAND[ss]?(f<SBAND[ss][0]||f>=SBAND[ss][1]):!inLimit(f))||hid.has(N[k][0])||muted.has(r[1])||surpSeen.has(k)||(sg&&r[1]!==sg)) return; if(!(E[k]||REV[k].length)) return; pool.push(k)}); }; build(); if(!pool.length&&surpSeen.size){ surpSeen.clear(); build() }
+    { const unheard=pool.filter(k=>!heard.has(N[k][0])); if(unheard.length) pool=unheard }
     if(!pool.length){ toast('Nothing to pick at this size. Try another size or genre.'); return }
     const k=pool[Math.floor(Math.random()*pool.length)]; lastSurp=k; surpSeen.add(k); if(surpSeen.size>40) surpSeen.delete(surpSeen.values().next().value);
     pick(k); window.scrollTo(0,0); if($('surpp').checked){ const pb=$('about').querySelector('button.play'); if(pb) pb.click() } toast('Surprise: '+N[k][1]+' ('+fmt(N[k][2])+' fans). Showing artists like them.');
