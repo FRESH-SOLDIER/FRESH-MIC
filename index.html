@@ -228,6 +228,13 @@ body.hasmini{padding-bottom:70px}body.hasmini .top{bottom:calc(max(16px,env(safe
 .fans{font:500 .86rem var(--f-data);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .fans small{display:block;color:var(--muted);font-weight:400;font-size:.7rem}
 .legend{margin:8px 0 14px;font-size:.82rem;color:var(--muted)}
+.sw{grid-column:2 / 4;display:flex;align-items:center;gap:10px;margin-top:8px}
+.sw .scale{grid-column:auto;flex:1;margin-top:0}
+ul.res.grid .sw{margin-inline:12px}
+.binfo{flex:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--ctl);background:transparent;color:var(--muted);font:700 .72rem var(--f-data);line-height:1;cursor:help;padding:0;display:grid;place-items:center}
+.binfo:hover,.binfo:focus-visible,.binfo[aria-expanded="true"]{color:var(--fg);border-color:var(--accent)}
+.binfo:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+#btip{position:fixed;z-index:80;max-width:min(300px,calc(100vw - 24px));background:var(--fg);color:var(--bg);padding:10px 12px;border-radius:10px;font:500 .8rem/1.45 var(--f-body);box-shadow:0 6px 20px rgba(0,0,0,.3);pointer-events:none}
 .scale{grid-column:2 / 4;position:relative;height:6px;border-radius:3px;background:var(--bar);margin-top:8px}
 .scale i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--accent);opacity:1}
 .scale b{position:absolute;top:-4px;width:2px;height:14px;background:var(--fg);border-radius:1px}
@@ -324,7 +331,7 @@ button.linkbtn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
 .player .prog:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 ul.res.grid .player{margin-inline:12px}
 @media (pointer:coarse){.links{gap:2px 8px}.links a,.links button{min-height:40px;display:inline-flex;align-items:center;padding-left:6px;padding-right:6px}.links .play{padding-left:14px;padding-right:14px}}
-@media (max-width:480px){.row{grid-template-columns:44px minmax(0,1fr)}.pic{width:44px;font-size:.95rem}.bsearch{max-width:none;flex-basis:100%}.fans{grid-column:2;text-align:left}.fans small{display:inline;margin-left:6px}.scale,.links{grid-column:1 / 3}}
+@media (max-width:480px){.row{grid-template-columns:44px minmax(0,1fr)}.pic{width:44px;font-size:.95rem}.bsearch{max-width:none;flex-basis:100%}.fans{grid-column:2;text-align:left}.fans small{display:inline;margin-left:6px}.sw,.links{grid-column:1 / 3}}
 @media (prefers-reduced-motion:no-preference){.row{animation:in .28s ease both}@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}}
 </style></head><body>
 
@@ -421,7 +428,7 @@ ul.res.grid .player{margin-inline:12px}
     <section aria-live="polite">
       <div class="head"><h2 id="title"></h2><button class="shuf" id="hopback" type="button" hidden></button><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button><a class="shuf" id="seedlink" target="_blank" rel="noopener" hidden>Listen on Deezer</a></div>
       <section class="about" id="about" aria-label="About this artist" hidden></section>
-      <p class="legend" id="legend" hidden>Each bar is an artist's fan count on a log scale: longer means bigger. The dark tick marks the artist you searched for, so bars that stop short of it are smaller.</p>
+      <p class="legend" id="legend" hidden>Each bar shows how big an artist is. Hover over, or tap, the ? at the end of any bar to see what it means for that artist.</p>
     <div class="ctl" id="sortctl" style="margin:0 0 12px"><div class="cap" id="sortlab">Order results by</div><div class="seg" id="sortseg" role="group" aria-labelledby="sortlab"></div></div>
       <ul class="res" id="res"></ul>
       <div class="axis" id="axis" aria-hidden="true"><span>100 fans</span><span>10K</span><span>1M</span><span>10M</span></div>
@@ -632,11 +639,11 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       res.appendChild(li); $('more').hidden=true; return;
     }
     results.slice(0,shown).forEach(r=>{
-      const a=N[r.k], li=document.createElement('li'); li.className='row';
+      const a=N[r.k], li=document.createElement('li'); li.className='row'; li.dataset.f=r.f; li.dataset.seed=N[cur][1]; li.dataset.qf=qf;
       const saved=list.includes(a[0]);
       li.innerHTML='<div><div class="name"></div><div class="why"></div></div>'
         +'<div class="fans" title="'+Number(r.f).toLocaleString('en-US')+' Deezer fans">'+fmt(r.f)+'<small>fans</small></div>'
-        +'<div class="scale'+(r.f<5000?' tiny':'')+'" aria-hidden="true"><i style="width:'+(pos(r.f)*100).toFixed(1)+'%"></i><b style="left:calc('+(pos(qf)*100).toFixed(1)+'% - 1px)"></b></div>'
+        +'<div class="sw"><div class="scale'+(r.f<5000?' tiny':'')+'" aria-hidden="true"><i style="width:'+(pos(r.f)*100).toFixed(1)+'%"></i><b style="left:calc('+(pos(qf)*100).toFixed(1)+'% - 1px)"></b></div><button type="button" class="binfo" aria-label="What does this bar mean?">?</button></div>'
         +'<div class="links"><a target="_blank" rel="noopener" href="https://www.deezer.com/artist/'+a[0]+'">Deezer</a>'
         +'<a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query='+enc(a[1]+' music')+'">YouTube</a>'
         +'<a target="_blank" rel="noopener" href="https://bandcamp.com/search?q='+enc(a[1])+'">Bandcamp</a>'
@@ -845,9 +852,10 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   function card(item,kind){
     const a=N[item.k], li=document.createElement('li'); li.className='row';
     const saved=list.includes(a[0]);
+    li.dataset.f=item.f;
     li.innerHTML='<div><div class="name"></div><div class="why"></div></div>'
       +'<div class="fans" title="'+Number(item.f).toLocaleString('en-US')+' Deezer fans">'+fmt(item.f)+'<small>fans</small></div>'
-      +'<div class="scale'+(item.f<5000?' tiny':'')+'" aria-hidden="true"><i style="width:'+(pos(item.f)*100).toFixed(1)+'%"></i></div>'
+      +'<div class="sw"><div class="scale'+(item.f<5000?' tiny':'')+'" aria-hidden="true"><i style="width:'+(pos(item.f)*100).toFixed(1)+'%"></i></div><button type="button" class="binfo" aria-label="What does this bar mean?">?</button></div>'
       +'<div class="links"></div>';
     li.insertBefore(pic(item.k),li.firstChild);
     li.querySelector('.name').textContent=a[1];
@@ -1590,6 +1598,22 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       au.addEventListener('ended',()=>{ if(i+1<files.length) go(i+1); else { const nx=li.nextElementSibling; stopFree(); if(auto&&nx){ const nb=nx.querySelector('button.play'); if(nb){ nx.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); nb.click() } } } });
       au.addEventListener('error',()=>{ toast('This track could not be played. Use the source page.') });
       go(0) }) }
+
+  // fan-count bar explainer: one shared tooltip, opened from the ? at the end of each bar
+  { const tip=document.createElement('div'); tip.id='btip'; tip.setAttribute('role','tooltip'); tip.hidden=true; document.body.appendChild(tip); let cur_=null, shownAt=0;
+    const words=f=>f==null?'an unknown number of':fmt(f);
+    const textFor=btn=>{ const li=btn.closest('li.row'); const f=li&&li.dataset.f!==undefined&&li.dataset.f!==''?+li.dataset.f:null; const seed=(li&&li.dataset.seed)||''; const qf0=li&&li.dataset.qf?+li.dataset.qf:null;
+      let t='Bar length = Deezer fans on a log scale, from 100 fans (empty) to 10 million (full), so each step along the bar is about 10 times more fans. '+(f==null?'':'This artist: '+fmt(f)+' fans'+(f<5000?' (gold bar = under 5K, a very small artist).':'.'));
+      if(seed&&qf0&&f){ const ra=f/qf0; t+=' The dark tick is '+seed+' ('+fmt(qf0)+' fans). '+(ra>=1.15?'This artist has about '+(ra>=10?Math.round(ra):ra.toFixed(1))+'\u00D7 more fans.':ra<=.87?'This artist has about '+(1/ra>=10?Math.round(1/ra):(1/ra).toFixed(1))+'\u00D7 fewer fans.':'About the same size.') }
+      return t };
+    const show=btn=>{ cur_=btn; shownAt=Date.now(); tip.textContent=textFor(btn); tip.hidden=false; const r=btn.getBoundingClientRect(), tw=tip.offsetWidth, th=tip.offsetHeight; let x=Math.min(Math.max(12,r.right-tw),innerWidth-tw-12), y=r.top-th-8; if(y<8) y=r.bottom+8; tip.style.left=x+'px'; tip.style.top=y+'px'; btn.setAttribute('aria-expanded','true'); btn.setAttribute('aria-describedby','btip') };
+    const hide=()=>{ if(cur_){ cur_.setAttribute('aria-expanded','false'); cur_.removeAttribute('aria-describedby') } cur_=null; tip.hidden=true };
+    document.addEventListener('mouseover',e=>{ const b=e.target.closest&&e.target.closest('.binfo, .sw .scale'); if(b){ show(b.classList.contains('binfo')?b:b.parentNode.querySelector('.binfo')) } });
+    document.addEventListener('mouseout',e=>{ if(e.target.closest&&e.target.closest('.binfo, .sw .scale')) hide() });
+    document.addEventListener('focusin',e=>{ if(e.target.classList&&e.target.classList.contains('binfo')) show(e.target) });
+    document.addEventListener('focusout',e=>{ if(e.target.classList&&e.target.classList.contains('binfo')) hide() });
+    document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('.binfo'); if(b){ if(cur_===b&&e.detail===0) hide(); else show(b) } else hide() });
+    addEventListener('scroll',()=>{ if(Date.now()-shownAt>250) hide() },{passive:true}); document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&cur_){ hide() } },true) }
   function setTab(t){
     if(t!=='find'&&t!=='page'&&t!=='free') t='home';
     ui.tab=t; saveUi(); if(t!=='page') sndOff(); if(t!=='free') stopFree();
