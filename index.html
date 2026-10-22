@@ -270,7 +270,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area
 #surp{margin-top:14px;font-size:.95rem;padding:10px 16px}
 .surprow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:14px}.surprow #surp{margin-top:0}
 #surpp,.surpp input{accent-color:var(--accent)}.surpp{display:inline-flex;align-items:center;gap:6px;font:500 .9rem var(--f-body)}
-#surpg{font:500 .9rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:8px;padding:9px 10px;max-width:100%}
+#surps,#surpg{font:500 .9rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:8px;padding:9px 10px;max-width:100%}
 .fsearch .prow{display:flex;gap:8px;margin-top:6px}.fsearch input{flex:1;min-width:0;font:500 1rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:10px;padding:10px 12px}
 #fres .row{grid-template-columns:minmax(0,1fr) auto}.fres-lic a{color:inherit}.fres-lic{font:500 .8rem var(--f-data);margin-top:4px}
 #fres audio{width:100%;margin-top:8px;grid-column:1/-1}#fres .ftracks{grid-column:1/-1;margin:6px 0 0;padding-left:1.2em;font-size:.86rem}
@@ -346,7 +346,7 @@ ul.res.grid .player{margin-inline:12px}
   <header>
     <h1>Fresh Mic</h1>
     <p class="lede">New and upcoming artists you probably haven't heard of, plus a way to find more like the ones you love. Everything here has far fewer listeners than the big names.</p>
-    <div class="surprow"><button type="button" class="shuf" id="surp">Surprise me: open a random artist</button><label class="surpp"><input type="checkbox" id="surpp"> Play its preview</label><select id="surpg" aria-label="Genre for the random artist"><option value="0">Any genre</option></select></div>
+    <div class="surprow"><button type="button" class="shuf" id="surp">Surprise me: open a random artist</button><label class="surpp"><input type="checkbox" id="surpp"> Play its preview</label><select id="surpg" aria-label="Genre for the random artist"><option value="0">Any genre</option></select><select id="surps" aria-label="Popularity for the random artist"><option value="">Size: my fan limit</option><option value="any">Any size</option><option value="t">Under 5K fans</option><option value="s">5K to 25K</option><option value="m">25K to 100K</option><option value="l">Over 100K (biggest here)</option></select></div>
   </header>
 
   <div class="bar" id="bar">
@@ -1000,6 +1000,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   });
 
   let lastSurp=-1;
+  const SBAND={t:[0,5000],s:[5000,25000],m:[25000,100000],l:[100000,1e12]}; let ss=(ui.ss==='any'||SBAND[ui.ss]?ui.ss:'');
+  { const so=$('surps'); so.value=ss; so.addEventListener('change',()=>{ ss=so.value; ui.ss=ss; saveUi(); surpSeen.clear() }) }
   const surpSeen=new Set(); let sg=(Number.isInteger(ui.sg)&&ui.sg>0?ui.sg:0);
   { const cnt=new Map(); R.forEach(r=>{ if(r[1]) cnt.set(r[1],(cnt.get(r[1])||0)+1) }); const sel=$('surpg');
     [...cnt.entries()].filter(([g,c])=>GN[g]&&c>=8).sort((a,b)=>b[1]-a[1]).forEach(([g,c])=>{ const o=document.createElement('option'); o.value=g; o.textContent=gname(g)+' ('+c+')'; sel.appendChild(o) });
@@ -1007,8 +1009,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     { const sp=$('surpp'); sp.checked=ui.sp===true; sp.addEventListener('change',()=>{ ui.sp=sp.checked; saveUi() }) }
     sel.addEventListener('change',()=>{ sg=+sel.value; ui.sg=sg; saveUi(); surpSeen.clear() }) }
   $('surp').addEventListener('click',()=>{
-    let pool; const build=()=>{ pool=[]; R.forEach(r=>{const k=r[0], f=N[k][2]; if(f==null||f<300||!inLimit(f)||hid.has(N[k][0])||muted.has(r[1])||surpSeen.has(k)||(sg&&r[1]!==sg)) return; if(!(E[k]||REV[k].length)) return; pool.push(k)}); }; build(); if(!pool.length&&surpSeen.size){ surpSeen.clear(); build() }
-    if(!pool.length){ toast('Nothing to pick at this size. Raise the fan limit.'); return }
+    let pool; const build=()=>{ pool=[]; R.forEach(r=>{const k=r[0], f=N[k][2]; if(f==null||f<300||(ss==='any'?false:SBAND[ss]?(f<SBAND[ss][0]||f>=SBAND[ss][1]):!inLimit(f))||hid.has(N[k][0])||muted.has(r[1])||surpSeen.has(k)||(sg&&r[1]!==sg)) return; if(!(E[k]||REV[k].length)) return; pool.push(k)}); }; build(); if(!pool.length&&surpSeen.size){ surpSeen.clear(); build() }
+    if(!pool.length){ toast('Nothing to pick at this size. Try another size or genre.'); return }
     const k=pool[Math.floor(Math.random()*pool.length)]; lastSurp=k; surpSeen.add(k); if(surpSeen.size>40) surpSeen.delete(surpSeen.values().next().value);
     pick(k); window.scrollTo(0,0); if($('surpp').checked){ const pb=$('about').querySelector('button.play'); if(pb) pb.click() } toast('Surprise: '+N[k][1]+' ('+fmt(N[k][2])+' fans). Showing artists like them.');
   });
