@@ -220,6 +220,7 @@ ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .mini{overflow:visible}.mini #mprog{position:absolute;left:0;top:-1px;height:3px;width:0;background:var(--accent);pointer-events:none;transition:width .25s linear}
 .mini #msave[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
 @media (max-width:560px){.mini{flex-wrap:wrap;gap:6px}.mini .mname{flex:1 0 100%;max-width:none;text-align:left}.mini button:not(.mname){flex:1 1 auto;padding:8px 6px;font-size:.78rem}.mini #mstop{flex:0 0 auto}html body.hasmini{padding-bottom:118px}html body.hasmini .top{bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 112px)}}
+.heardtag{font:500 .75rem var(--f-data);color:var(--muted);align-self:center;white-space:nowrap}
 .mini button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 body.hasmini{padding-bottom:70px}body.hasmini .top{bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 62px)}
 .row.playing{border-left:4px solid var(--accent);padding-left:10px}
@@ -594,6 +595,8 @@ const G = /*DATA*/;
     window[name]=fin; sc.onerror=()=>fin(null); setTimeout(()=>fin(null),8000);
     sc.src=url+(url.indexOf('?')>=0?'&':'?')+'output=jsonp&callback='+name; document.head.appendChild(sc);
   }
+  let heard=new Set(); try{ heard=new Set(JSON.parse(localStorage.getItem('freshmic:heard')||'[]').map(Number)) }catch(e){}
+  function markHeard(li,id){ if(!li.querySelector('.heardtag')){ const t=document.createElement('span'); t.className='heardtag'; t.textContent='\u2713 Heard'; t.title='You already played a preview of this artist'; const lk=li.querySelector('.links'); if(lk) lk.appendChild(t) } if(!heard.has(id)){ heard.add(id); try{ localStorage.setItem('freshmic:heard',JSON.stringify([...heard].slice(-600))) }catch(e){} } }
   function previewBtn(li,a,albumId){
     const links=li.querySelector('.links'); const url=albumId?'https://www.deezer.com/album/'+albumId:'https://www.deezer.com/artist/'+a[0];
     let el;
@@ -617,7 +620,7 @@ const G = /*DATA*/;
             pr.addEventListener('click',e=>{ const r=pr.getBoundingClientRect(); if(au.duration&&r.width) au.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*au.duration });
             pr.addEventListener('keydown',e=>{ if(!au.duration) return; if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); au.currentTime=Math.max(0,Math.min(au.duration,au.currentTime+(e.key==='ArrowRight'?5:-5))) } }); }
                     try{ if('mediaSession' in navigator&&window.MediaMetadata){ navigator.mediaSession.metadata=new MediaMetadata({title:t.title_short,artist:a[1],album:'Fresh Mic \u00B7 30-second preview'}); const ms=navigator.mediaSession; ms.setActionHandler('play',()=>{au.play().catch(()=>{})}); ms.setActionHandler('pause',()=>{au.pause()}); ms.setActionHandler('nexttrack',()=>{ const l=li; stopNow(); playNextFrom(l) }); } }catch(e){}
-          NOW={el,au,bar,li,title:t.title_short,who:a[1]}; showMini(); au.addEventListener('timeupdate',()=>{ if(NOW&&NOW.au===au&&au.duration) $('mprog').style.width=(au.currentTime/au.duration*100).toFixed(1)+'%' }); au.addEventListener('play',tabMark); au.addEventListener('pause',tabMark); el.textContent='\u25A0 Stop'; el.setAttribute('aria-pressed','true');
+          NOW={el,au,bar,li,title:t.title_short,who:a[1]}; markHeard(li,a[0]); showMini(); au.addEventListener('timeupdate',()=>{ if(NOW&&NOW.au===au&&au.duration) $('mprog').style.width=(au.currentTime/au.duration*100).toFixed(1)+'%' }); au.addEventListener('play',tabMark); au.addEventListener('pause',tabMark); el.textContent='\u25A0 Stop'; el.setAttribute('aria-pressed','true');
           au.addEventListener('timeupdate',()=>{ const tmE=bar.querySelector('.tm'); if(tmE&&au.duration){ const f=n=>Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0'); tmE.textContent=f(au.currentTime)+' / '+f(au.duration) } const i=bar.querySelector('i'); if(i&&au.duration){ const v=au.currentTime/au.duration*100; i.style.width=v+'%'; bar.querySelector('.prog').setAttribute('aria-valuenow',Math.round(v)) }});
           au.addEventListener('ended',()=>{
             const wasLi=li; stopNow();
@@ -631,6 +634,7 @@ const G = /*DATA*/;
       el=document.createElement('a'); el.className='play'; el.target='_blank'; el.rel='noopener'; el.href=url; el.textContent='\u25B6 Preview on Deezer';
     }
     links.insertBefore(el,links.firstChild);
+    if(heard.has(a[0])) markHeard(li,a[0]);
   }
   function render(){
     const res=$('res'); res.textContent='';

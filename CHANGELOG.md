@@ -110,3 +110,4 @@
 - 2026-10-22: Added a Shuffle shortlist button (shown with 3 or more saved artists) that mixes the order, with Undo, for a random-order listen. Research: playlist users expect a shuffle option.
 - 2026-10-22: The shortlist box now remembers whether you left it open or closed between visits, so a shortlist you use as a playlist stays open. Research: people who keep a saved list re-open it every visit.
 - 2026-10-22: Hovering the artist and song name in the Now playing bar shows the full name (long names are cut off on phones) and says that clicking it shows the artist in the list. Research: players with truncated titles are criticised when the full title can't be read.
+- 2026-10-22: Artists whose preview you have already played now show a small '✓ Heard' tag (kept only in your browser, last 600 artists), so you can skip ones you've already sampled. Research: discovery-site users complain about re-listening to the same artists.
