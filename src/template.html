@@ -218,6 +218,8 @@ ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .mini button:not(.mname){font:500 .82rem var(--f-data);color:var(--fg);background:transparent;border:1px solid var(--ctl);border-radius:8px;padding:8px 10px;cursor:pointer;white-space:nowrap}
 .mini #mauto[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
 .mini{overflow:visible}.mini #mprog{position:absolute;left:0;top:-1px;height:3px;width:0;background:var(--accent);pointer-events:none;transition:width .25s linear}
+.mini #msave[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+@media (max-width:560px){.mini{flex-wrap:wrap;gap:6px}.mini .mname{flex:1 0 100%;max-width:none;text-align:left}.mini button:not(.mname){flex:1 1 auto;padding:8px 6px;font-size:.78rem}.mini #mstop{flex:0 0 auto}html body.hasmini{padding-bottom:118px}html body.hasmini .top{bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 112px)}}
 .mini button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 body.hasmini{padding-bottom:70px}body.hasmini .top{bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 62px)}
 .row.playing{border-left:4px solid var(--accent);padding-left:10px}
@@ -475,6 +477,7 @@ ul.res.grid .player{margin-inline:12px}
     <button type="button" id="mpp" aria-label="Pause">Pause</button>
     <button type="button" id="mprev" aria-label="Play the previous artist">&#9664;&#9664; Prev</button>
     <button type="button" id="mnext" aria-label="Play the next artist">Next &#9654;&#9654;</button>
+    <button type="button" id="msave" aria-pressed="false" aria-label="Save the playing artist to your shortlist">Save</button>
     <button type="button" id="mauto" aria-pressed="false" aria-label="Autoplay next">Auto</button>
     <button type="button" id="mstop" aria-label="Stop the preview">&times;</button>
   </div>
@@ -580,7 +583,8 @@ const G = /*DATA*/;
   function mediaClear(){ try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=null; ['play','pause','nexttrack'].forEach(a=>{try{navigator.mediaSession.setActionHandler(a,null)}catch(e){}}) } }catch(e){} }
   function tabMark(){ const t=document.title.replace(/^\u25b6 /,''); const want=(NOW&&!NOW.au.paused)?'\u25b6 '+t:t; if(document.title!==want) document.title=want }
   try{ new MutationObserver(tabMark).observe(document.querySelector('title'),{childList:true,characterData:true,subtree:true}) }catch(e){}
-  function showMini(){ const m=$('mini'); if(!NOW){ $('mprog').style.width='0'; m.hidden=true; document.body.classList.remove('hasmini'); tabMark(); return } m.hidden=false; document.body.classList.add('hasmini'); $('mname').textContent=NOW.who+' \u2014 '+NOW.title; $('mpp').textContent=NOW.au.paused?'Play':'Pause'; $('mpp').setAttribute('aria-label',NOW.au.paused?'Resume':'Pause'); $('mauto').setAttribute('aria-pressed',auto); tabMark() }
+  function msyn(){ const sb=NOW&&NOW.li&&NOW.li.querySelector('.save'), b=$('msave'); b.hidden=!sb; if(sb){ const on=sb.getAttribute('aria-pressed')==='true'; b.setAttribute('aria-pressed',on); b.textContent=on?'Saved':'Save' } }
+  function showMini(){ const m=$('mini'); if(!NOW){ $('mprog').style.width='0'; m.hidden=true; document.body.classList.remove('hasmini'); tabMark(); return } m.hidden=false; document.body.classList.add('hasmini'); $('mname').textContent=NOW.who+' \u2014 '+NOW.title; $('mpp').textContent=NOW.au.paused?'Play':'Pause'; $('mpp').setAttribute('aria-label',NOW.au.paused?'Resume':'Pause'); $('mauto').setAttribute('aria-pressed',auto); msyn(); tabMark() }
   function stopNow(){ if(!NOW) return; try{NOW.au.pause()}catch(e){} if(NOW.bar.parentNode) NOW.bar.parentNode.classList.remove('playing'); NOW.bar.remove(); NOW.el.textContent='\u25B6 Play 30s'; NOW.el.setAttribute('aria-pressed','false'); NOW=null; mediaClear(); showMini() }
   let jid=0;
   function jsonp(url,cb){
@@ -711,6 +715,7 @@ const G = /*DATA*/;
   window.addEventListener('popstate',()=>{ const m=/^#like=(\d+)$/.exec(location.hash); if(!m) return; const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&k!==cur&&(E[k]||REV[k].length)){ if(hops[hops.length-1]===k) hops.pop(); else hops.length=0; pick(k,false,true); window.scrollTo(0,0); updHop() } });
   $('mpp').addEventListener('click',()=>{ if(!NOW) return; if(NOW.au.paused) NOW.au.play().catch(()=>{}); else NOW.au.pause(); showMini() });
   $('mprev').addEventListener('click',()=>{ if(NOW){ const l=NOW.li; if(!(l.previousElementSibling&&[...l.parentNode.children].some(x=>x!==l&&x.compareDocumentPosition(l)&4&&x.querySelector('button.play')))) return; stopNow(); playPrevFrom(l) } });
+  $('msave').addEventListener('click',()=>{ const sb=NOW&&NOW.li&&NOW.li.querySelector('.save'); if(sb){ sb.click(); msyn() } });
   $('mnext').addEventListener('click',()=>{ if(NOW){ const l=NOW.li; stopNow(); playNextFrom(l) } });
   $('mstop').addEventListener('click',()=>stopNow());
   $('mname').addEventListener('click',()=>{ if(NOW) NOW.li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}) });
