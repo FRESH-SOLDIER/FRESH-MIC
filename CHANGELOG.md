@@ -97,3 +97,4 @@
 - 2026-10-22: The Free music tab now remembers your last search word and your licence filter (Public domain / CC BY) between visits. Research: people who dig for reusable music repeat the same searches and dislike resetting filters.
 - 2026-10-22: Background now shows five distinct scenes matched to fan size (galaxy, city lights, aurora, fireflies, one lantern), same slow drift.
 - 2026-10-22: While a preview is playing the browser tab title starts with ▶ (and loses it on pause or stop), so you can see which tab is making sound among many. Research: Bandcamp and Last.fm users with many tabs open ask for this.
+- 2026-10-22: The ? note on every fan bar is now written in very simple words (a candy bar: long = lots of fans, short = few, gold = a secret tiny artist, the little dark line = the artist you searched). Requested by the owner.
