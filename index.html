@@ -467,6 +467,7 @@ ul.res.grid .player{margin-inline:12px}
     <button class="copy" id="copylink" type="button">Copy shortlist link</button>
     <button class="copy" id="dlcsv" type="button">Download as spreadsheet (CSV)</button>
     <button class="copy" id="prlist" type="button">Print shortlist</button>
+    <button class="copy" id="playlist" type="button" hidden>Play shortlist</button>
     <button class="copy" id="clrlist" type="button" hidden>Clear shortlist</button>
     <span class="cap" id="copied" style="margin-left:10px"></span>
   </details>
@@ -693,10 +694,11 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       ol.appendChild(li)});
     $('listsum').textContent='Your shortlist ('+list.length+')';
     updateJump();
-    $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length;
+    $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
   }
 
+  $('playlist').addEventListener('click',()=>{ const b=$('listol').querySelector('button.play'); if(!b) return; if(!auto){ auto=true; ui.auto=true; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',true) } b.click(); showMini() });
   $('clrlist').addEventListener('click',()=>{ const old=list.slice(); if(!old.length) return; list.length=0; saveList(); refreshAll(); renderList(); toast('Shortlist cleared ('+old.length+' artists).',()=>{ list.push(...old); saveList(); refreshAll(); renderList() }); });
   $('saveall').addEventListener('click',()=>{ const add=results.slice(0,shown).map(r=>N[r.k][0]).filter(id=>!list.includes(id)); if(!add.length){ toast('Everything shown is already in your shortlist.'); return } list.push(...add); saveList(); refreshAll(); renderList(); render(); toast('Saved '+add.length+' artists to your shortlist.',()=>{ add.forEach(id=>{const i=list.indexOf(id); if(i>=0) list.splice(i,1)}); saveList(); refreshAll(); renderList(); render() }); });
   $('hidclear').addEventListener('click',()=>{hid.clear(); saveHid(); refreshAll(); toast('All artists are visible again.')});
