@@ -466,7 +466,6 @@ ul.res.grid .player{margin-inline:12px}
     <button class="copy" id="copy" type="button">Copy list</button>
     <button class="copy" id="copylink" type="button">Copy shortlist link</button>
     <button class="copy" id="dlcsv" type="button">Download as spreadsheet (CSV)</button>
-    <button class="copy" id="csvlist" type="button">Download CSV</button>
     <button class="copy" id="prlist" type="button">Print shortlist</button>
     <button class="copy" id="clrlist" type="button" hidden>Clear shortlist</button>
     <span class="cap" id="copied" style="margin-left:10px"></span>
@@ -686,7 +685,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       const x=document.createElement('button'); x.type='button'; x.className='hide'; x.textContent='Remove'; x.setAttribute('aria-label','Remove '+N[k][1]+' from shortlist');
       x.addEventListener('click',()=>{const i=list.indexOf(id); if(i>=0) list.splice(i,1); saveList(); refreshAll(); renderList(); toast(N[k][1]+' removed.',()=>{list.splice(Math.min(i,list.length),0,id); saveList(); refreshAll(); renderList()})});
       if(E[k]||REV[k].length){ const f=document.createElement('button'); f.type='button'; f.className='sim'; f.textContent='Find similar'; f.setAttribute('aria-label','Find artists similar to '+N[k][1]); f.addEventListener('click',()=>hop(k)); li.appendChild(f); li.appendChild(document.createTextNode(' ')); }
-      li.appendChild(x); ol.appendChild(li)});
+      li.appendChild(x);
+      { const lk=document.createElement('span'); lk.className='links'; lk.style.display='inline-flex'; lk.style.margin='0 8px'; li.insertBefore(lk,a.nextSibling); const rr=RI.get(k); previewBtn(li,N[k],(rr&&rr[4].length&&rr[4][0][2]<=TODAY)?rr[4][0][0]:null) }
+      ol.appendChild(li)});
     $('listsum').textContent='Your shortlist ('+list.length+')';
     updateJump();
     $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length;
@@ -1715,13 +1716,6 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       if(list.length!==before.length){ saveList(); renderList(); refreshAll(); $('listbox').open=true;
         toast('Added '+(list.length-before.length)+' artists from a shared shortlist.',()=>{list=before; saveList(); renderList(); refreshAll()}); }
       try{history.replaceState(null,'',location.pathname+location.search)}catch(e){} } }
-  $('csvlist').addEventListener('click',()=>{
-    const idx=new Map(N.map((a,i)=>[a[0],i])), q=v=>{ v=String(v); if(/^[=+\-@\t\r]/.test(v)) v="'"+v; return '"'+v.replace(/"/g,'""')+'"' };
-    const rows=[['Artist','Deezer fans','Deezer link']]; list.forEach(id=>{ const k=idx.get(id); if(k!=null) rows.push([N[k][1],N[k][2]==null?'':N[k][2],'https://www.deezer.com/artist/'+id]) });
-    const done=m=>{$('copied').textContent=m; setTimeout(()=>$('copied').textContent='',2200)};
-    if(rows.length<2){ done('Your shortlist is empty'); return }
-    try{ const blob=new Blob(['\ufeff'+rows.map(r=>r.map(q).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}), u=URL.createObjectURL(blob), l=document.createElement('a'); l.href=u; l.download='fresh-mic-shortlist.csv'; document.body.appendChild(l); l.click(); l.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000); done('Downloaded') }catch(e){ done('Download not available here') }
-  });
   $('copy').addEventListener('click',()=>{
     const idx=new Map(N.map((a,i)=>[a[0],i]));
     const txt=list.map(id=>{const k=idx.get(id);return k==null?'':N[k][1]}).filter(Boolean).join('\n');
