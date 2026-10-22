@@ -207,6 +207,7 @@ ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 @media (hover:hover){.seg button[aria-pressed="false"]:hover{border-color:var(--accent);color:var(--accent)}.tabs button[aria-selected="false"]:hover{color:var(--fg)}.shuf:hover{filter:brightness(1.12)}.hide:hover,.links button:hover{color:var(--fg);border-color:var(--ctl)}}
 @media (hover:hover){ul.res:not(.grid) .row:hover{background:var(--surface);box-shadow:-10px 0 0 var(--surface),10px 0 0 var(--surface)}}
 .row{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 96px);scroll-margin-bottom:24px}
+.row.playing{border-left:4px solid var(--accent);padding-left:10px}
 .row:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .row{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:6px 14px;align-items:start;padding:16px 0;border-bottom:1px solid var(--line)}
 .tile{width:52px;height:52px;border-radius:10px;display:grid;place-items:center;color:#fff;font:800 1.2rem var(--f-display);text-shadow:0 1px 2px rgba(0,0,0,.35)}
@@ -518,7 +519,7 @@ const G = /*DATA*/;
   let NOW=null, auto=(ui.auto===true);
   function playNextFrom(li){ let nx=li.nextElementSibling; while(nx&&!nx.querySelector('button.play')) nx=nx.nextElementSibling; if(nx){ nx.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); nx.querySelector('button.play').click(); } }
   function mediaClear(){ try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=null; ['play','pause','nexttrack'].forEach(a=>{try{navigator.mediaSession.setActionHandler(a,null)}catch(e){}}) } }catch(e){} }
-  function stopNow(){ if(!NOW) return; try{NOW.au.pause()}catch(e){} NOW.bar.remove(); NOW.el.textContent='\u25B6 Play 30s'; NOW.el.setAttribute('aria-pressed','false'); NOW=null; mediaClear() }
+  function stopNow(){ if(!NOW) return; try{NOW.au.pause()}catch(e){} if(NOW.bar.parentNode) NOW.bar.parentNode.classList.remove('playing'); NOW.bar.remove(); NOW.el.textContent='\u25B6 Play 30s'; NOW.el.setAttribute('aria-pressed','false'); NOW=null; mediaClear() }
   let jid=0;
   function jsonp(url,cb){
     const name='__dz'+(++jid), sc=document.createElement('script'); let done=false;
@@ -544,7 +545,7 @@ const G = /*DATA*/;
           bar.innerHTML='<div class="now"></div><div class="prog"><i></i></div><div class="tm" aria-hidden="true">0:00 / 0:30</div>';
           { const vr=document.createElement('input'); vr.type='range'; vr.min=0; vr.max=100; vr.step=5; vr.value=vol0; vr.className='pvol'; vr.setAttribute('aria-label','Preview volume'); vr.addEventListener('input',()=>{ const v=+vr.value; au.volume=v/100; ui.vol=v; saveUi() }); bar.appendChild(vr); }
           bar.querySelector('.now').textContent='Now playing: '+t.title_short+' \u2014 '+a[1]+' (30-second preview from Deezer)';
-          li.appendChild(bar);
+          li.appendChild(bar); li.classList.add('playing');
           { const pr=bar.querySelector('.prog'); pr.setAttribute('role','slider'); pr.tabIndex=0; pr.setAttribute('aria-label','Seek within the preview'); pr.setAttribute('aria-valuemin','0'); pr.setAttribute('aria-valuemax','100'); pr.setAttribute('aria-valuenow','0');
             pr.addEventListener('click',e=>{ const r=pr.getBoundingClientRect(); if(au.duration&&r.width) au.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*au.duration });
             pr.addEventListener('keydown',e=>{ if(!au.duration) return; if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); au.currentTime=Math.max(0,Math.min(au.duration,au.currentTime+(e.key==='ArrowRight'?5:-5))) } }); }
