@@ -251,6 +251,14 @@ details.list ol{margin:10px 0;padding-left:1.2em}
 body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:19}
 .tabs{display:flex;gap:6px}
 #surp{margin-top:14px;font-size:.95rem;padding:10px 16px}
+.surprow{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:14px}.surprow #surp{margin-top:0}
+#surpg{font:500 .9rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:8px;padding:9px 10px;max-width:100%}
+.about{margin:14px 0 4px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.about h3{margin:0 0 8px;font:800 1rem var(--f-display)}
+.about dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;margin:0;font-size:.9rem}
+.about dt{color:var(--muted)}.about dd{margin:0}
+.about ul{margin:8px 0 0;padding-left:1.1em;font-size:.88rem}
+.about .tag{display:inline-block;border:1px solid var(--ctl);border-radius:999px;padding:1px 9px;font-size:.8rem;margin-right:6px}
 .bsearch{position:relative;flex:1 1 200px;max-width:300px;margin-bottom:8px}
 #gq{width:100%;font:500 .95rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:999px;padding:8px 14px}
 .jump{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
@@ -315,7 +323,7 @@ ul.res.grid .player{margin-inline:12px}
   <header>
     <h1>Fresh Mic</h1>
     <p class="lede">New and upcoming artists you probably haven't heard of, plus a way to find more like the ones you love. Everything here has far fewer listeners than the big names.</p>
-    <button type="button" class="shuf" id="surp">Surprise me: open a random artist</button>
+    <div class="surprow"><button type="button" class="shuf" id="surp">Surprise me: open a random artist</button><select id="surpg" aria-label="Genre for the random artist"><option value="0">Any genre</option></select></div>
   </header>
 
   <div class="bar" id="bar">
@@ -399,6 +407,7 @@ ul.res.grid .player{margin-inline:12px}
     </section>
     <section aria-live="polite">
       <div class="head"><h2 id="title"></h2><button class="shuf" id="hopback" type="button" hidden></button><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button><a class="shuf" id="seedlink" target="_blank" rel="noopener" hidden>Listen on Deezer</a></div>
+      <section class="about" id="about" aria-label="About this artist" hidden></section>
       <p class="legend" id="legend" hidden>Each bar is an artist's fan count on a log scale: longer means bigger. The dark tick marks the artist you searched for, so bars that stop short of it are smaller.</p>
     <div class="ctl" id="sortctl" style="margin:0 0 12px"><div class="cap" id="sortlab">Order results by</div><div class="seg" id="sortseg" role="group" aria-labelledby="sortlab"></div></div>
       <ul class="res" id="res"></ul>
@@ -588,6 +597,7 @@ const G = /*DATA*/;
     const qf=N[cur][2]||0;
     $('meta').textContent=fmt(qf)+' fans · '+results.length+' match'+(results.length===1?'':'es');
     $('legend').hidden=!results.length; $('saveall').hidden=!results.length;
+    renderAbout(cur);
     if(!results.length){
       const li=document.createElement('li'); li.className='empty';
       li.textContent='No matches for '+N[cur][1]+' with the current filters.';
@@ -611,7 +621,7 @@ const G = /*DATA*/;
       li.insertBefore(pic(r.k),li.firstChild);
       li.querySelector('.name').textContent=a[1];
       const rr=RI.get(r.k); previewBtn(li,a,(rr&&rr[4].length&&rr[4][0][2]<=TODAY)?rr[4][0][0]:null); if(rr&&rr[4].length&&rr[4][0][2]<=TODAY&&rr[4][0][2]>=cutoff(60)){const bd=document.createElement('span');bd.className='badge';bd.textContent='New '+rr[4][0][3];li.querySelector('.name').appendChild(bd)}
-      li.querySelector('.why').textContent=(r.direct?'Deezer lists this artist as related to '+N[cur][1]+'.':(r.via.length?'A step further out, through '+r.via.join(' and ')+'.':'A step further out.')) + ((rr&&rr[4].length&&rr[4][0][2]<=TODAY)?' Latest release: '+when(rr[4][0][2])+'.':'');
+      li.querySelector('.why').textContent=(rr&&gname(rr[1])!=='Other'?gname(rr[1])+' \u00B7 '+rr[3]+' release'+(rr[3]===1?'':'s')+'. ':'')+(r.direct?'Deezer lists this artist as related to '+N[cur][1]+'.':(r.via.length?'A step further out, through '+r.via.join(' and ')+'.':'A step further out.')) + ((rr&&rr[4].length&&rr[4][0][2]<=TODAY)?' Latest release: '+when(rr[4][0][2])+'.':'');
       li.querySelector('.save').addEventListener('click',e=>{
         const i=list.indexOf(a[0]); if(i>=0) list.splice(i,1); else list.push(a[0]);
         saveList(); e.target.setAttribute('aria-pressed',i<0); e.target.textContent=i<0?'Saved':'Save'; renderList();
@@ -667,6 +677,22 @@ const G = /*DATA*/;
   $('mname').addEventListener('click',()=>{ if(NOW) NOW.li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}) });
   $('mauto').addEventListener('click',()=>{ auto=!auto; ui.auto=auto; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',auto); showMini(); toast(auto?'Autoplay on: the next artist\u2019s preview starts when one ends.':'Autoplay off.') });
   $('hopback').addEventListener('click',()=>{ if(hops.length) history.back() });
+  function renderAbout(k){
+    const box=$('about'); box.textContent=''; if(k<0){ box.hidden=true; return }
+    const a=N[k], r=RI.get(k), f=a[2]; box.hidden=false;
+    const h=document.createElement('h3'); h.textContent='About '+a[1]; box.appendChild(h);
+    const dl=document.createElement('dl'); const row=(t,v)=>{ if(v==null||v==='') return; const dt=document.createElement('dt'), dd=document.createElement('dd'); dt.textContent=t; dd.textContent=v; dl.appendChild(dt); dl.appendChild(dd) };
+    const tier=f==null?'':f<5000?'Very small (under 5K fans)':f<25000?'Small (under 25K fans)':f<100000?'Growing (under 100K fans)':f<500000?'Established (under 500K fans)':'Big name (500K+ fans)';
+    row('Size',f==null?'':fmt(f)+' fans on Deezer. '+tier);
+    if(r){ row('Main genre',gname(r[1])==='Other'?'Not listed':gname(r[1])); row('On Deezer',r[3]+' release'+(r[3]===1?'':'s')+' (albums, EPs and singles)');
+      const live=r[4].filter(x=>x[2]<=TODAY), soon=r[4].filter(x=>x[2]>TODAY);
+      if(live.length) row('Latest release','\u201C'+live[0][1]+'\u201D, a '+live[0][3]+', '+when(live[0][2]).replace(/^Out /,'out '));
+      if(soon.length) row('Coming up','\u201C'+soon[0][1]+'\u201D, '+when(soon[0][2]).toLowerCase());
+    } else row('Releases','No release details in this snapshot.');
+    row('Similar artists',results.length+' found in this list');
+    box.appendChild(dl);
+    if(r&&r[4].length>1){ const ul=document.createElement('ul'); r[4].forEach(x=>{ const li=document.createElement('li'); li.textContent='\u201C'+x[1]+'\u201D \u00B7 '+x[3]+' \u00B7 '+when(x[2]); ul.appendChild(li) }); const cap=document.createElement('div'); cap.className='cap'; cap.style.marginTop='10px'; cap.textContent='Recent releases'; box.appendChild(cap); box.appendChild(ul) }
+  }
   function pick(k,stay,nohash){ if(!stay) setTab('find'); cur=k;
     if(!nohash){ recent=[N[k][0]].concat(recent.filter(x=>x!==N[k][0])).slice(0,8); saveRecent(); renderRecent(); } shown=24; $('q').value=N[k][1]; qsync(); hideSug(); results=related(k); render();
     $('sharelink').hidden=false;
@@ -892,9 +918,13 @@ const G = /*DATA*/;
   });
 
   let lastSurp=-1;
-  const surpSeen=new Set();
+  const surpSeen=new Set(); let sg=(Number.isInteger(ui.sg)&&ui.sg>0?ui.sg:0);
+  { const cnt=new Map(); R.forEach(r=>{ if(r[1]) cnt.set(r[1],(cnt.get(r[1])||0)+1) }); const sel=$('surpg');
+    [...cnt.entries()].filter(([g,c])=>GN[g]&&c>=8).sort((a,b)=>b[1]-a[1]).forEach(([g,c])=>{ const o=document.createElement('option'); o.value=g; o.textContent=gname(g)+' ('+c+')'; sel.appendChild(o) });
+    if(![...sel.options].some(o=>+o.value===sg)) sg=0; sel.value=String(sg);
+    sel.addEventListener('change',()=>{ sg=+sel.value; ui.sg=sg; saveUi(); surpSeen.clear() }) }
   $('surp').addEventListener('click',()=>{
-    let pool; const build=()=>{ pool=[]; R.forEach(r=>{const k=r[0], f=N[k][2]; if(f==null||f<300||!inLimit(f)||hid.has(N[k][0])||muted.has(r[1])||surpSeen.has(k)) return; if(!(E[k]||REV[k].length)) return; pool.push(k)}); }; build(); if(!pool.length&&surpSeen.size){ surpSeen.clear(); build() }
+    let pool; const build=()=>{ pool=[]; R.forEach(r=>{const k=r[0], f=N[k][2]; if(f==null||f<300||!inLimit(f)||hid.has(N[k][0])||muted.has(r[1])||surpSeen.has(k)||(sg&&r[1]!==sg)) return; if(!(E[k]||REV[k].length)) return; pool.push(k)}); }; build(); if(!pool.length&&surpSeen.size){ surpSeen.clear(); build() }
     if(!pool.length){ toast('Nothing to pick at this size. Raise the fan limit.'); return }
     const k=pool[Math.floor(Math.random()*pool.length)]; lastSurp=k; surpSeen.add(k); if(surpSeen.size>40) surpSeen.delete(surpSeen.values().next().value);
     pick(k); window.scrollTo(0,0); toast('Surprise: '+N[k][1]+' ('+fmt(N[k][2])+' fans). Showing artists like them.');
