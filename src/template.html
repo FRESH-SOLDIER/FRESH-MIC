@@ -217,6 +217,7 @@ ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .mini .mname{flex:1;min-width:0;text-align:left;background:none;border:0;color:var(--fg);font:600 .9rem var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;padding:8px 4px}
 .mini button:not(.mname){font:500 .82rem var(--f-data);color:var(--fg);background:transparent;border:1px solid var(--ctl);border-radius:8px;padding:8px 10px;cursor:pointer;white-space:nowrap}
 .mini #mauto[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.mini{overflow:visible}.mini #mprog{position:absolute;left:0;top:-1px;height:3px;width:0;background:var(--accent);pointer-events:none;transition:width .25s linear}
 .mini button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 body.hasmini{padding-bottom:70px}body.hasmini .top{bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 62px)}
 .row.playing{border-left:4px solid var(--accent);padding-left:10px}
@@ -470,7 +471,7 @@ ul.res.grid .player{margin-inline:12px}
   </details>
 
   <div class="mini" id="mini" role="region" aria-label="Now playing" hidden>
-    <button type="button" class="mname" id="mname" aria-label="Show the playing artist in the list"></button>
+    <i id="mprog" aria-hidden="true"></i><button type="button" class="mname" id="mname" aria-label="Show the playing artist in the list"></button>
     <button type="button" id="mpp" aria-label="Pause">Pause</button>
     <button type="button" id="mprev" aria-label="Play the previous artist">&#9664;&#9664; Prev</button>
     <button type="button" id="mnext" aria-label="Play the next artist">Next &#9654;&#9654;</button>
@@ -579,7 +580,7 @@ const G = /*DATA*/;
   function mediaClear(){ try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=null; ['play','pause','nexttrack'].forEach(a=>{try{navigator.mediaSession.setActionHandler(a,null)}catch(e){}}) } }catch(e){} }
   function tabMark(){ const t=document.title.replace(/^\u25b6 /,''); const want=(NOW&&!NOW.au.paused)?'\u25b6 '+t:t; if(document.title!==want) document.title=want }
   try{ new MutationObserver(tabMark).observe(document.querySelector('title'),{childList:true,characterData:true,subtree:true}) }catch(e){}
-  function showMini(){ const m=$('mini'); if(!NOW){ m.hidden=true; document.body.classList.remove('hasmini'); tabMark(); return } m.hidden=false; document.body.classList.add('hasmini'); $('mname').textContent=NOW.who+' \u2014 '+NOW.title; $('mpp').textContent=NOW.au.paused?'Play':'Pause'; $('mpp').setAttribute('aria-label',NOW.au.paused?'Resume':'Pause'); $('mauto').setAttribute('aria-pressed',auto); tabMark() }
+  function showMini(){ const m=$('mini'); if(!NOW){ $('mprog').style.width='0'; m.hidden=true; document.body.classList.remove('hasmini'); tabMark(); return } m.hidden=false; document.body.classList.add('hasmini'); $('mname').textContent=NOW.who+' \u2014 '+NOW.title; $('mpp').textContent=NOW.au.paused?'Play':'Pause'; $('mpp').setAttribute('aria-label',NOW.au.paused?'Resume':'Pause'); $('mauto').setAttribute('aria-pressed',auto); tabMark() }
   function stopNow(){ if(!NOW) return; try{NOW.au.pause()}catch(e){} if(NOW.bar.parentNode) NOW.bar.parentNode.classList.remove('playing'); NOW.bar.remove(); NOW.el.textContent='\u25B6 Play 30s'; NOW.el.setAttribute('aria-pressed','false'); NOW=null; mediaClear(); showMini() }
   let jid=0;
   function jsonp(url,cb){
@@ -611,7 +612,7 @@ const G = /*DATA*/;
             pr.addEventListener('click',e=>{ const r=pr.getBoundingClientRect(); if(au.duration&&r.width) au.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*au.duration });
             pr.addEventListener('keydown',e=>{ if(!au.duration) return; if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); au.currentTime=Math.max(0,Math.min(au.duration,au.currentTime+(e.key==='ArrowRight'?5:-5))) } }); }
                     try{ if('mediaSession' in navigator&&window.MediaMetadata){ navigator.mediaSession.metadata=new MediaMetadata({title:t.title_short,artist:a[1],album:'Fresh Mic \u00B7 30-second preview'}); const ms=navigator.mediaSession; ms.setActionHandler('play',()=>{au.play().catch(()=>{})}); ms.setActionHandler('pause',()=>{au.pause()}); ms.setActionHandler('nexttrack',()=>{ const l=li; stopNow(); playNextFrom(l) }); } }catch(e){}
-          NOW={el,au,bar,li,title:t.title_short,who:a[1]}; showMini(); au.addEventListener('play',tabMark); au.addEventListener('pause',tabMark); el.textContent='\u25A0 Stop'; el.setAttribute('aria-pressed','true');
+          NOW={el,au,bar,li,title:t.title_short,who:a[1]}; showMini(); au.addEventListener('timeupdate',()=>{ if(NOW&&NOW.au===au&&au.duration) $('mprog').style.width=(au.currentTime/au.duration*100).toFixed(1)+'%' }); au.addEventListener('play',tabMark); au.addEventListener('pause',tabMark); el.textContent='\u25A0 Stop'; el.setAttribute('aria-pressed','true');
           au.addEventListener('timeupdate',()=>{ const tmE=bar.querySelector('.tm'); if(tmE&&au.duration){ const f=n=>Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0'); tmE.textContent=f(au.currentTime)+' / '+f(au.duration) } const i=bar.querySelector('i'); if(i&&au.duration){ const v=au.currentTime/au.duration*100; i.style.width=v+'%'; bar.querySelector('.prog').setAttribute('aria-valuenow',Math.round(v)) }});
           au.addEventListener('ended',()=>{
             const wasLi=li; stopNow();
