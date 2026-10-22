@@ -911,17 +911,28 @@ const G = /*DATA*/;
   }
 
   // slow drifting background: the busier the sky, the bigger the artists allowed (Any size = full sky, 5K = a few quiet lights)
-  const BGN=[150,80,40,18,7]; let bgBuilt=false;
+  const BGN=['Galaxy','City lights','Aurora','Fireflies','One lantern']; let bgBuilt=false;
   function setBg(){ const host=$('bgfx'); if(!host) return;
-    if(!bgBuilt){ bgBuilt=true; const rnd=(()=>{ let x=7; return ()=>{ x=(x*16807)%2147483647; return x/2147483647 } })();
-      BGN.forEach((n,t)=>{ const el=document.createElement('i'), g=[]; const small=t>=3;
-        for(let j=0;j<n;j++){ const r=(small?3.5+rnd()*5:1+rnd()*3.2).toFixed(1), a=(small?.55+rnd()*.35:.25+rnd()*.5).toFixed(2), c=rnd()<.7?'var(--accent)':'var(--tiny)';
-          g.push('radial-gradient(circle at '+(rnd()*100).toFixed(1)+'% '+(rnd()*100).toFixed(1)+'%,color-mix(in srgb,'+c+' '+Math.round(a*100)+'%,transparent) 0,color-mix(in srgb,'+c+' '+Math.round(a*100)+'%,transparent) '+r+'px,transparent '+(+r+1)+'px)') }
-        g.push('radial-gradient(ellipse at '+(t%2?'80% 20%':'20% 80%')+',color-mix(in srgb,var(--accent) '+(14-t*2)+'%,transparent),transparent '+(70-t*8)+'%)');
-        el.style.backgroundImage=g.join(','); host.appendChild(el) }) }
-    const idx=Math.max(0,LIMS.findIndex(x=>x[0]===limit)); [...host.children].forEach((e,i)=>e.classList.toggle('on',i===idx)) }
+    if(!bgBuilt){ bgBuilt=true; let x=7; const rnd=()=>{ x=(x*16807)%2147483647; return x/2147483647 }, pc=()=>(rnd()*100).toFixed(1)+'%';
+      const dots=(n,rmin,rr,col,al)=>{ const g=[]; for(let j=0;j<n;j++){ const r=(rmin+rnd()*rr).toFixed(1); g.push('radial-gradient(circle at '+pc()+' '+pc()+','+col.replace('A',(al*(.6+rnd()*.4)).toFixed(2))+' 0,'+col.replace('A',(al*(.6+rnd()*.4)).toFixed(2))+' '+r+'px,transparent '+(+r+1)+'px)') } return g };
+      const glows=(n,col,core,halo)=>{ const g=[]; for(let j=0;j<n;j++) g.push('radial-gradient(circle at '+pc()+' '+pc()+',rgba('+col+',.85) 0,rgba('+col+',.85) '+core+'px,rgba('+col+',.25) '+(core+1)+'px,transparent '+halo+'px)'); return g };
+      const scenes=[
+        // 0 Galaxy: dense stars and big colour clouds
+        ()=>({bg:dots(140,1,3,'rgba(255,255,255,A)',.7).concat(dots(26,1.5,2.5,'rgba(255,200,120,A)',.8),['radial-gradient(ellipse 60% 45% at 20% 30%,rgba(150,90,255,.30),transparent 70%)','radial-gradient(ellipse 55% 40% at 80% 65%,rgba(40,160,255,.26),transparent 70%)','radial-gradient(ellipse 40% 30% at 55% 12%,rgba(255,90,170,.22),transparent 70%)'])}),
+        // 1 City lights: rows of lit windows rising from a glowing horizon
+        ()=>({bg:['radial-gradient(circle,rgba(255,205,100,.95) 0 2.4px,transparent 3.2px)','radial-gradient(circle,rgba(255,150,70,.85) 0 2px,transparent 2.8px)','radial-gradient(circle,rgba(120,200,255,.75) 0 1.8px,transparent 2.6px)','linear-gradient(to top,rgba(255,110,60,.32),transparent 50%)'],size:['26px 34px','41px 47px','57px 63px','100% 100%'],mask:'linear-gradient(to top,#000 0,#000 25%,transparent 70%)',pos:['0 0','9px 14px','20px 7px','0 0']}),
+        // 2 Aurora: soft green and violet ribbons
+        ()=>({bg:dots(30,.8,1.6,'rgba(255,255,255,A)',.7).concat(['linear-gradient(104deg,transparent 18%,rgba(60,235,170,.34) 32%,rgba(60,235,170,.12) 42%,transparent 54%)','linear-gradient(78deg,transparent 44%,rgba(130,120,255,.30) 60%,transparent 78%)','linear-gradient(98deg,transparent 4%,rgba(90,255,210,.24) 14%,transparent 28%)','linear-gradient(115deg,transparent 62%,rgba(60,235,170,.22) 76%,transparent 92%)']),mask:'linear-gradient(to bottom,#000 0,#000 40%,transparent 92%)'}),
+        // 3 Fireflies: a few drifting yellow-green glows
+        ()=>({bg:glows(16,'200,255,90',3,26).concat(glows(8,'255,230,120',2,18))}),
+        // 4 One lantern: a single warm light low in the dark, with a few embers
+        ()=>({bg:['radial-gradient(circle at 50% 80%,rgba(255,240,170,.95) 0,rgba(255,215,120,.85) 7px,rgba(255,170,70,.4) 16px,transparent 70px)','radial-gradient(ellipse 50% 38% at 50% 84%,rgba(255,150,60,.42),transparent 72%)','radial-gradient(ellipse 90% 60% at 50% 100%,rgba(255,110,40,.22),transparent 70%)'].concat(dots(9,1.2,1.6,'rgba(255,170,70,A)',.8))})
+      ];
+      scenes.forEach(f=>{ const sc=f(), el=document.createElement('i'); el.style.backgroundImage=sc.bg.join(','); if(sc.size) el.style.backgroundSize=sc.size.join(','); if(sc.pos) el.style.backgroundPosition=sc.pos.join(','); if(sc.mask){ el.style.webkitMaskImage=sc.mask; el.style.maskImage=sc.mask } host.appendChild(el) }) }
+    const idx=Math.max(0,LIMS.findIndex(x=>x[0]===limit)); [...host.children].forEach((e,i)=>e.classList.toggle('on',i===idx));
+    const cap=$('bgcap'); if(cap) cap.textContent='Background: '+BGN[idx]+'. Each size has its own scene, from a full galaxy for any size down to one lantern for the smallest artists.' }
   setBg();
-  { const cap=document.createElement('p'); cap.className='bgcap'; cap.textContent='The background shows the size you chose: a full sky for any size, fewer lights as artists get smaller.'; $('seg').parentNode.appendChild(cap) }
+  { const cap=document.createElement('p'); cap.className='bgcap'; cap.id='bgcap'; $('seg').parentNode.appendChild(cap); setBg() }
   // genre chips (only genres with enough recent releases)
   (function(){
     const cnt=new Map(); R.forEach(r=>{ if(r[4].some(x=>x[2]<=TODAY)) cnt.set(r[1],(cnt.get(r[1])||0)+1) });
