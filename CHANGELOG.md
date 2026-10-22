@@ -96,3 +96,4 @@
 - 2026-10-22: On the Free music tab, Space now pauses and resumes the playing free song (when no button or field has focus), like the previews elsewhere; the shortcuts card says so. Research: the space bar is the universal pause key for audio.
 - 2026-10-22: The Free music tab now remembers your last search word and your licence filter (Public domain / CC BY) between visits. Research: people who dig for reusable music repeat the same searches and dislike resetting filters.
 - 2026-10-22: Background now shows five distinct scenes matched to fan size (galaxy, city lights, aurora, fireflies, one lantern), same slow drift.
+- 2026-10-22: While a preview is playing the browser tab title starts with ▶ (and loses it on pause or stop), so you can see which tab is making sound among many. Research: Bandcamp and Last.fm users with many tabs open ask for this.
