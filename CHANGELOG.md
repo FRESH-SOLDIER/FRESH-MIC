@@ -107,3 +107,4 @@
 - 2026-10-22: Shortlist entries have up and down arrows to reorder them (saved in the browser, keyboard focus stays on the moved entry), so the shortlist can be arranged as a playlist. Research: people who build lists on discovery sites ask to order them.
 - 2026-10-22: Added a Play shortlist button (shown when the shortlist has artists): it turns autoplay on and starts the first saved artist's preview, then moves down the list in your order. Research: people save artists to listen through them later.
 - 2026-10-22: When Next (or autoplay) reaches the end of a list, or Prev is pressed on the first artist, a short message says so ('That was the last artist in this list') instead of silently stopping. Research: playlist users are confused when playback just stops.
+- 2026-10-22: Added a Shuffle shortlist button (shown with 3 or more saved artists) that mixes the order, with Undo, for a random-order listen. Research: playlist users expect a shuffle option.
