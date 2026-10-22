@@ -587,7 +587,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   try{ new MutationObserver(tabMark).observe(document.querySelector('title'),{childList:true,characterData:true,subtree:true}) }catch(e){}
   function msyn(){ const sb=NOW&&NOW.li&&NOW.li.querySelector('.save'), b=$('msave'); b.hidden=!sb; if(sb){ const on=sb.getAttribute('aria-pressed')==='true'; b.setAttribute('aria-pressed',on); b.textContent=on?'Saved':'Save' } }
   function showMini(){ const m=$('mini'); if(!NOW){ $('mprog').style.width='0'; m.hidden=true; document.body.classList.remove('hasmini'); tabMark(); return } m.hidden=false; document.body.classList.add('hasmini'); $('mname').textContent=NOW.who+' \u2014 '+NOW.title; $('mname').title=$('mname').textContent+' (click to show it in the list)'; $('mpp').textContent=NOW.au.paused?'Play':'Pause'; $('mpp').setAttribute('aria-label',NOW.au.paused?'Resume':'Pause'); $('mauto').setAttribute('aria-pressed',auto); msyn(); tabMark() }
-  function stopNow(){ if(!NOW) return; try{NOW.au.pause()}catch(e){} if(NOW.bar.parentNode) NOW.bar.parentNode.classList.remove('playing'); NOW.bar.remove(); NOW.el.textContent='\u25B6 Play 30s'; NOW.el.setAttribute('aria-pressed','false'); NOW=null; mediaClear(); showMini() }
+  function stopNow(){ if(!NOW) return; try{NOW.au.pause()}catch(e){} if(NOW.bar.parentNode) NOW.bar.parentNode.classList.remove('playing'); NOW.bar.remove(); NOW.el.textContent=NOW.el.dataset.lab||'\u25B6 Play 30s'; NOW.el.setAttribute('aria-pressed','false'); NOW=null; mediaClear(); showMini() }
   let jid=0;
   function jsonp(url,cb){
     const name='__dz'+(++jid), sc=document.createElement('script'); let done=false;
@@ -597,19 +597,20 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   }
   let heard=new Set(); try{ heard=new Set(JSON.parse(localStorage.getItem('freshmic:heard')||'[]').map(Number)) }catch(e){}
   function markHeard(li,id){ if(!li.querySelector('.heardtag')){ const t=document.createElement('span'); t.className='heardtag'; t.textContent='\u2713 Heard'; t.title='You already played a preview of this artist'; const lk=li.querySelector('.links'); if(lk) lk.appendChild(t) } if(!heard.has(id)){ heard.add(id); try{ localStorage.setItem('freshmic:heard',JSON.stringify([...heard].slice(-600))) }catch(e){} } }
-  function previewBtn(li,a,albumId){
+  function previewBtn(li,a,albumId,rand){
+    const LAB=rand?'\uD83C\uDFB2 Random song':'\u25B6 Play 30s'; if(rand&&!G.embed) return;
     const links=li.querySelector('.links'); const url=albumId?'https://www.deezer.com/album/'+albumId:'https://www.deezer.com/artist/'+a[0];
     let el;
     if(G.embed){
-      el=document.createElement('button'); el.type='button'; el.className='play'; el.textContent='\u25B6 Play 30s'; el.setAttribute('aria-pressed','false');
+      el=document.createElement('button'); el.type='button'; el.className='play'; el.textContent=LAB; el.setAttribute('aria-pressed','false');
       let bar=null;
       el.addEventListener('click',()=>{
         if(NOW&&NOW.el===el){stopNow(); return}
         stopNow(); stopFree(); el.textContent='Loading\u2026';
-        const ep=albumId?'album/'+albumId+'/tracks?limit=1':'artist/'+a[0]+'/top?limit=1';
+        const ep=rand?'artist/'+a[0]+'/top?limit=50':albumId?'album/'+albumId+'/tracks?limit=1':'artist/'+a[0]+'/top?limit=1';
         jsonp('https://api.deezer.com/'+ep,d=>{
-          const t=d&&d.data&&d.data[0];
-          if(!t||!t.preview){ if(!d){ el.textContent='Couldn\u2019t reach Deezer. Tap to retry'; toast('Couldn\u2019t reach Deezer for the preview. Check your connection or an ad blocker, then try again.'); setTimeout(()=>{ if(!NOW||NOW.el!==el) el.textContent='\u25B6 Play 30s' },4000); return } el.textContent='No preview'; setTimeout(()=>{el.textContent='\u25B6 Play 30s'},2000); return}
+          let t=d&&d.data&&d.data[0]; if(rand&&d&&d.data){ const ok=d.data.filter(x=>x&&x.preview); t=ok.length?ok[Math.floor(Math.random()*ok.length)]:null }
+          if(!t||!t.preview){ if(!d){ el.textContent='Couldn\u2019t reach Deezer. Tap to retry'; toast('Couldn\u2019t reach Deezer for the preview. Check your connection or an ad blocker, then try again.'); setTimeout(()=>{ if(!NOW||NOW.el!==el) el.textContent=LAB },4000); return } el.textContent='No preview'; setTimeout(()=>{el.textContent=LAB},2000); return}
           const au=new Audio(t.preview); const vol0=(Number.isInteger(ui.vol)&&ui.vol>=0&&ui.vol<=100)?ui.vol:90; au.volume=vol0/100;
           bar=document.createElement('div'); bar.className='player';
           bar.innerHTML='<div class="now"></div><div class="prog"><i></i></div><div class="tm" aria-hidden="true">0:00 / 0:30</div>';
@@ -633,7 +634,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     } else {
       el=document.createElement('a'); el.className='play'; el.target='_blank'; el.rel='noopener'; el.href=url; el.textContent='\u25B6 Preview on Deezer';
     }
-    links.insertBefore(el,links.firstChild);
+    { const base=rand?links.querySelector('button.play,a.play'):null; if(base) links.insertBefore(el,base.nextSibling); else links.insertBefore(el,links.firstChild); } if(rand){ el.className='play rnd'; el.dataset.lab=LAB }
     if(heard.has(a[0])) markHeard(li,a[0]);
   }
   function render(){
@@ -667,7 +668,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
         +'<button class="hide" type="button" aria-label="Hide '+a[1].replace(/[&<>"]/g,'')+' from my results">Not for me</button></div>';
       li.insertBefore(pic(r.k),li.firstChild);
       li.querySelector('.name').textContent=a[1];
-      const rr=RI.get(r.k); previewBtn(li,a,(rr&&rr[4].length&&rr[4][0][2]<=TODAY)?rr[4][0][0]:null); if(rr&&rr[4].length&&rr[4][0][2]<=TODAY&&rr[4][0][2]>=cutoff(60)){const bd=document.createElement('span');bd.className='badge';bd.textContent='New '+rr[4][0][3];li.querySelector('.name').appendChild(bd)}
+      const rr=RI.get(r.k); previewBtn(li,a,(rr&&rr[4].length&&rr[4][0][2]<=TODAY)?rr[4][0][0]:null); previewBtn(li,a,null,true); if(rr&&rr[4].length&&rr[4][0][2]<=TODAY&&rr[4][0][2]>=cutoff(60)){const bd=document.createElement('span');bd.className='badge';bd.textContent='New '+rr[4][0][3];li.querySelector('.name').appendChild(bd)}
       li.querySelector('.why').textContent=(rr&&gname(rr[1])!=='Other'?gname(rr[1])+' \u00B7 '+rr[3]+' release'+(rr[3]===1?'':'s')+'. ':'')+(r.direct?'Deezer lists this artist as related to '+N[cur][1]+'.':(r.via.length?'A step further out, through '+r.via.join(' and ')+'.':'A step further out.')) + ((rr&&rr[4].length&&rr[4][0][2]<=TODAY)?' Latest release: '+when(rr[4][0][2])+'.':'');
       li.querySelector('.save').addEventListener('click',e=>{
         const i=list.indexOf(a[0]); if(i>=0) list.splice(i,1); else list.push(a[0]);
@@ -748,7 +749,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     } else row('Releases','No release details in this snapshot.');
     row('Similar artists',results.length+' found in this list');
     box.appendChild(dl);
-    { const lk=document.createElement('div'); lk.className='links'; lk.style.marginTop='10px'; box.appendChild(lk); const lv=r&&r[4].find(x=>x[2]<=TODAY); previewBtn(box,a,lv?lv[0]:null) }
+    { const lk=document.createElement('div'); lk.className='links'; lk.style.marginTop='10px'; box.appendChild(lk); const lv=r&&r[4].find(x=>x[2]<=TODAY); previewBtn(box,a,lv?lv[0]:null); previewBtn(box,a,null,true) }
     if(r&&r[4].length>1){ const ul=document.createElement('ul'); r[4].forEach(x=>{ const li=document.createElement('li'); li.textContent='\u201C'+x[1]+'\u201D \u00B7 '+x[3]+' \u00B7 '+when(x[2]); ul.appendChild(li) }); const cap=document.createElement('div'); cap.className='cap'; cap.style.marginTop='10px'; cap.textContent='Recent releases'; box.appendChild(cap); box.appendChild(ul) }
   }
   function pick(k,stay,nohash){ if(!stay) setTab('find'); cur=k;
