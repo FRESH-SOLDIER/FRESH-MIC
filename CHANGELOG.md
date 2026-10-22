@@ -98,3 +98,4 @@
 - 2026-10-22: Background now shows five distinct scenes matched to fan size (galaxy, city lights, aurora, fireflies, one lantern), same slow drift.
 - 2026-10-22: While a preview is playing the browser tab title starts with ▶ (and loses it on pause or stop), so you can see which tab is making sound among many. Research: Bandcamp and Last.fm users with many tabs open ask for this.
 - 2026-10-22: The ? note on every fan bar is now written in very simple words (a candy bar: long = lots of fans, short = few, gold = a secret tiny artist, the little dark line = the artist you searched). Requested by the owner.
+- 2026-10-22: The Now playing bar has a Prev button next to Next (plays the artist above in the list), and the Next and stop buttons now show their symbols properly (they were showing raw code text). Research: Spotify and Bandcamp users expect skip-back as well as skip-forward.

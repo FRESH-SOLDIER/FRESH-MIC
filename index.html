@@ -472,9 +472,10 @@ ul.res.grid .player{margin-inline:12px}
   <div class="mini" id="mini" role="region" aria-label="Now playing" hidden>
     <button type="button" class="mname" id="mname" aria-label="Show the playing artist in the list"></button>
     <button type="button" id="mpp" aria-label="Pause">Pause</button>
-    <button type="button" id="mnext" aria-label="Play the next artist">Next \u25B6\u25B6</button>
+    <button type="button" id="mprev" aria-label="Play the previous artist">&#9664;&#9664; Prev</button>
+    <button type="button" id="mnext" aria-label="Play the next artist">Next &#9654;&#9654;</button>
     <button type="button" id="mauto" aria-pressed="false" aria-label="Autoplay next">Auto</button>
-    <button type="button" id="mstop" aria-label="Stop the preview">\u00D7</button>
+    <button type="button" id="mstop" aria-label="Stop the preview">&times;</button>
   </div>
   <button class="top" id="top" type="button" aria-label="Back to top" hidden>↑</button>
 
@@ -573,6 +574,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
 
   // Preview: Deezer's own player (licensed by Deezer, so nothing is copied or re-hosted here).
   let NOW=null, auto=(ui.auto===true);
+  function playPrevFrom(li){ let pv=li.previousElementSibling; while(pv&&!pv.querySelector('button.play')) pv=pv.previousElementSibling; if(pv){ pv.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); pv.querySelector('button.play').click() } }
   function playNextFrom(li){ let nx=li.id==='about'?$('res').firstElementChild:li.nextElementSibling; while(nx&&!nx.querySelector('button.play')) nx=nx.nextElementSibling; if(nx){ nx.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); nx.querySelector('button.play').click(); } }
   function mediaClear(){ try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=null; ['play','pause','nexttrack'].forEach(a=>{try{navigator.mediaSession.setActionHandler(a,null)}catch(e){}}) } }catch(e){} }
   function tabMark(){ const t=document.title.replace(/^\u25b6 /,''); const want=(NOW&&!NOW.au.paused)?'\u25b6 '+t:t; if(document.title!==want) document.title=want }
@@ -707,6 +709,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   function hop(k){ try{ if(cur>=0){ history.replaceState(null,'','#like='+N[cur][0]); history.pushState(null,'','#like='+N[k][0]); hops.push(cur) } }catch(e){} pick(k,false,true); window.scrollTo(0,0); updHop() }
   window.addEventListener('popstate',()=>{ const m=/^#like=(\d+)$/.exec(location.hash); if(!m) return; const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&k!==cur&&(E[k]||REV[k].length)){ if(hops[hops.length-1]===k) hops.pop(); else hops.length=0; pick(k,false,true); window.scrollTo(0,0); updHop() } });
   $('mpp').addEventListener('click',()=>{ if(!NOW) return; if(NOW.au.paused) NOW.au.play().catch(()=>{}); else NOW.au.pause(); showMini() });
+  $('mprev').addEventListener('click',()=>{ if(NOW){ const l=NOW.li; if(!(l.previousElementSibling&&[...l.parentNode.children].some(x=>x!==l&&x.compareDocumentPosition(l)&4&&x.querySelector('button.play')))) return; stopNow(); playPrevFrom(l) } });
   $('mnext').addEventListener('click',()=>{ if(NOW){ const l=NOW.li; stopNow(); playNextFrom(l) } });
   $('mstop').addEventListener('click',()=>stopNow());
   $('mname').addEventListener('click',()=>{ if(NOW) NOW.li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}) });
