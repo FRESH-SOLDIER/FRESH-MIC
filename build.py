@@ -12,6 +12,7 @@ ld = json.dumps({"@context": "https://schema.org", "@type": "WebSite", "name": S
 esc = lambda s: s.replace('&', '&amp;').replace('"', '&quot;')
 seo = ('<meta name="description" content="%s">' % esc(SITE['desc'])
   + '<link rel="canonical" href="%s">' % SITE['url']
+  + '<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">'
   + '<meta property="og:type" content="website"><meta property="og:site_name" content="%s">' % esc(SITE['title'])
   + '<meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s">' % (esc(SITE['title']), esc(SITE['desc']), SITE['url'])
   + '<meta property="og:image" content="%s">' % (SITE['url'] + 'og.png') + '<meta name="twitter:image" content="%s">' % (SITE['url'] + 'og.png') + '<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#14182B">'
