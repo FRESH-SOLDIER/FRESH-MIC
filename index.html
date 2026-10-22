@@ -204,6 +204,7 @@ button:focus-visible,a:focus-visible,.chip:focus-visible{outline:3px solid var(-
 .head h2{font:800 1.5rem/1.1 var(--f-display);margin:0;text-wrap:balance}
 .head .meta{font:400 .82rem var(--f-data);color:var(--muted)}
 ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+@media (hover:hover){.seg button[aria-pressed="false"]:hover{border-color:var(--accent);color:var(--accent)}.tabs button[aria-selected="false"]:hover{color:var(--fg)}.shuf:hover{filter:brightness(1.12)}.hide:hover,.links button:hover{color:var(--fg);border-color:var(--ctl)}}
 @media (hover:hover){ul.res:not(.grid) .row:hover{background:var(--surface);box-shadow:-10px 0 0 var(--surface),10px 0 0 var(--surface)}}
 .row{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 96px);scroll-margin-bottom:24px}
 .row:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
