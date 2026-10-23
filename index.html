@@ -647,7 +647,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     $('title').textContent='Like '+N[cur][1];
     { const sl=$('seedlink'); sl.href='https://www.deezer.com/artist/'+N[cur][0]; sl.textContent='Listen to '+N[cur][1]+' on Deezer'; sl.hidden=false }
     const qf=N[cur][2]||0;
-    $('meta').textContent=fmt(qf)+' fans · '+results.length+' match'+(results.length===1?'':'es');
+    $('meta').textContent=fmt(qf)+' fans · '+results.length+' match'+(results.length===1?'':'es')+(()=>{ const h=results.filter(r=>heard.has(N[r.k][0])).length; return h?' · '+h+' heard':'' })();
     $('legend').hidden=!results.length; $('saveall').hidden=!results.length;
     renderAbout(cur);
     if(!results.length){
