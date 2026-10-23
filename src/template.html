@@ -792,7 +792,10 @@ const G = /*DATA*/;
     b2.addEventListener('click',()=>{freshOnly=!freshOnly; ui.fresh=freshOnly; saveUi(); b2.setAttribute('aria-pressed',freshOnly); shown=24; if(cur>=0){results=related(cur);render()}});
     const b3=document.createElement('button'); b3.type='button'; b3.textContent='Hide artists I\u2019ve heard'; b3.title='Hides artists whose 30-second preview you have already played on this device'; b3.setAttribute('aria-pressed',hideHeard);
     b3.addEventListener('click',()=>{hideHeard=!hideHeard; ui.hh=hideHeard; saveUi(); b3.setAttribute('aria-pressed',hideHeard); shown=24; if(cur>=0){results=related(cur);render()}});
-    w.appendChild(b); w.appendChild(b2); w.appendChild(b3); $('sortctl').appendChild(w); }
+    const b4=document.createElement('button'); b4.type='button'; b4.textContent='Forget what I\u2019ve heard'; b4.title='Clears the list of artists whose preview you have played (kept only in this browser)';
+    b4.addEventListener('click',()=>{ const n=heard.size; heard.clear(); try{ localStorage.removeItem('freshmic:heard') }catch(e){} document.querySelectorAll('.heardtag').forEach(t=>t.remove()); b4.hidden=true; toast(n?'Cleared '+n+' heard artists.':'Nothing to clear.'); shown=24; if(cur>=0){results=related(cur);render()} });
+    b4.hidden=heard.size===0; $('sortctl').addEventListener('click',()=>{ b4.hidden=heard.size===0 });
+    w.appendChild(b); w.appendChild(b2); w.appendChild(b3); w.appendChild(b4); $('sortctl').appendChild(w); }
 
   // autocomplete (page search and top-bar search share one implementation)
   const hiders=[]; const hideSug=()=>hiders.forEach(f=>f());
