@@ -406,6 +406,7 @@ ul.res.grid .player{margin-inline:12px}
     <div>
       <div class="cap" id="hhlab">Listening history</div>
       <div class="seg" id="hhseg" role="group" aria-labelledby="hhlab"></div>
+      <div class="cap" id="hhcount" style="margin-top:4px"></div>
     </div>
     <div><button class="shuf" id="resetf" type="button" hidden>Reset filters</button></div>
     <div class="jump" id="jump"><span class="cap">Jump to</span></div>
@@ -700,7 +701,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   }
 
   function updateJump(){ const bs=$('jump').querySelectorAll('button'); const jb=bs[bs.length-1]; if(jb) jb.textContent='My shortlist'+(list.length?' ('+list.length+')':'') }
-  function listSum(){ const h=list.filter(id=>heard.has(id)).length; $('listsum').textContent='Your shortlist ('+list.length+(h?' \u00b7 '+h+' heard':'')+')' }
+  function listSum(){ const hc=$('hhcount'); if(hc) hc.textContent=heard.size?heard.size+' artist'+(heard.size===1?'':'s')+' heard on this device':'No previews heard yet'; const h=list.filter(id=>heard.has(id)).length; $('listsum').textContent='Your shortlist ('+list.length+(h?' \u00b7 '+h+' heard':'')+')' }
   function renderList(){
     const ol=$('listol'); ol.textContent='';
     const idx=new Map(N.map((a,i)=>[a[0],i]));
@@ -836,7 +837,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const b3=document.createElement('button'); b3.type='button'; b3.textContent='Hide artists I\u2019ve heard'; b3.title='Hides artists whose 30-second preview you have already played on this device'; b3.setAttribute('aria-pressed',hideHeard);
     b3.dataset.hh='1'; b3.addEventListener('click',()=>{hideHeard=!hideHeard; ui.hh=hideHeard; saveUi(); document.querySelectorAll('[data-hh]').forEach(e=>e.setAttribute('aria-pressed',hideHeard)); shown=24; newShown=24; if(cur>=0){results=related(cur);render()} renderHome()});
     const b4=document.createElement('button'); b4.type='button'; b4.textContent='Forget what I\u2019ve heard'; b4.title='Clears the list of artists whose preview you have played (kept only in this browser)';
-    b4.addEventListener('click',()=>{ const n=heard.size; heard.clear(); try{ localStorage.removeItem('freshmic:heard') }catch(e){} document.querySelectorAll('.heardtag').forEach(t=>t.remove()); b4.hidden=true; toast(n?'Cleared '+n+' heard artists.':'Nothing to clear.'); shown=24; if(cur>=0){results=related(cur);render()} });
+    b4.addEventListener('click',()=>{ const n=heard.size; heard.clear(); try{ localStorage.removeItem('freshmic:heard') }catch(e){} document.querySelectorAll('.heardtag').forEach(t=>t.remove()); b4.hidden=true; listSum(); toast(n?'Cleared '+n+' heard artists.':'Nothing to clear.'); shown=24; if(cur>=0){results=related(cur);render()} });
     b4.hidden=heard.size===0; $('sortctl').addEventListener('click',()=>{ b4.hidden=heard.size===0 });
     w.appendChild(b); w.appendChild(b2); w.appendChild(b3); w.appendChild(b4); $('sortctl').appendChild(w); }
 
@@ -1012,7 +1013,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   { const cap=document.createElement('p'); cap.className='bgcap'; cap.id='bgcap'; $('seg').parentNode.appendChild(cap); setBg() }
   { const hb=document.createElement('button'); hb.type='button'; hb.textContent='Hide artists I\u2019ve heard'; hb.dataset.hh='1'; hb.title='Hides artists whose 30-second preview you have already played on this device'; hb.setAttribute('aria-pressed',hideHeard);
     hb.addEventListener('click',()=>{ hideHeard=!hideHeard; ui.hh=hideHeard; saveUi(); document.querySelectorAll('[data-hh]').forEach(e=>e.setAttribute('aria-pressed',hideHeard)); newShown=24; gemShown=8; renderHome(); if(cur>=0){ shown=24; results=related(cur); render() } });
-    $('hhseg').appendChild(hb) }
+    $('hhseg').appendChild(hb); listSum() }
   // genre chips (only genres with enough recent releases)
   (function(){
     const cnt=new Map(); R.forEach(r=>{ if(r[1]&&GN[r[1]]) cnt.set(r[1],(cnt.get(r[1])||0)+1) });
