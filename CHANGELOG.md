@@ -133,3 +133,4 @@
 - 2026-10-23: Print shortlist now prints your private notes under each artist (empty note boxes and the suggestions list are left out of the printout). Research: printed lists should look clean and carry the owner's comments.
 - 2026-10-23: Pressing H toggles Hide artists I've heard on Discover and Find similar (with a short message), and the shortcuts list mentions it. Research: Every Noise-style browsing is loved for fast keyboard control.
 - 2026-10-23: Discover's Listening history control shows how many artists you have heard on this device (it updates as you play, unmark or forget). Research: listening-history features feel clearer when they show the running total.
+- 2026-10-23: Shortlist entries show the artist's main genre next to the fan count (for example '17.2K fans, Rock') when it is known. Research: list users want to tell saved artists apart at a glance.
