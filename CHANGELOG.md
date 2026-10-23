@@ -126,3 +126,4 @@
 - 2026-10-23: The shortlist spreadsheet download now adds a My note column (only when you have written notes; formula-safe). Notes are still left out of share links. Research: people who keep annotated lists want them in their own export.
 - 2026-10-23: The shortlist suggestions have a Save all button (with Undo) that adds every suggested artist in one tap. Research: TasteDive-style recommendation lists are easier to use when they can be saved in bulk.
 - 2026-10-23: The small Heard tag on an artist is now a button: click it to mark that one artist as not heard (undoing an accidental play) instead of clearing the whole history. Research: listening-history features get criticised when mistakes cannot be fixed one at a time.
+- 2026-10-23: Discover's Reset filters button now also appears for, and switches off, the Hide artists I've heard filter, so it resets every Discover filter. Research: users get confused when a reset button leaves a filter still on.

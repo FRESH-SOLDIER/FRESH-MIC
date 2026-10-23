@@ -952,7 +952,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
 
   function renderHome(){
     const {fresh,soon}=homeData();
-    $('resetf').hidden=!(limit!==100000||genre||rtype||rwin);
+    $('resetf').hidden=!(limit!==100000||genre||rtype||rwin||hideHeard);
     const nl=$('newlist'); nl.textContent='';
     $('newmeta').textContent=fresh.length+' release'+(fresh.length===1?'':'s');
     if(!fresh.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No recent releases match these filters.'; const fx=[]; if(limit) fx.push(['Show any size',()=>$('seg').children[0].click()]); if(genre) fx.push(['All genres',()=>$('genres').children[0].click()]); if(rtype) fx.push(['All types',()=>$('rtseg').children[0].click()]); fx.forEach(([t,fn])=>{ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent=t; b.addEventListener('click',fn); li.appendChild(b) }); nl.appendChild(li)}
@@ -1030,7 +1030,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   })();
   $('newmore').addEventListener('click',()=>{const prev=newShown; newShown+=24; renderHome(); const rows=$('newlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
   $('soonmore').addEventListener('click',()=>{const prev=soonShown; soonShown+=12; renderHome(); const rows=$('soonlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
-  $('resetf').addEventListener('click',()=>{ const pick1=(box,sel)=>{const b=box.querySelector(sel); if(b) b.click()}; pick1($('seg'),'button:nth-child(3)'); pick1($('genres'),'.chip:first-child'); pick1($('rtseg'),'button:first-child'); pick1($('rwseg'),'button:first-child'); $('resetf').hidden=true; toast('Filters reset.'); });
+  $('resetf').addEventListener('click',()=>{ const pick1=(box,sel)=>{const b=box.querySelector(sel); if(b) b.click()}; pick1($('seg'),'button:nth-child(3)'); pick1($('genres'),'.chip:first-child'); pick1($('rtseg'),'button:first-child'); pick1($('rwseg'),'button:first-child'); if(hideHeard){ const hb=$('hhseg').querySelector('button'); if(hb) hb.click() } $('resetf').hidden=true; toast('Filters reset.'); });
   $('shuf').addEventListener('click',()=>{gemSeed=Math.random();gemShown=8;renderHome()});
   $('gemmore').addEventListener('click',()=>{const prev=gemShown; gemShown+=8; renderHome(); const rows=$('gems').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
 
