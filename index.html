@@ -477,8 +477,10 @@ ul.res.grid .player{margin-inline:12px}
     <button class="copy" id="prlist" type="button">Print shortlist</button>
     <button class="copy" id="playlist" type="button" hidden>Play shortlist</button>
     <button class="copy" id="shufflelist" type="button" hidden>Shuffle shortlist</button>
+    <button class="copy" id="blendbtn" type="button" hidden>Suggest artists from my shortlist</button>
     <button class="copy" id="clrlist" type="button" hidden>Clear shortlist</button>
     <span class="cap" id="copied" style="margin-left:10px"></span>
+    <ol id="blendol" class="blend" hidden></ol>
   </details>
 
   <div class="mini" id="mini" role="region" aria-label="Now playing" hidden>
@@ -713,11 +715,25 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       ol.appendChild(li)});
     $('listsum').textContent='Your shortlist ('+list.length+')';
     updateJump();
-    $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3;
+    $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
   }
 
   $('playlist').addEventListener('click',()=>{ const b=$('listol').querySelector('button.play'); if(!b) return; if(!auto){ auto=true; ui.auto=true; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',true) } b.click(); showMini() });
+  function blend(){
+    const idx=new Map(N.map((a,i)=>[a[0],i])), inL=new Set(list), sc=new Map(), hit=new Map(); let seeds=0;
+    list.forEach(id=>{ const k=idx.get(id); if(k==null) return; seeds++; related(k).forEach(r=>{ if(inL.has(N[r.k][0])) return; sc.set(r.k,(sc.get(r.k)||0)+r.sc); hit.set(r.k,(hit.get(r.k)||0)+1) }) });
+    const top=[...sc.entries()].map(([k,v])=>[k,v*(1+.5*(hit.get(k)-1))]).sort((a,b)=>b[1]-a[1]).slice(0,6);
+    const ol=$('blendol'); ol.textContent=''; ol.hidden=false;
+    if(!top.length){ const li=document.createElement('li'); li.textContent='No new suggestions with your current filters.'; ol.appendChild(li); return }
+    const h=document.createElement('li'); h.className='blendh'; h.textContent='Suggested from your '+seeds+' saved artists (best overlap first):'; h.style.listStyle='none'; h.style.marginLeft='-1.2em'; ol.appendChild(h);
+    top.forEach(([k])=>{ const li=document.createElement('li'); const a=document.createElement('a'); a.href='https://www.deezer.com/artist/'+N[k][0]; a.target='_blank'; a.rel='noopener'; a.textContent=N[k][1]; li.appendChild(a);
+      li.appendChild(document.createTextNode(' ('+fmt(N[k][2]||0)+' fans, related to '+hit.get(k)+' of '+seeds+') '));
+      const sv=document.createElement('button'); sv.type='button'; sv.className='sim'; sv.textContent='Save'; sv.setAttribute('aria-label','Save '+N[k][1]+' to shortlist'); sv.addEventListener('click',()=>{ if(!list.includes(N[k][0])) list.push(N[k][0]); saveList(); refreshAll(); renderList(); blend(); toast(N[k][1]+' saved.') }); li.appendChild(sv);
+      if(E[k]||REV[k].length){ li.appendChild(document.createTextNode(' ')); const f=document.createElement('button'); f.type='button'; f.className='sim'; f.textContent='Find similar'; f.setAttribute('aria-label','Find artists similar to '+N[k][1]); f.addEventListener('click',()=>hop(k)); li.appendChild(f) }
+      ol.appendChild(li) })
+  }
+  $('blendbtn').addEventListener('click',blend);
   $('shufflelist').addEventListener('click',()=>{ if(list.length<3) return; const old=list.slice(); for(let i=list.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [list[i],list[j]]=[list[j],list[i]] } saveList(); renderList(); toast('Shortlist shuffled.',()=>{ list.length=0; list.push(...old); saveList(); renderList() }) });
   { const lb=$('listbox'); if(ui.lo===true) lb.open=true; lb.addEventListener('toggle',()=>{ if(document.body.classList.contains('printlist')) return; ui.lo=lb.open; saveUi() }) }
   $('clrlist').addEventListener('click',()=>{ const old=list.slice(); if(!old.length) return; list.length=0; saveList(); refreshAll(); renderList(); toast('Shortlist cleared ('+old.length+' artists).',()=>{ list.push(...old); saveList(); refreshAll(); renderList() }); });
