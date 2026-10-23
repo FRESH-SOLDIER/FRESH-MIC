@@ -400,6 +400,10 @@ ul.res.grid .player{margin-inline:12px}
       <div class="cap" id="rwlab">Released within</div>
       <div class="seg" id="rwseg" role="group" aria-labelledby="rwlab"></div>
     </div>
+    <div>
+      <div class="cap" id="hhlab">Listening history</div>
+      <div class="seg" id="hhseg" role="group" aria-labelledby="hhlab"></div>
+    </div>
     <div><button class="shuf" id="resetf" type="button" hidden>Reset filters</button></div>
     <div class="jump" id="jump"><span class="cap">Jump to</span></div>
     <section class="sec" id="secNew" aria-live="polite">
@@ -796,7 +800,7 @@ const G = /*DATA*/;
     const b2=document.createElement('button'); b2.type='button'; b2.textContent='Released in the last 90 days'; b2.setAttribute('aria-pressed',freshOnly);
     b2.addEventListener('click',()=>{freshOnly=!freshOnly; ui.fresh=freshOnly; saveUi(); b2.setAttribute('aria-pressed',freshOnly); shown=24; if(cur>=0){results=related(cur);render()}});
     const b3=document.createElement('button'); b3.type='button'; b3.textContent='Hide artists I\u2019ve heard'; b3.title='Hides artists whose 30-second preview you have already played on this device'; b3.setAttribute('aria-pressed',hideHeard);
-    b3.addEventListener('click',()=>{hideHeard=!hideHeard; ui.hh=hideHeard; saveUi(); b3.setAttribute('aria-pressed',hideHeard); shown=24; if(cur>=0){results=related(cur);render()}});
+    b3.dataset.hh='1'; b3.addEventListener('click',()=>{hideHeard=!hideHeard; ui.hh=hideHeard; saveUi(); document.querySelectorAll('[data-hh]').forEach(e=>e.setAttribute('aria-pressed',hideHeard)); shown=24; newShown=24; if(cur>=0){results=related(cur);render()} renderHome()});
     const b4=document.createElement('button'); b4.type='button'; b4.textContent='Forget what I\u2019ve heard'; b4.title='Clears the list of artists whose preview you have played (kept only in this browser)';
     b4.addEventListener('click',()=>{ const n=heard.size; heard.clear(); try{ localStorage.removeItem('freshmic:heard') }catch(e){} document.querySelectorAll('.heardtag').forEach(t=>t.remove()); b4.hidden=true; toast(n?'Cleared '+n+' heard artists.':'Nothing to clear.'); shown=24; if(cur>=0){results=related(cur);render()} });
     b4.hidden=heard.size===0; $('sortctl').addEventListener('click',()=>{ b4.hidden=heard.size===0 });
@@ -876,7 +880,7 @@ const G = /*DATA*/;
   function homeData(){
     const fresh=[], soon=[];
     R.forEach(r=>{
-      const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50||hid.has(N[k][0])) return;
+      const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50||hid.has(N[k][0])||(hideHeard&&heard.has(N[k][0]))) return;
       if(genre?r[1]!==genre:muted.has(r[1])) return;
       const okT=x=>!rtype||x[3]===rtype;
       const past=r[4].find(x=>x[2]<=TODAY&&okT(x)), fut=r[4].filter(x=>x[2]>TODAY&&okT(x));
@@ -972,6 +976,9 @@ const G = /*DATA*/;
     const cap=$('bgcap'); if(cap) cap.textContent='Background: '+BGN[idx]+'. Each size has its own scene, from a full galaxy for any size down to one lantern for the smallest artists.' }
   setBg();
   { const cap=document.createElement('p'); cap.className='bgcap'; cap.id='bgcap'; $('seg').parentNode.appendChild(cap); setBg() }
+  { const hb=document.createElement('button'); hb.type='button'; hb.textContent='Hide artists I\u2019ve heard'; hb.dataset.hh='1'; hb.title='Hides artists whose 30-second preview you have already played on this device'; hb.setAttribute('aria-pressed',hideHeard);
+    hb.addEventListener('click',()=>{ hideHeard=!hideHeard; ui.hh=hideHeard; saveUi(); document.querySelectorAll('[data-hh]').forEach(e=>e.setAttribute('aria-pressed',hideHeard)); newShown=24; gemShown=8; renderHome(); if(cur>=0){ shown=24; results=related(cur); render() } });
+    $('hhseg').appendChild(hb) }
   // genre chips (only genres with enough recent releases)
   (function(){
     const cnt=new Map(); R.forEach(r=>{ if(r[1]&&GN[r[1]]) cnt.set(r[1],(cnt.get(r[1])||0)+1) });
