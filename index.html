@@ -221,6 +221,8 @@ ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .mini #msave[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
 @media (max-width:560px){.mini{flex-wrap:wrap;gap:6px}.mini .mname{flex:1 0 100%;max-width:none;text-align:left}.mini button:not(.mname){flex:1 1 auto;padding:8px 6px;font-size:.78rem}.mini #mstop{flex:0 0 auto}html body.hasmini{padding-bottom:118px}html body.hasmini .top{bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 112px)}}
 .heardtag{font:500 .75rem var(--f-data);color:var(--muted);align-self:center;white-space:nowrap}
+.fgl{font:500 .85rem var(--f-data);color:var(--muted);margin-right:6px}
+#fgen{font:500 .9rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:8px;padding:8px 10px;max-width:100%}
 .mini button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 body.hasmini{padding-bottom:70px}body.hasmini .top{bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 62px)}
 .row.playing{border-left:4px solid var(--accent);padding-left:10px}
@@ -511,7 +513,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   const $=id=>document.getElementById(id);
   const fmt=n=>n>=1e6?(n/1e6).toFixed(n>=1e7?0:1)+'M':n>=1e3?(n/1e3).toFixed(n>=1e5?0:1)+'K':String(n);
   const LIMS=[[0,'Any size'],[500000,'500K fans'],[100000,'100K'],[25000,'25K'],[5000,'5K']];
-  let limit=(LIMS.some(x=>x[0]===ui.limit)?ui.limit:100000), cur=-1, shown=24, results=[], sortMode=(ui.sort==='small'||ui.sort==='new'?ui.sort:'best'), directOnly=ui.direct===true, freshOnly=ui.fresh===true;
+  let limit=(LIMS.some(x=>x[0]===ui.limit)?ui.limit:100000), cur=-1, shown=24, results=[], sortMode=(ui.sort==='small'||ui.sort==='new'?ui.sort:'best'), directOnly=ui.direct===true, freshOnly=ui.fresh===true, fgen=(Number.isInteger(ui.fg)&&ui.fg>0?ui.fg:0);
   let list=[]; try{list=JSON.parse(localStorage.getItem('freshmic:list')||localStorage.getItem('undertow:list')||'[]')}catch(e){}
   const saveList=()=>{try{localStorage.setItem('freshmic:list',JSON.stringify(list))}catch(e){}};
   let hid=new Set(); try{hid=new Set(JSON.parse(localStorage.getItem('freshmic:hide')||'[]'))}catch(e){}
@@ -560,6 +562,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       if(limit && f>limit) return;
       if(hid.has(N[k][0])) return;
       if(directOnly&&!direct.has(k)) return;
+      if(fgen){ const gr=RI.get(k); if(!gr||gr[1]!==fgen) return; }
       if(freshOnly){ const rr=RI.get(k); if(!(rr&&rr[4].length&&rr[4][0][2]<=TODAY&&rr[4][0][2]>=cutoff(90))) return; }
       out.push({k,sc,f,direct:direct.has(k),via:(via.get(k)||[]).sort((x,y)=>y[0]-x[0]).slice(0,2).map(x=>N[x[1]][1])});
     });
@@ -959,6 +962,16 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   setBg();
   { const cap=document.createElement('p'); cap.className='bgcap'; cap.id='bgcap'; $('seg').parentNode.appendChild(cap); setBg() }
   // genre chips (only genres with enough recent releases)
+  (function(){
+    const cnt=new Map(); R.forEach(r=>{ if(r[1]&&GN[r[1]]) cnt.set(r[1],(cnt.get(r[1])||0)+1) });
+    const ents=[...cnt.entries()].sort((a,b)=>b[1]-a[1]); if(fgen&&!cnt.has(fgen)) fgen=0;
+    const lab=document.createElement('label'); lab.className='fgl'; lab.htmlFor='fgen'; lab.textContent='Genre ';
+    const sel=document.createElement('select'); sel.id='fgen'; sel.setAttribute('aria-label','Show only similar artists in one genre');
+    const o0=document.createElement('option'); o0.value='0'; o0.textContent='All genres'; sel.appendChild(o0);
+    ents.forEach(([g])=>{ const o=document.createElement('option'); o.value=g; o.textContent=gname(g); sel.appendChild(o) }); sel.value=String(fgen);
+    sel.addEventListener('change',()=>{ fgen=+sel.value; ui.fg=fgen; saveUi(); shown=24; if(cur>=0){ results=related(cur); render() } });
+    const w=document.createElement('div'); w.style.marginTop='8px'; w.appendChild(lab); w.appendChild(sel); $('sortctl').appendChild(w);
+  })();
   (function(){
     const cnt=new Map(); R.forEach(r=>{ if(r[4].some(x=>x[2]<=TODAY)) cnt.set(r[1],(cnt.get(r[1])||0)+1) });
     const entries=[...cnt.entries()].filter(([g,c])=>GN[g]&&c>=8).sort((a,b)=>b[1]-a[1]);
