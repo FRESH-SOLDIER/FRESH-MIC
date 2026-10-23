@@ -438,7 +438,7 @@ ul.res.grid .player{margin-inline:12px}
       <div class="chips" id="recent" hidden><span class="cap">Recent</span></div>
     </section>
     <section aria-live="polite">
-      <div class="head"><h2 id="title"></h2><button class="shuf" id="hopback" type="button" hidden></button><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button><a class="shuf" id="seedlink" target="_blank" rel="noopener" hidden>Listen on Deezer</a></div>
+      <div class="head"><h2 id="title"></h2><button class="shuf" id="hopback" type="button" hidden></button><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="copyres" type="button" hidden>Copy names as text</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button><a class="shuf" id="seedlink" target="_blank" rel="noopener" hidden>Listen on Deezer</a></div>
       <section class="about" id="about" aria-label="About this artist" hidden></section>
       <p class="legend" id="legend" hidden>Each bar shows how big an artist is. Hover over, or tap, the ? at the end of any bar to see what it means for that artist.</p>
     <div class="ctl" id="sortctl" style="margin:0 0 12px"><div class="cap" id="sortlab">Order results by</div><div class="seg" id="sortseg" role="group" aria-labelledby="sortlab"></div></div>
@@ -659,7 +659,7 @@ const G = /*DATA*/;
     { const sl=$('seedlink'); sl.href='https://www.deezer.com/artist/'+N[cur][0]; sl.textContent='Listen to '+N[cur][1]+' on Deezer'; sl.hidden=false }
     const qf=N[cur][2]||0;
     $('meta').textContent=fmt(qf)+' fans · '+results.length+' match'+(results.length===1?'':'es')+(()=>{ const h=results.filter(r=>heard.has(N[r.k][0])).length; return h?' · '+h+' heard':'' })();
-    $('legend').hidden=!results.length; $('saveall').hidden=!results.length;
+    $('legend').hidden=!results.length; $('saveall').hidden=!results.length; $('copyres').hidden=!results.length;
     renderAbout(cur);
     if(!results.length){
       const li=document.createElement('li'); li.className='empty';
@@ -798,6 +798,12 @@ const G = /*DATA*/;
   }
   const canShare=!!navigator.share&&window.matchMedia&&matchMedia('(pointer: coarse)').matches;
   if(canShare) $('sharelink').textContent='Share these results';
+  $('copyres').addEventListener('click',()=>{
+    const rows=results.slice(0,shown).map((r,i)=>(i+1)+'. '+N[r.k][1]+' ('+fmt(N[r.k][2]||0)+' fans)');
+    const t='Artists like '+(cur>=0?N[cur][1]:'this one')+' (Fresh Mic):\n'+rows.join('\n')+'\n'+location.href;
+    const done=()=>toast('Copied '+rows.length+' artist names as text.');
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done,()=>toast('Copy failed.')); else toast('Copy failed.');
+  });
   $('sharelink').addEventListener('click',()=>{
     const u=location.href;
     if(canShare){ navigator.share({title:document.title,text:'Artists like '+(cur>=0?N[cur][1]:'this one')+' on Fresh Mic',url:u}).catch(()=>{}); return }
