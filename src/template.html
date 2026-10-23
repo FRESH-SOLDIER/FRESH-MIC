@@ -477,6 +477,8 @@ ul.res.grid .player{margin-inline:12px}
     <button class="copy" id="prlist" type="button">Print shortlist</button>
     <button class="copy" id="playlist" type="button" hidden>Play shortlist</button>
     <button class="copy" id="shufflelist" type="button" hidden>Shuffle shortlist</button>
+    <button class="copy" id="sortaz" type="button" hidden>Sort A to Z</button>
+    <button class="copy" id="sortsmall" type="button" hidden>Sort smallest first</button>
     <button class="copy" id="blendbtn" type="button" hidden>Suggest artists from my shortlist</button>
     <button class="copy" id="clrlist" type="button" hidden>Clear shortlist</button>
     <span class="cap" id="copied" style="margin-left:10px"></span>
@@ -715,7 +717,7 @@ const G = /*DATA*/;
       ol.appendChild(li)});
     $('listsum').textContent='Your shortlist ('+list.length+')';
     updateJump();
-    $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
+    $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('sortaz').hidden=list.length<3; $('sortsmall').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
   }
 
@@ -734,6 +736,9 @@ const G = /*DATA*/;
       ol.appendChild(li) })
   }
   $('blendbtn').addEventListener('click',blend);
+  const sortList=(cmp,msg)=>{ if(list.length<3) return; const old=list.slice(), ix=new Map(N.map((a,i)=>[a[0],i])); const key=id=>{ const k=ix.get(id); return k==null?null:N[k] }; list.sort((a,b)=>{ const x=key(a), y=key(b); if(!x||!y) return 0; return cmp(x,y) }); saveList(); renderList(); toast(msg,()=>{ list.length=0; list.push(...old); saveList(); renderList() }) };
+  $('sortaz').addEventListener('click',()=>sortList((x,y)=>x[1].localeCompare(y[1],undefined,{sensitivity:'base'}),'Shortlist sorted A to Z.'));
+  $('sortsmall').addEventListener('click',()=>sortList((x,y)=>(x[2]||0)-(y[2]||0),'Shortlist sorted smallest first.'));
   $('shufflelist').addEventListener('click',()=>{ if(list.length<3) return; const old=list.slice(); for(let i=list.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [list[i],list[j]]=[list[j],list[i]] } saveList(); renderList(); toast('Shortlist shuffled.',()=>{ list.length=0; list.push(...old); saveList(); renderList() }) });
   { const lb=$('listbox'); if(ui.lo===true) lb.open=true; lb.addEventListener('toggle',()=>{ if(document.body.classList.contains('printlist')) return; ui.lo=lb.open; saveUi() }) }
   $('clrlist').addEventListener('click',()=>{ const old=list.slice(); if(!old.length) return; list.length=0; saveList(); refreshAll(); renderList(); toast('Shortlist cleared ('+old.length+' artists).',()=>{ list.push(...old); saveList(); refreshAll(); renderList() }); });
