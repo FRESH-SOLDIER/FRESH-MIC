@@ -221,7 +221,8 @@ ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .mini #msave[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
 @media (max-width:560px){.mini{flex-wrap:wrap;gap:6px}.mini .mname{flex:1 0 100%;max-width:none;text-align:left}.mini button:not(.mname){flex:1 1 auto;padding:8px 6px;font-size:.78rem}.mini #mstop{flex:0 0 auto}html body.hasmini{padding-bottom:118px}html body.hasmini .top{bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 112px)}}
 .lnote{margin-top:6px;width:100%;max-width:420px;font:400 .85rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:8px;padding:6px 10px}
-.heardtag{font:500 .75rem var(--f-data);color:var(--muted);align-self:center;white-space:nowrap}
+.heardtag{font:500 .75rem var(--f-data);color:var(--muted);align-self:center;white-space:nowrap;background:none;border:0;padding:4px 2px;cursor:pointer;text-decoration:underline dotted}
+.heardtag:hover,.heardtag:focus-visible{color:var(--fg)}
 .fgl{font:500 .85rem var(--f-data);color:var(--muted);margin-right:6px}
 #fgen{font:500 .9rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:8px;padding:8px 10px;max-width:100%}
 .mini button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
@@ -610,7 +611,7 @@ const G = /*DATA*/;
     sc.src=url+(url.indexOf('?')>=0?'&':'?')+'output=jsonp&callback='+name; document.head.appendChild(sc);
   }
   let heard=new Set(); try{ heard=new Set(JSON.parse(localStorage.getItem('freshmic:heard')||'[]').map(Number)) }catch(e){}
-  function markHeard(li,id){ if(!li.querySelector('.heardtag')){ const t=document.createElement('span'); t.className='heardtag'; t.textContent='\u2713 Heard'; t.title='You already played a preview of this artist'; const lk=li.querySelector('.links'); if(lk) lk.appendChild(t) } if(!heard.has(id)){ heard.add(id); try{ localStorage.setItem('freshmic:heard',JSON.stringify([...heard].slice(-600))) }catch(e){} } }
+  function markHeard(li,id){ if(!li.querySelector('.heardtag')){ const t=document.createElement('button'); t.type='button'; t.className='heardtag'; t.textContent='\u2713 Heard'; t.title='You already played a preview of this artist. Click to mark it as not heard.'; t.setAttribute('aria-label','Heard. Click to mark as not heard.'); t.addEventListener('click',()=>{ heard.delete(id); try{ localStorage.setItem('freshmic:heard',JSON.stringify([...heard].slice(-600))) }catch(e){} t.remove(); toast('Marked as not heard.') }); const lk=li.querySelector('.links'); if(lk) lk.appendChild(t) } if(!heard.has(id)){ heard.add(id); try{ localStorage.setItem('freshmic:heard',JSON.stringify([...heard].slice(-600))) }catch(e){} } }
   function previewBtn(li,a,albumId,rand){
     const LAB=rand?'\uD83C\uDFB2 Random song':'\u25B6 Play 30s'; if(rand&&!G.embed) return;
     const links=li.querySelector('.links'); const url=albumId?'https://www.deezer.com/album/'+albumId:'https://www.deezer.com/artist/'+a[0];
