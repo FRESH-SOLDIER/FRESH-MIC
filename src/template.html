@@ -506,7 +506,7 @@ ul.res.grid .player{margin-inline:12px}
     <span>Only artists in this snapshot can be searched. If yours is missing, try a similar one.</span>
   </footer>
   <dialog id="keys" aria-labelledby="keysT"><h2 id="keysT">Keyboard shortcuts</h2>
-    <dl><dt><kbd>/</kbd></dt><dd>Search for an artist</dd><dt><kbd>S</kbd></dt><dd>Random artist</dd><dt><kbd>J</kbd> <kbd>K</kbd></dt><dd>Next and previous result</dd><dt><kbd>P</kbd></dt><dd>Preview the selected result</dd><dt><kbd>B</kbd></dt><dd>Save it to your shortlist</dd><dt><kbd>O</kbd></dt><dd>Open it on Deezer</dd><dt><kbd>X</kbd></dt><dd>Hide it</dd><dt><kbd>F</kbd></dt><dd>Find artists like it</dd><dt><kbd>Z</kbd></dt><dd>Undo the last hide, remove or clear</dd><dt><kbd>Space</kbd></dt><dd>Pause or resume the preview or free song</dd><dt><kbd>Esc</kbd></dt><dd>Stop a preview, dismiss a message or close this</dd><dt><kbd>N</kbd> <kbd>[</kbd></dt><dd>While a preview plays: next (N) or previous ([) artist</dd><dt><kbd>?</kbd></dt><dd>Show this list</dd></dl>
+    <dl><dt><kbd>/</kbd></dt><dd>Search for an artist</dd><dt><kbd>S</kbd></dt><dd>Random artist</dd><dt><kbd>J</kbd> <kbd>K</kbd></dt><dd>Next and previous result</dd><dt><kbd>P</kbd></dt><dd>Preview the selected result</dd><dt><kbd>B</kbd></dt><dd>Save it to your shortlist</dd><dt><kbd>O</kbd></dt><dd>Open it on Deezer</dd><dt><kbd>X</kbd></dt><dd>Hide it</dd><dt><kbd>F</kbd></dt><dd>Find artists like it</dd><dt><kbd>Z</kbd></dt><dd>Undo the last hide, remove or clear</dd><dt><kbd>Space</kbd></dt><dd>Pause or resume the preview or free song</dd><dt><kbd>Esc</kbd></dt><dd>Stop a preview, dismiss a message or close this</dd><dt><kbd>N</kbd> <kbd>[</kbd></dt><dd>While a preview plays: next (N) or previous ([) artist</dd><dt><kbd>H</kbd></dt><dd>Hide or show artists you have already heard (Discover and Find similar)</dd><dt><kbd>?</kbd></dt><dd>Show this list</dd></dl>
     <button type="button" class="shuf" id="keysX">Close</button></dialog>
 </main>
 
@@ -1636,6 +1636,7 @@ const G = /*DATA*/;
     }
     if((e.key==='n'||e.key==='N'||e.key==='['||e.key===']')&&NOW){ e.preventDefault(); $(e.key==='['?'mprev':'mnext').click(); return }
     if(e.key==='z'||e.key==='Z'){ const ub=document.querySelector('#toast button'); if(ub){ e.preventDefault(); ub.click() } return }
+    if(e.key==='h'||e.key==='H'){ const hb=[...document.querySelectorAll('[data-hh]')].find(b=>b.offsetParent!==null); if(hb){ e.preventDefault(); hb.click(); toast(hideHeard?'Hiding artists you have already heard. Press H to show them again.':'Showing every artist again.') } return }
     if(e.key==='?'){ const d=$('keys'); if(d.showModal&&!d.open){ e.preventDefault(); d.showModal(); $('keysX').focus() } return }
     if(e.key==='/'){ e.preventDefault(); setTab('find'); $('q').focus(); $('q').select() }
     else if(e.key==='s'||e.key==='S'){ e.preventDefault(); $('surp').click() }

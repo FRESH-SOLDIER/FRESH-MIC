@@ -131,3 +131,4 @@
 - 2026-10-23: The shortlist Copy list button now adds your private note after each artist name (Name - note) when you have written one. Research: people paste saved lists into messages and want their own comments to come along.
 - 2026-10-23: The shortlist heading shows how many saved artists you have already heard (for example 'Your shortlist (9 · 3 heard)') and updates as you play or unmark them. Research: people who keep a listening list want to see how much of it is left.
 - 2026-10-23: Print shortlist now prints your private notes under each artist (empty note boxes and the suggestions list are left out of the printout). Research: printed lists should look clean and carry the owner's comments.
+- 2026-10-23: Pressing H toggles Hide artists I've heard on Discover and Find similar (with a short message), and the shortcuts list mentions it. Research: Every Noise-style browsing is loved for fast keyboard control.
