@@ -1796,7 +1796,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       try{history.replaceState(null,'',location.pathname+location.search)}catch(e){} } }
   $('copy').addEventListener('click',()=>{
     const idx=new Map(N.map((a,i)=>[a[0],i]));
-    const txt=list.map(id=>{const k=idx.get(id);return k==null?'':N[k][1]}).filter(Boolean).join('\n');
+    const txt=list.map(id=>{const k=idx.get(id);return k==null?'':N[k][1]+(notes[id]?' - '+notes[id]:'')}).filter(Boolean).join('\n');
     const done=m=>{$('copied').textContent=m; setTimeout(()=>$('copied').textContent='',2200)};
     if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>done('Copied'),()=>done('Select the list to copy'))}
     else done('Select the list to copy');
