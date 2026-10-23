@@ -733,7 +733,10 @@ const G = /*DATA*/;
       li.appendChild(document.createTextNode(' ('+fmt(N[k][2]||0)+' fans, related to '+hit.get(k)+' of '+seeds+') '));
       const sv=document.createElement('button'); sv.type='button'; sv.className='sim'; sv.textContent='Save'; sv.setAttribute('aria-label','Save '+N[k][1]+' to shortlist'); sv.addEventListener('click',()=>{ if(!list.includes(N[k][0])) list.push(N[k][0]); saveList(); refreshAll(); renderList(); blend(); toast(N[k][1]+' saved.') }); li.appendChild(sv);
       if(E[k]||REV[k].length){ li.appendChild(document.createTextNode(' ')); const f=document.createElement('button'); f.type='button'; f.className='sim'; f.textContent='Find similar'; f.setAttribute('aria-label','Find artists similar to '+N[k][1]); f.addEventListener('click',()=>hop(k)); li.appendChild(f) }
-      ol.appendChild(li) })
+      ol.appendChild(li) });
+    const al=document.createElement('li'); al.style.listStyle='none'; al.style.marginLeft='-1.2em'; const sa=document.createElement('button'); sa.type='button'; sa.className='sim'; sa.textContent='Save all '+top.length;
+    sa.addEventListener('click',()=>{ const old=list.slice(); top.forEach(([k])=>{ if(!list.includes(N[k][0])) list.push(N[k][0]) }); const added=list.length-old.length; saveList(); refreshAll(); renderList(); blend(); toast('Saved '+added+' suggested artist'+(added===1?'':'s')+'.',()=>{ list.length=0; list.push(...old); saveList(); refreshAll(); renderList(); blend() }) });
+    al.appendChild(sa); ol.appendChild(al)
   }
   $('blendbtn').addEventListener('click',blend);
   const sortList=(cmp,msg)=>{ if(list.length<3) return; const old=list.slice(), ix=new Map(N.map((a,i)=>[a[0],i])); const key=id=>{ const k=ix.get(id); return k==null?null:N[k] }; list.sort((a,b)=>{ const x=key(a), y=key(b); if(!x||!y) return 0; return cmp(x,y) }); saveList(); renderList(); toast(msg,()=>{ list.length=0; list.push(...old); saveList(); renderList() }) };
