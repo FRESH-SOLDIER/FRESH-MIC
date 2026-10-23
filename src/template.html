@@ -611,7 +611,7 @@ const G = /*DATA*/;
     sc.src=url+(url.indexOf('?')>=0?'&':'?')+'output=jsonp&callback='+name; document.head.appendChild(sc);
   }
   let heard=new Set(); try{ heard=new Set(JSON.parse(localStorage.getItem('freshmic:heard')||'[]').map(Number)) }catch(e){}
-  function markHeard(li,id){ if(!li.querySelector('.heardtag')){ const t=document.createElement('button'); t.type='button'; t.className='heardtag'; t.textContent='\u2713 Heard'; t.title='You already played a preview of this artist. Click to mark it as not heard.'; t.setAttribute('aria-label','Heard. Click to mark as not heard.'); t.addEventListener('click',()=>{ heard.delete(id); try{ localStorage.setItem('freshmic:heard',JSON.stringify([...heard].slice(-600))) }catch(e){} t.remove(); toast('Marked as not heard.') }); const lk=li.querySelector('.links'); if(lk) lk.appendChild(t) } if(!heard.has(id)){ heard.add(id); try{ localStorage.setItem('freshmic:heard',JSON.stringify([...heard].slice(-600))) }catch(e){} } }
+  function markHeard(li,id){ if(!li.querySelector('.heardtag')){ const t=document.createElement('button'); t.type='button'; t.className='heardtag'; t.textContent='\u2713 Heard'; t.title='You already played a preview of this artist. Click to mark it as not heard.'; t.setAttribute('aria-label','Heard. Click to mark as not heard.'); t.addEventListener('click',()=>{ heard.delete(id); try{ localStorage.setItem('freshmic:heard',JSON.stringify([...heard].slice(-600))) }catch(e){} t.remove(); listSum(); toast('Marked as not heard.') }); const lk=li.querySelector('.links'); if(lk) lk.appendChild(t) } if(!heard.has(id)){ heard.add(id); try{ localStorage.setItem('freshmic:heard',JSON.stringify([...heard].slice(-600))) }catch(e){} } listSum() }
   function previewBtn(li,a,albumId,rand){
     const LAB=rand?'\uD83C\uDFB2 Random song':'\u25B6 Play 30s'; if(rand&&!G.embed) return;
     const links=li.querySelector('.links'); const url=albumId?'https://www.deezer.com/album/'+albumId:'https://www.deezer.com/artist/'+a[0];
@@ -698,6 +698,7 @@ const G = /*DATA*/;
   }
 
   function updateJump(){ const bs=$('jump').querySelectorAll('button'); const jb=bs[bs.length-1]; if(jb) jb.textContent='My shortlist'+(list.length?' ('+list.length+')':'') }
+  function listSum(){ const h=list.filter(id=>heard.has(id)).length; $('listsum').textContent='Your shortlist ('+list.length+(h?' \u00b7 '+h+' heard':'')+')' }
   function renderList(){
     const ol=$('listol'); ol.textContent='';
     const idx=new Map(N.map((a,i)=>[a[0],i]));
@@ -716,7 +717,7 @@ const G = /*DATA*/;
         nt.addEventListener('change',()=>{ const v=nt.value.trim().slice(0,80); if(v) notes[id]=v; else delete notes[id]; try{ localStorage.setItem('freshmic:notes',JSON.stringify(notes)) }catch(e){} nt.value=v });
         li.appendChild(document.createElement('br')); li.appendChild(nt) }
       ol.appendChild(li)});
-    $('listsum').textContent='Your shortlist ('+list.length+')';
+    listSum();
     updateJump();
     $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('sortaz').hidden=list.length<3; $('sortsmall').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
