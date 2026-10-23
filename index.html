@@ -220,6 +220,7 @@ ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .mini{overflow:visible}.mini #mprog{position:absolute;left:0;top:-1px;height:3px;width:0;background:var(--accent);pointer-events:none;transition:width .25s linear}
 .mini #msave[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
 @media (max-width:560px){.mini{flex-wrap:wrap;gap:6px}.mini .mname{flex:1 0 100%;max-width:none;text-align:left}.mini button:not(.mname){flex:1 1 auto;padding:8px 6px;font-size:.78rem}.mini #mstop{flex:0 0 auto}html body.hasmini{padding-bottom:118px}html body.hasmini .top{bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 112px)}}
+.lnote{margin-top:6px;width:100%;max-width:420px;font:400 .85rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:8px;padding:6px 10px}
 .heardtag{font:500 .75rem var(--f-data);color:var(--muted);align-self:center;white-space:nowrap}
 .fgl{font:500 .85rem var(--f-data);color:var(--muted);margin-right:6px}
 #fgen{font:500 .9rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:8px;padding:8px 10px;max-width:100%}
@@ -515,6 +516,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   const LIMS=[[0,'Any size'],[500000,'500K fans'],[100000,'100K'],[25000,'25K'],[5000,'5K']];
   let limit=(LIMS.some(x=>x[0]===ui.limit)?ui.limit:100000), cur=-1, shown=24, results=[], sortMode=(ui.sort==='small'||ui.sort==='new'?ui.sort:'best'), directOnly=ui.direct===true, freshOnly=ui.fresh===true, hideHeard=ui.hh===true, fgen=(Number.isInteger(ui.fg)&&ui.fg>0?ui.fg:0);
   let list=[]; try{list=JSON.parse(localStorage.getItem('freshmic:list')||localStorage.getItem('undertow:list')||'[]')}catch(e){}
+  let notes={}; try{ const n=JSON.parse(localStorage.getItem('freshmic:notes')||'{}'); if(n&&typeof n==='object') Object.keys(n).forEach(k=>{ if(/^\d+$/.test(k)&&typeof n[k]==='string') notes[k]=n[k].slice(0,80) }) }catch(e){}
   const saveList=()=>{try{localStorage.setItem('freshmic:list',JSON.stringify(list))}catch(e){}};
   let hid=new Set(); try{hid=new Set(JSON.parse(localStorage.getItem('freshmic:hide')||'[]'))}catch(e){}
   const saveHid=()=>{try{localStorage.setItem('freshmic:hide',JSON.stringify([...hid]))}catch(e){}};
@@ -701,6 +703,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
         li.appendChild(m); li.appendChild(document.createTextNode(' ')) });
       li.appendChild(x);
       { const lk=document.createElement('span'); lk.className='links'; lk.style.display='inline-flex'; lk.style.margin='0 8px'; li.insertBefore(lk,a.nextSibling); const rr=RI.get(k); previewBtn(li,N[k],(rr&&rr[4].length&&rr[4][0][2]<=TODAY)?rr[4][0][0]:null) }
+      { const nt=document.createElement('input'); nt.type='text'; nt.className='lnote'; nt.maxLength=80; nt.placeholder='Add a private note (kept only in this browser)'; nt.setAttribute('aria-label','Private note for '+N[k][1]); nt.value=notes[id]||'';
+        nt.addEventListener('change',()=>{ const v=nt.value.trim().slice(0,80); if(v) notes[id]=v; else delete notes[id]; try{ localStorage.setItem('freshmic:notes',JSON.stringify(notes)) }catch(e){} nt.value=v });
+        li.appendChild(document.createElement('br')); li.appendChild(nt) }
       ol.appendChild(li)});
     $('listsum').textContent='Your shortlist ('+list.length+')';
     updateJump();
