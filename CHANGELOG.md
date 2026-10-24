@@ -148,3 +148,4 @@
 - 2026-10-24: Autoplay now pauses after 10 previews in a row with a message (any click or tap you make resets the count), so it cannot run all night on its own. Research: autoplaying discovery sites are criticised for never stopping when the listener has walked away.
 - 2026-10-24: Discover shows a Heard lately row with the last 8 artists whose preview you played; click a name to open Find similar for it. Research: listeners lose track of a good find a few tracks later and want a way back.
 - 2026-10-24: Discover's genre row has a Random genre chip right after All genres that jumps to a genre other than the current one (Reset filters undoes it). Research: Every Noise-style browsing is loved for happy accidents in genres people would not pick.
+- 2026-10-24: The now-playing bar has a Share button that copies a link to Find similar for the artist you are hearing (opens the device share sheet on phones). Research: people share a track the moment they like it.
