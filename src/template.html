@@ -1056,6 +1056,7 @@ const G = /*DATA*/;
     const mkc=(id,label,c)=>{const b=document.createElement('button'); b.type='button'; b.className='chip'; b.setAttribute('aria-pressed',id===genre); b.textContent=label; if(c!=null){const sm=document.createElement('small'); sm.textContent=c; b.appendChild(sm)}
       b.addEventListener('click',()=>{genre=id; ui.genre=id; saveUi(); newShown=24; gemShown=8; [...box.children].forEach(y=>y.setAttribute('aria-pressed',y===b)); renderMute(); renderHome()}); box.appendChild(b)};
     mkc(0,'All genres');
+    { const rb=document.createElement('button'); rb.type='button'; rb.className='chip'; rb.id='rgenre'; rb.textContent='Random genre'; rb.title='Jump to a genre you did not pick'; rb.addEventListener('click',()=>{ const cs=[...box.querySelectorAll('.chip:not(#rgenre)')].slice(1).filter(x=>x.getAttribute('aria-pressed')!=='true'); if(!cs.length) return; const c=cs[Math.floor(Math.random()*cs.length)]; c.click(); c.scrollIntoView({block:'nearest',inline:'center',behavior:reduce?'auto':'smooth'}); toast('Random genre: '+c.firstChild.textContent+'.') }); box.appendChild(rb) }
     entries.forEach(([g,c])=>mkc(g,gname(g),c));
     renderMute();
     // bring a remembered genre into view inside the sideways-scrolling row
