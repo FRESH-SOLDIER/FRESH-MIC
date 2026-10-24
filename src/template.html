@@ -500,6 +500,7 @@ ul.res.grid .player{margin-inline:12px}
     <button type="button" id="mnext" aria-label="Play the next artist">Next &#9654;&#9654;</button>
     <button type="button" id="msave" aria-pressed="false" aria-label="Save the playing artist to your shortlist">Save</button>
     <button type="button" id="mauto" aria-pressed="false" aria-label="Autoplay next">Auto</button>
+    <button type="button" id="msim" aria-label="Find artists similar to the playing artist" hidden>Similar</button>
     <button type="button" id="mrep" aria-pressed="false" aria-label="Repeat this preview">Repeat</button>
     <button type="button" id="mstop" aria-label="Stop the preview">&times;</button>
   </div>
@@ -608,7 +609,7 @@ const G = /*DATA*/;
   function mediaClear(){ try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=null; ['play','pause','nexttrack'].forEach(a=>{try{navigator.mediaSession.setActionHandler(a,null)}catch(e){}}) } }catch(e){} }
   function tabMark(){ const t=document.title.replace(/^\u25b6 /,''); const want=(NOW&&!NOW.au.paused)?'\u25b6 '+t:t; if(document.title!==want) document.title=want }
   try{ new MutationObserver(tabMark).observe(document.querySelector('title'),{childList:true,characterData:true,subtree:true}) }catch(e){}
-  function msyn(){ const sb=NOW&&NOW.li&&NOW.li.querySelector('.save'), b=$('msave'); b.hidden=!sb; if(sb){ const on=sb.getAttribute('aria-pressed')==='true'; b.setAttribute('aria-pressed',on); b.textContent=on?'Saved':'Save' } }
+  function msyn(){ const sb=NOW&&NOW.li&&NOW.li.querySelector('.save'), b=$('msave'); $('msim').hidden=!(NOW&&NOW.li&&NOW.li.querySelector('button.sim')); b.hidden=!sb; if(sb){ const on=sb.getAttribute('aria-pressed')==='true'; b.setAttribute('aria-pressed',on); b.textContent=on?'Saved':'Save' } }
   function showMini(){ const m=$('mini'); if(!NOW){ $('mprog').style.width='0'; $('mtime').textContent=''; m.hidden=true; document.body.classList.remove('hasmini'); tabMark(); return } m.hidden=false; document.body.classList.add('hasmini'); $('mname').textContent=NOW.who+' \u2014 '+NOW.title; $('mname').title=$('mname').textContent+' (click to show it in the list)'; $('mpp').textContent=NOW.au.paused?'Play':'Pause'; $('mpp').setAttribute('aria-label',NOW.au.paused?'Resume':'Pause'); $('mauto').setAttribute('aria-pressed',auto); msyn(); tabMark() }
   function stopNow(){ if(!NOW) return; try{NOW.au.pause()}catch(e){} if(NOW.bar.parentNode) NOW.bar.parentNode.classList.remove('playing'); NOW.bar.remove(); NOW.el.textContent=NOW.el.dataset.lab||'\u25B6 Play 30s'; NOW.el.setAttribute('aria-pressed','false'); NOW=null; mediaClear(); showMini() }
   let jid=0;
@@ -780,6 +781,7 @@ const G = /*DATA*/;
   window.addEventListener('popstate',()=>{ const m=/^#like=(\d+)$/.exec(location.hash); if(!m) return; const k=N.findIndex(a=>a[0]===+m[1]); if(k>=0&&k!==cur&&(E[k]||REV[k].length)){ if(hops[hops.length-1]===k) hops.pop(); else hops.length=0; pick(k,false,true); window.scrollTo(0,0); updHop() } });
   $('mpp').addEventListener('click',()=>{ if(!NOW) return; if(NOW.au.paused) NOW.au.play().catch(()=>{}); else NOW.au.pause(); showMini() });
   $('mprev').addEventListener('click',()=>{ if(NOW){ const l=NOW.li; if(!(l.previousElementSibling&&[...l.parentNode.children].some(x=>x!==l&&x.compareDocumentPosition(l)&4&&x.querySelector('button.play')))) return; stopNow(); playPrevFrom(l) } });
+  $('msim').addEventListener('click',()=>{ const sb=NOW&&NOW.li&&NOW.li.querySelector('button.sim'); if(sb) sb.click() });
   $('msave').addEventListener('click',()=>{ const sb=NOW&&NOW.li&&NOW.li.querySelector('.save'); if(sb){ sb.click(); msyn() } });
   $('mnext').addEventListener('click',()=>{ if(NOW){ const l=NOW.li; stopNow(); playNextFrom(l) } });
   $('mstop').addEventListener('click',()=>stopNow());

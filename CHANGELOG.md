@@ -141,3 +141,4 @@
 - 2026-10-24: Pressing R while a preview plays toggles Repeat, and the shortcuts list mentions it. Research: players people use all day are loved for one-key controls.
 - 2026-10-24: While a preview plays, the Left and Right arrow keys jump back or forward 5 seconds (when no box or button is focused), and the shortcuts list mentions it. Research: listeners want to replay a catchy bit without grabbing the mouse.
 - 2026-10-24: The now-playing bar shows the elapsed and total time of the preview (for example 0:07 / 0:30). Research: players that hide the clock make listeners guess how much of a sample is left.
+- 2026-10-24: The now-playing bar has a Similar button that opens Find similar for the artist you are listening to, so you can follow a good find without scrolling back to its row. Research: discovery listeners want to chase a track they like right away.
