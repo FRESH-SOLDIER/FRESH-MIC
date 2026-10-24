@@ -139,3 +139,4 @@
 - 2026-10-23: The shortlist (2 or more artists) has a Play a random saved artist button that picks a random saved artist you have not heard yet (any, once all are heard) and plays its preview. Research: people with a saved list want a quick shuffle-style way to rediscover it.
 - 2026-10-24: The now-playing bar has a Repeat button that replays the current 30-second preview when it ends (remembered in the browser; it overrides Autoplay while on). Research: listeners who like a new track want to hear it again without hunting for the play button.
 - 2026-10-24: Pressing R while a preview plays toggles Repeat, and the shortcuts list mentions it. Research: players people use all day are loved for one-key controls.
+- 2026-10-24: While a preview plays, the Left and Right arrow keys jump back or forward 5 seconds (when no box or button is focused), and the shortcuts list mentions it. Research: listeners want to replay a catchy bit without grabbing the mouse.
