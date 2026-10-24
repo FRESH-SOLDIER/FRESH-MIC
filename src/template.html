@@ -424,7 +424,7 @@ ul.res.grid .player{margin-inline:12px}
       <button class="more" id="soonmore" type="button" hidden>Show more</button>
     </section>
     <section class="sec" id="secGems">
-      <div class="head"><h2>Hidden gems</h2><span class="meta" id="gemmeta"></span><button class="shuf" id="shuf" type="button">Shuffle</button></div>
+      <div class="head"><h2>Hidden gems</h2><span class="meta" id="gemmeta"></span><button class="shuf" id="shuf" type="button">Shuffle</button><button class="shuf" id="playgems" type="button">Play these gems</button></div>
       <p class="sub">Artists with a few thousand fans or fewer who have put music out in the last year.</p>
       <ul class="res" id="gems"></ul>
       <button class="more" id="gemmore" type="button" hidden>Show more</button>
@@ -743,6 +743,7 @@ const G = /*DATA*/;
   }
 
   $('playres').addEventListener('click',()=>{ const rows=[...$('res').querySelectorAll('li')]; const li=rows.find(x=>x.querySelector('button.play')&&!x.querySelector('.heardtag'))||rows.find(x=>x.querySelector('button.play')); if(!li){ toast('No previews to play here.'); return } if(!auto){ auto=true; ui.auto=true; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',true) } li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click(); showMini(); toast('Playing these results one after another. Autoplay is on.') });
+  $('playgems').addEventListener('click',()=>{ const rows=[...$('gems').querySelectorAll('li')]; const li=rows.find(x=>x.querySelector('button.play')&&!x.querySelector('.heardtag'))||rows.find(x=>x.querySelector('button.play')); if(!li){ toast('No previews to play here.'); return } if(!auto){ auto=true; ui.auto=true; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',true) } li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click(); showMini(); toast('Playing these hidden gems one after another. Autoplay is on.') });
   $('playlist').addEventListener('click',()=>{ const b=$('listol').querySelector('button.play'); if(!b) return; if(!auto){ auto=true; ui.auto=true; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',true) } b.click(); showMini() });
   function blend(){
     const idx=new Map(N.map((a,i)=>[a[0],i])), inL=new Set(list), sc=new Map(), hit=new Map(); let seeds=0;
