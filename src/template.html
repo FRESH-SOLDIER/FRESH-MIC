@@ -607,6 +607,7 @@ const G = /*DATA*/;
   // Preview: Deezer's own player (licensed by Deezer, so nothing is copied or re-hosted here).
   let NOW=null, auto=(ui.auto===true);
   function playPrevFrom(li){ let pv=li.previousElementSibling; while(pv&&!pv.querySelector('button.play')) pv=pv.previousElementSibling; if(pv){ pv.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); pv.querySelector('button.play').click() } else toast('This is the first artist in this list.') }
+  let autoRun=0; document.addEventListener('click',e=>{ if(e.isTrusted) autoRun=0 },true);
   function playNextFrom(li){ let nx=li.id==='about'?$('res').firstElementChild:li.nextElementSibling; const skipH=!li.closest('#listol'); let sk=0; while(nx&&(!nx.querySelector('button.play')||(skipH&&nx.querySelector('.heardtag')))){ if(nx.querySelector('.heardtag')) sk++; nx=nx.nextElementSibling } if(nx){ nx.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); nx.querySelector('button.play').click(); if(sk) toast('Skipped '+sk+' artist'+(sk===1?'':'s')+' you have already heard.') } else toast(sk?'No more new artists in this list (skipped '+sk+' you have already heard).':'That was the last artist in this list.') }
   function mediaClear(){ try{ if('mediaSession' in navigator){ navigator.mediaSession.metadata=null; ['play','pause','nexttrack'].forEach(a=>{try{navigator.mediaSession.setActionHandler(a,null)}catch(e){}}) } }catch(e){} }
   function tabMark(){ const t=document.title.replace(/^\u25b6 /,''); const want=(NOW&&!NOW.au.paused)?'\u25b6 '+t:t; if(document.title!==want) document.title=want }
@@ -654,6 +655,7 @@ const G = /*DATA*/;
             if(ui.rep){ au.currentTime=0; au.play().catch(()=>{}); return }
             const wasLi=li; stopNow();
             if(!auto) return;
+            if(++autoRun>=10){ autoRun=0; toast('Autoplay paused after 10 previews in a row. Press Play on any artist to keep listening.'); return }
             playNextFrom(wasLi);
           });
           au.play().catch(()=>{stopNow(); el.textContent='Tap again to play'});
