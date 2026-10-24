@@ -484,6 +484,7 @@ ul.res.grid .player{margin-inline:12px}
     <button class="copy" id="sortaz" type="button" hidden>Sort A to Z</button>
     <button class="copy" id="sortsmall" type="button" hidden>Sort smallest first</button>
     <button class="copy" id="sortgenre" type="button" hidden>Sort by genre</button>
+    <button class="copy" id="rmheard" type="button" hidden>Remove artists I've heard</button>
     <button class="copy" id="blendbtn" type="button" hidden>Suggest artists from my shortlist</button>
     <button class="copy" id="clrlist" type="button" hidden>Clear shortlist</button>
     <span class="cap" id="copied" style="margin-left:10px"></span>
@@ -702,7 +703,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   }
 
   function updateJump(){ const bs=$('jump').querySelectorAll('button'); const jb=bs[bs.length-1]; if(jb) jb.textContent='My shortlist'+(list.length?' ('+list.length+')':'') }
-  function listSum(){ const hc=$('hhcount'); if(hc) hc.textContent=heard.size?heard.size+' artist'+(heard.size===1?'':'s')+' heard on this device':'No previews heard yet'; const h=list.filter(id=>heard.has(id)).length; $('listsum').textContent='Your shortlist ('+list.length+(h?' \u00b7 '+h+' heard':'')+')' }
+  function listSum(){ const hc=$('hhcount'); if(hc) hc.textContent=heard.size?heard.size+' artist'+(heard.size===1?'':'s')+' heard on this device':'No previews heard yet'; const h=list.filter(id=>heard.has(id)).length; { const rb=$('rmheard'); if(rb) rb.hidden=!h } $('listsum').textContent='Your shortlist ('+list.length+(h?' \u00b7 '+h+' heard':'')+')' }
   function renderList(){
     const ol=$('listol'); ol.textContent='';
     const idx=new Map(N.map((a,i)=>[a[0],i]));
@@ -747,6 +748,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   $('blendbtn').addEventListener('click',blend);
   const sortList=(cmp,msg)=>{ if(list.length<3) return; const old=list.slice(), ix=new Map(N.map((a,i)=>[a[0],i])); const key=id=>{ const k=ix.get(id); return k==null?null:N[k] }; list.sort((a,b)=>{ const x=key(a), y=key(b); if(!x||!y) return 0; return cmp(x,y) }); saveList(); renderList(); toast(msg,()=>{ list.length=0; list.push(...old); saveList(); renderList() }) };
   $('sortaz').addEventListener('click',()=>sortList((x,y)=>x[1].localeCompare(y[1],undefined,{sensitivity:'base'}),'Shortlist sorted A to Z.'));
+  $('rmheard').addEventListener('click',()=>{ const old=list.slice(), keep=list.filter(id=>!heard.has(id)); const n=old.length-keep.length; if(!n) return; list.length=0; list.push(...keep); saveList(); refreshAll(); renderList(); toast('Removed '+n+' artist'+(n===1?'':'s')+' you have already heard.',()=>{ list.length=0; list.push(...old); saveList(); refreshAll(); renderList() }) });
   $('sortgenre').addEventListener('click',()=>{ const gn=x=>{ const r=RI.get(IDX.get(x[0])); return r&&r[1]&&GN[r[1]]?gname(r[1]):'\uffff' }; sortList((x,y)=>{ const a=gn(x), b=gn(y); return a===b?x[1].localeCompare(y[1],undefined,{sensitivity:'base'}):a.localeCompare(b) },'Shortlist grouped by genre.') });
   $('sortsmall').addEventListener('click',()=>sortList((x,y)=>(x[2]||0)-(y[2]||0),'Shortlist sorted smallest first.'));
   $('shufflelist').addEventListener('click',()=>{ if(list.length<3) return; const old=list.slice(); for(let i=list.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [list[i],list[j]]=[list[j],list[i]] } saveList(); renderList(); toast('Shortlist shuffled.',()=>{ list.length=0; list.push(...old); saveList(); renderList() }) });

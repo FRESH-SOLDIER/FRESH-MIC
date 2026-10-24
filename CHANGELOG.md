@@ -135,3 +135,4 @@
 - 2026-10-23: Discover's Listening history control shows how many artists you have heard on this device (it updates as you play, unmark or forget). Research: listening-history features feel clearer when they show the running total.
 - 2026-10-23: Shortlist entries show the artist's main genre next to the fan count (for example '17.2K fans, Rock') when it is known. Research: list users want to tell saved artists apart at a glance.
 - 2026-10-23: The shortlist (3 or more artists) has a Sort by genre button that groups saved artists by main genre (A to Z inside each group, unknown genres last), with Undo. Research: people sorting a saved list want to group it by style.
+- 2026-10-23: The shortlist has a Remove artists I've heard button (shown only when some saved artists are heard) that trims the list down to what you have not listened to yet, with Undo. Research: people use a saved list as a to-listen queue and want to clear what they have finished.
