@@ -149,3 +149,4 @@
 - 2026-10-24: Discover shows a Heard lately row with the last 8 artists whose preview you played; click a name to open Find similar for it. Research: listeners lose track of a good find a few tracks later and want a way back.
 - 2026-10-24: Discover's genre row has a Random genre chip right after All genres that jumps to a genre other than the current one (Reset filters undoes it). Research: Every Noise-style browsing is loved for happy accidents in genres people would not pick.
 - 2026-10-24: The now-playing bar has a Share button that copies a link to Find similar for the artist you are hearing (opens the device share sheet on phones). Research: people share a track the moment they like it.
+- 2026-10-24: Find similar has a Play these results button that turns Autoplay on and starts previews from the first artist you have not heard, running down the list. Research: people want a similar-artists page to work like a radio station, not a list to click one by one.
