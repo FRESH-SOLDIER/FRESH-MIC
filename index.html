@@ -441,6 +441,7 @@ ul.res.grid .player{margin-inline:12px}
       <ul id="sug" role="listbox" hidden></ul>
       <div class="chips" id="chips"><span class="cap">Try</span></div>
       <div class="chips" id="recent" hidden><span class="cap">Recent</span></div>
+      <div class="chips scroll" id="hrecent2" role="group" aria-label="Artists you heard most recently" hidden></div>
     </section>
     <section aria-live="polite">
       <div class="head"><h2 id="title"></h2><button class="shuf" id="hopback" type="button" hidden></button><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="copyres" type="button" hidden>Copy names as text</button><button class="shuf" id="playres" type="button" hidden>Play these results</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button><a class="shuf" id="seedlink" target="_blank" rel="noopener" hidden>Listen on Deezer</a></div>
@@ -717,7 +718,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
 
   function updateJump(){ const bs=$('jump').querySelectorAll('button'); const jb=bs[bs.length-1]; if(jb) jb.textContent='My shortlist'+(list.length?' ('+list.length+')':'') }
   let idIdx=null;
-  function heardChips(){ const box=$('hrecent'); if(!box) return; const ids=[...heard].slice(-8).reverse(); if(!idIdx){ idIdx=new Map(); N.forEach((n,k)=>{ if(n) idIdx.set(n[0],k) }) } box.textContent=''; const cap=document.createElement('span'); cap.className='cap'; cap.textContent='Heard lately'; box.appendChild(cap); let c=0; ids.forEach(id=>{ const k=idIdx.get(id); if(k===undefined||!E[k]&&!REV[k].length) return; const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=N[k][1]; b.title='Find artists similar to '+N[k][1]; b.addEventListener('click',()=>{ setTab('find'); hop(k) }); box.appendChild(b); c++ }); box.hidden=!c }
+  function heardChips(){ ['hrecent','hrecent2'].forEach(fillHeard) }
+  function fillHeard(id){ const box=$(id); if(!box) return; const ids=[...heard].slice(-8).reverse(); if(!idIdx){ idIdx=new Map(); N.forEach((n,k)=>{ if(n) idIdx.set(n[0],k) }) } box.textContent=''; const cap=document.createElement('span'); cap.className='cap'; cap.textContent='Heard lately'; box.appendChild(cap); let c=0; ids.forEach(id=>{ const k=idIdx.get(id); if(k===undefined||!E[k]&&!REV[k].length) return; const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=N[k][1]; b.title='Find artists similar to '+N[k][1]; b.addEventListener('click',()=>{ setTab('find'); hop(k) }); box.appendChild(b); c++ }); box.hidden=!c }
   function listSum(){ heardChips(); const hc=$('hhcount'); if(hc) hc.textContent=heard.size?heard.size+' artist'+(heard.size===1?'':'s')+' heard on this device':'No previews heard yet'; const h=list.filter(id=>heard.has(id)).length; { const rb=$('rmheard'); if(rb) rb.hidden=!h } $('listsum').textContent='Your shortlist ('+list.length+(h?' \u00b7 '+h+' heard':'')+')' }
   function renderList(){
     const ol=$('listol'); ol.textContent='';
