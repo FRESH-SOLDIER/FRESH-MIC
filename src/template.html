@@ -218,7 +218,7 @@ ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .mini{position:fixed;left:0;right:0;bottom:0;z-index:35;display:flex;align-items:center;gap:8px;padding:10px max(12px,env(safe-area-inset-right,0px)) max(10px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));background:var(--surface);border-top:2px solid var(--accent);box-shadow:0 -4px 16px rgba(0,0,0,.2)}
 .mini .mname{flex:1;min-width:0;text-align:left;background:none;border:0;color:var(--fg);font:600 .9rem var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;padding:8px 4px}
 .mini button:not(.mname){font:500 .82rem var(--f-data);color:var(--fg);background:transparent;border:1px solid var(--ctl);border-radius:8px;padding:8px 10px;cursor:pointer;white-space:nowrap}
-.mini #mauto[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.mini #mrep[aria-pressed="true"],.mini #mauto[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
 .mini{overflow:visible}.mini #mprog{position:absolute;left:0;top:-1px;height:3px;width:0;background:var(--accent);pointer-events:none;transition:width .25s linear}
 .mini #msave[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
 @media (max-width:560px){.mini{flex-wrap:wrap;gap:6px}.mini .mname{flex:1 0 100%;max-width:none;text-align:left}.mini button:not(.mname){flex:1 1 auto;padding:8px 6px;font-size:.78rem}.mini #mstop{flex:0 0 auto}html body.hasmini{padding-bottom:118px}html body.hasmini .top{bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 112px)}}
@@ -499,6 +499,7 @@ ul.res.grid .player{margin-inline:12px}
     <button type="button" id="mnext" aria-label="Play the next artist">Next &#9654;&#9654;</button>
     <button type="button" id="msave" aria-pressed="false" aria-label="Save the playing artist to your shortlist">Save</button>
     <button type="button" id="mauto" aria-pressed="false" aria-label="Autoplay next">Auto</button>
+    <button type="button" id="mrep" aria-pressed="false" aria-label="Repeat this preview">Repeat</button>
     <button type="button" id="mstop" aria-label="Stop the preview">&times;</button>
   </div>
   <button class="top" id="top" type="button" aria-label="Back to top" hidden>↑</button>
@@ -645,6 +646,7 @@ const G = /*DATA*/;
           NOW={el,au,bar,li,title:t.title_short,who:a[1]}; markHeard(li,a[0]); showMini(); au.addEventListener('timeupdate',()=>{ if(NOW&&NOW.au===au&&au.duration) $('mprog').style.width=(au.currentTime/au.duration*100).toFixed(1)+'%' }); au.addEventListener('play',tabMark); au.addEventListener('pause',tabMark); el.textContent='\u25A0 Stop'; el.setAttribute('aria-pressed','true');
           au.addEventListener('timeupdate',()=>{ const tmE=bar.querySelector('.tm'); if(tmE&&au.duration){ const f=n=>Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0'); tmE.textContent=f(au.currentTime)+' / '+f(au.duration) } const i=bar.querySelector('i'); if(i&&au.duration){ const v=au.currentTime/au.duration*100; i.style.width=v+'%'; bar.querySelector('.prog').setAttribute('aria-valuenow',Math.round(v)) }});
           au.addEventListener('ended',()=>{
+            if(ui.rep){ au.currentTime=0; au.play().catch(()=>{}); return }
             const wasLi=li; stopNow();
             if(!auto) return;
             playNextFrom(wasLi);
@@ -781,6 +783,8 @@ const G = /*DATA*/;
   $('mnext').addEventListener('click',()=>{ if(NOW){ const l=NOW.li; stopNow(); playNextFrom(l) } });
   $('mstop').addEventListener('click',()=>stopNow());
   $('mname').addEventListener('click',()=>{ if(NOW) NOW.li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}) });
+  $('mrep').setAttribute('aria-pressed',!!ui.rep);
+  $('mrep').addEventListener('click',()=>{ ui.rep=!ui.rep; saveUi(); $('mrep').setAttribute('aria-pressed',!!ui.rep); toast(ui.rep?'Repeat on: this preview plays again when it ends.':'Repeat off.') });
   $('mauto').addEventListener('click',()=>{ auto=!auto; ui.auto=auto; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',auto); showMini(); toast(auto?'Autoplay on: the next artist\u2019s preview starts when one ends.':'Autoplay off.') });
   $('hopback').addEventListener('click',()=>{ if(hops.length) history.back() });
   function renderAbout(k){
