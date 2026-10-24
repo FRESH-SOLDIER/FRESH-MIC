@@ -408,6 +408,7 @@ ul.res.grid .player{margin-inline:12px}
       <div class="cap" id="hhlab">Listening history</div>
       <div class="seg" id="hhseg" role="group" aria-labelledby="hhlab"></div>
       <div class="cap" id="hhcount" style="margin-top:4px"></div>
+      <div class="chips scroll" id="hrecent" role="group" aria-label="Artists you heard most recently" hidden></div>
     </div>
     <div><button class="shuf" id="resetf" type="button" hidden>Reset filters</button></div>
     <div class="jump" id="jump"><span class="cap">Jump to</span></div>
@@ -713,7 +714,9 @@ const G = /*DATA*/;
   }
 
   function updateJump(){ const bs=$('jump').querySelectorAll('button'); const jb=bs[bs.length-1]; if(jb) jb.textContent='My shortlist'+(list.length?' ('+list.length+')':'') }
-  function listSum(){ const hc=$('hhcount'); if(hc) hc.textContent=heard.size?heard.size+' artist'+(heard.size===1?'':'s')+' heard on this device':'No previews heard yet'; const h=list.filter(id=>heard.has(id)).length; { const rb=$('rmheard'); if(rb) rb.hidden=!h } $('listsum').textContent='Your shortlist ('+list.length+(h?' \u00b7 '+h+' heard':'')+')' }
+  let idIdx=null;
+  function heardChips(){ const box=$('hrecent'); if(!box) return; const ids=[...heard].slice(-8).reverse(); if(!idIdx){ idIdx=new Map(); N.forEach((n,k)=>{ if(n) idIdx.set(n[0],k) }) } box.textContent=''; const cap=document.createElement('span'); cap.className='cap'; cap.textContent='Heard lately'; box.appendChild(cap); let c=0; ids.forEach(id=>{ const k=idIdx.get(id); if(k===undefined||!E[k]&&!REV[k].length) return; const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=N[k][1]; b.title='Find artists similar to '+N[k][1]; b.addEventListener('click',()=>{ setTab('find'); hop(k) }); box.appendChild(b); c++ }); box.hidden=!c }
+  function listSum(){ heardChips(); const hc=$('hhcount'); if(hc) hc.textContent=heard.size?heard.size+' artist'+(heard.size===1?'':'s')+' heard on this device':'No previews heard yet'; const h=list.filter(id=>heard.has(id)).length; { const rb=$('rmheard'); if(rb) rb.hidden=!h } $('listsum').textContent='Your shortlist ('+list.length+(h?' \u00b7 '+h+' heard':'')+')' }
   function renderList(){
     const ol=$('listol'); ol.textContent='';
     const idx=new Map(N.map((a,i)=>[a[0],i]));
