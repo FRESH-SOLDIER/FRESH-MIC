@@ -143,3 +143,4 @@
 - 2026-10-24: The now-playing bar shows the elapsed and total time of the preview (for example 0:07 / 0:30). Research: players that hide the clock make listeners guess how much of a sample is left.
 - 2026-10-24: The now-playing bar has a Similar button that opens Find similar for the artist you are listening to, so you can follow a good find without scrolling back to its row. Research: discovery listeners want to chase a track they like right away.
 - 2026-10-24: Pressing M while a preview plays mutes or unmutes it (with a short message), and the shortcuts list mentions it. Research: a quick mute is what people reach for when a sample is too loud or the phone rings.
+- 2026-10-24: The now-playing bar has a Deezer button that opens the playing artist's (or release's) Deezer page in a new tab, so a find can be heard in full without scrolling back to its row. Research: after a 30-second sample, listeners want the full track in one tap.
