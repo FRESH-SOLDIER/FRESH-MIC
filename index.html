@@ -480,6 +480,7 @@ ul.res.grid .player{margin-inline:12px}
     <button class="copy" id="dlcsv" type="button">Download as spreadsheet (CSV)</button>
     <button class="copy" id="prlist" type="button">Print shortlist</button>
     <button class="copy" id="playlist" type="button" hidden>Play shortlist</button>
+    <button class="copy" id="randsaved" type="button" hidden>Play a random saved artist</button>
     <button class="copy" id="shufflelist" type="button" hidden>Shuffle shortlist</button>
     <button class="copy" id="sortaz" type="button" hidden>Sort A to Z</button>
     <button class="copy" id="sortsmall" type="button" hidden>Sort smallest first</button>
@@ -724,7 +725,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       ol.appendChild(li)});
     listSum();
     updateJump();
-    $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('sortaz').hidden=list.length<3; $('sortsmall').hidden=list.length<3; $('sortgenre').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
+    $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('randsaved').hidden=list.length<2; $('sortaz').hidden=list.length<3; $('sortsmall').hidden=list.length<3; $('sortgenre').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
   }
 
@@ -751,6 +752,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   $('rmheard').addEventListener('click',()=>{ const old=list.slice(), keep=list.filter(id=>!heard.has(id)); const n=old.length-keep.length; if(!n) return; list.length=0; list.push(...keep); saveList(); refreshAll(); renderList(); toast('Removed '+n+' artist'+(n===1?'':'s')+' you have already heard.',()=>{ list.length=0; list.push(...old); saveList(); refreshAll(); renderList() }) });
   $('sortgenre').addEventListener('click',()=>{ const gn=x=>{ const r=RI.get(IDX.get(x[0])); return r&&r[1]&&GN[r[1]]?gname(r[1]):'\uffff' }; sortList((x,y)=>{ const a=gn(x), b=gn(y); return a===b?x[1].localeCompare(y[1],undefined,{sensitivity:'base'}):a.localeCompare(b) },'Shortlist grouped by genre.') });
   $('sortsmall').addEventListener('click',()=>sortList((x,y)=>(x[2]||0)-(y[2]||0),'Shortlist sorted smallest first.'));
+  $('randsaved').addEventListener('click',()=>{ const rows=[...$('listol').querySelectorAll('li')].filter(li=>li.querySelector('button.play')); if(!rows.length) return; const fresh=rows.filter(li=>!li.querySelector('.heardtag')); const pool=fresh.length?fresh:rows; const li=pool[Math.floor(Math.random()*pool.length)]; li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click(); toast('Playing a random saved artist'+(fresh.length?' you have not heard yet':'')+'.') });
   $('shufflelist').addEventListener('click',()=>{ if(list.length<3) return; const old=list.slice(); for(let i=list.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [list[i],list[j]]=[list[j],list[i]] } saveList(); renderList(); toast('Shortlist shuffled.',()=>{ list.length=0; list.push(...old); saveList(); renderList() }) });
   { const lb=$('listbox'); if(ui.lo===true) lb.open=true; lb.addEventListener('toggle',()=>{ if(document.body.classList.contains('printlist')) return; ui.lo=lb.open; saveUi() }) }
   $('clrlist').addEventListener('click',()=>{ const old=list.slice(); if(!old.length) return; list.length=0; saveList(); refreshAll(); renderList(); toast('Shortlist cleared ('+old.length+' artists).',()=>{ list.push(...old); saveList(); refreshAll(); renderList() }); });
