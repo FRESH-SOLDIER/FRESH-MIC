@@ -162,3 +162,4 @@
 - 2026-10-24: Pressing F on Discover while a preview plays opens Find similar for the playing artist (F already did this for a selected result on Find similar). Research: following a good find should take one key, not a scroll back to its row.
 - 2026-10-25: Pressing X on Discover while a preview plays hides the playing artist (Z undoes), matching the Not for me button in the now-playing bar. Research: a quick dismiss key keeps the listening flow going.
 - 2026-10-25: Pressing O on Discover while a preview plays opens the playing artist on Deezer in a new tab (same as the Deezer button in the now-playing bar). Research: after a 30-second sample, one key to hear the full song.
+- 2026-10-25: Pressing G while a preview plays scrolls back to the playing artist in the list (same as clicking its name in the now-playing bar), and the shortcuts list mentions it. Research: after scrolling far down a long feed, listeners lose the row that is playing.
