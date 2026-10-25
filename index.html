@@ -593,6 +593,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       if(limit && f>limit) return;
       if(hid.has(N[k][0])) return;
       if(hideHeard&&heard.has(N[k][0])) return;
+      if(ui.hs===true&&list.includes(N[k][0])) return;
       if(directOnly&&!direct.has(k)) return;
       if(fgen){ const gr=RI.get(k); if(!gr||gr[1]!==fgen) return; }
       if(freshOnly){ const rr=RI.get(k); if(!(rr&&rr[4].length&&rr[4][0][2]<=TODAY&&rr[4][0][2]>=cutoff(90))) return; }
@@ -883,7 +884,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const b4=document.createElement('button'); b4.type='button'; b4.textContent='Forget what I\u2019ve heard'; b4.title='Clears the list of artists whose preview you have played (kept only in this browser)';
     b4.addEventListener('click',()=>{ const n=heard.size; heard.clear(); try{ localStorage.removeItem('freshmic:heard') }catch(e){} document.querySelectorAll('.heardtag').forEach(t=>t.remove()); b4.hidden=true; listSum(); toast(n?'Cleared '+n+' heard artists.':'Nothing to clear.'); shown=24; if(cur>=0){results=related(cur);render()} });
     b4.hidden=heard.size===0; $('sortctl').addEventListener('click',()=>{ b4.hidden=heard.size===0 });
-    w.appendChild(b); w.appendChild(b2); w.appendChild(b3); w.appendChild(b4); $('sortctl').appendChild(w); }
+    const b5=document.createElement('button'); b5.type='button'; b5.textContent='Hide artists on my shortlist'; b5.title='Hides results you have already saved'; b5.setAttribute('aria-pressed',ui.hs===true);
+    b5.addEventListener('click',()=>{ ui.hs=!(ui.hs===true); saveUi(); b5.setAttribute('aria-pressed',ui.hs); shown=24; if(cur>=0){results=related(cur);render()} });
+    w.appendChild(b); w.appendChild(b2); w.appendChild(b3); w.appendChild(b5); w.appendChild(b4); $('sortctl').appendChild(w); }
 
   // autocomplete (page search and top-bar search share one implementation)
   const hiders=[]; const hideSug=()=>hiders.forEach(f=>f());
