@@ -943,7 +943,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   let rtype=(['album','ep','single'].includes(ui.rtype)?ui.rtype:'');
   let muted=new Set(); try{muted=new Set((JSON.parse(localStorage.getItem('freshmic:mute')||'[]')).map(Number))}catch(e){}
   const saveMuted=()=>{try{localStorage.setItem('freshmic:mute',JSON.stringify([...muted]))}catch(e){}};
+  function homeTitle(){ return genre?gname(genre)+' artists | '+BASE_TITLE:BASE_TITLE }
   function renderMute(){
+    if(!$('viewHome').hidden&&typeof BASE_TITLE!=='undefined'){ const pl=/^\u25b6 /.test(document.title)?'\u25b6 ':''; document.title=pl+homeTitle() }
     const bar=$('mutebar'), btn=$('mutebtn'), note=$('mutenote');
     $('gshare').hidden=!genre;
     if(genre){ bar.hidden=false; const m=muted.has(genre); btn.textContent=m?'Show '+gname(genre)+' in All genres again':'Hide '+gname(genre)+' from All genres'; note.textContent=''; }
@@ -1786,7 +1788,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   function setTab(t){
     if(t!=='find'&&t!=='page'&&t!=='free') t='home';
     ui.tab=t; saveUi(); if(t!=='page') sndOff(); if(t!=='free') stopFree();
-    document.title=t==='free'?'Free music | '+BASE_TITLE:t==='page'?'My page | '+BASE_TITLE:(t==='find'&&cur>=0?'Artists like '+N[cur][1]+' | '+BASE_TITLE:(t==='find'?'Find similar artists | '+BASE_TITLE:BASE_TITLE));
+    document.title=t==='free'?'Free music | '+BASE_TITLE:t==='page'?'My page | '+BASE_TITLE:(t==='find'&&cur>=0?'Artists like '+N[cur][1]+' | '+BASE_TITLE:(t==='find'?'Find similar artists | '+BASE_TITLE:homeTitle()));
     document.querySelector('main').classList.toggle('pagewide',t==='page');
     $('viewHome').hidden=t!=='home'; $('viewFind').hidden=t!=='find'; $('viewPage').hidden=t!=='page'; $('viewFree').hidden=t!=='free'; $('controls').hidden=(t==='page'||t==='free'); { const bs=document.querySelector('.bsearch'); if(bs) bs.hidden=(t==='free'); $('listbox').hidden=(t==='free') } if(t==='free') freeInit();
     $('tabHome').setAttribute('aria-selected',t==='home'); $('tabFind').setAttribute('aria-selected',t==='find'); $('tabPage').setAttribute('aria-selected',t==='page'); $('tabFree').setAttribute('aria-selected',t==='free');
