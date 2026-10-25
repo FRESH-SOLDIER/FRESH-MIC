@@ -180,3 +180,4 @@
 - 2026-10-25: Fix: Hidden gems on Discover now really skips artists you have heard (Hide artists I've heard) and artists on your shortlist (Hide artists on my shortlist); before, only New releases honoured those two filters. Research: a filter that covers only part of a page reads as broken.
 - 2026-10-25: Hidden gems has an order picker (Shuffled, Smallest first, Newest release first), remembered in the browser; Shuffle still reshuffles when set to Shuffled. Research: gem hunters want to start from the smallest artists or the freshest releases.
 - 2026-10-25: Find similar has a Print results button that prints a clean numbered list of the artists shown (name, why it matches, fans) without controls, pictures or buttons. Research: people take recommendation lists to record shops and festivals on paper.
+- 2026-10-25: Long result lists now render lazily (content-visibility) so scrolling stays smooth.
