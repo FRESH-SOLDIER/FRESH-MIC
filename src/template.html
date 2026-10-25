@@ -884,8 +884,8 @@ const G = /*DATA*/;
     const b4=document.createElement('button'); b4.type='button'; b4.textContent='Forget what I\u2019ve heard'; b4.title='Clears the list of artists whose preview you have played (kept only in this browser)';
     b4.addEventListener('click',()=>{ const n=heard.size; heard.clear(); try{ localStorage.removeItem('freshmic:heard') }catch(e){} document.querySelectorAll('.heardtag').forEach(t=>t.remove()); b4.hidden=true; listSum(); toast(n?'Cleared '+n+' heard artists.':'Nothing to clear.'); shown=24; if(cur>=0){results=related(cur);render()} });
     b4.hidden=heard.size===0; $('sortctl').addEventListener('click',()=>{ b4.hidden=heard.size===0 });
-    const b5=document.createElement('button'); b5.type='button'; b5.textContent='Hide artists on my shortlist'; b5.title='Hides results you have already saved'; b5.setAttribute('aria-pressed',ui.hs===true);
-    b5.addEventListener('click',()=>{ ui.hs=!(ui.hs===true); saveUi(); b5.setAttribute('aria-pressed',ui.hs); shown=24; if(cur>=0){results=related(cur);render()} });
+    const b5=document.createElement('button'); b5.type='button'; b5.textContent='Hide artists on my shortlist'; b5.title='Hides results you have already saved'; b5.setAttribute('aria-pressed',ui.hs===true); b5.dataset.hs='1';
+    b5.addEventListener('click',()=>{ ui.hs=!(ui.hs===true); saveUi(); document.querySelectorAll('[data-hs]').forEach(e=>e.setAttribute('aria-pressed',ui.hs)); shown=24; newShown=24; gemShown=8; renderHome(); if(cur>=0){results=related(cur);render()} });
     w.appendChild(b); w.appendChild(b2); w.appendChild(b3); w.appendChild(b5); w.appendChild(b4); $('sortctl').appendChild(w); }
 
   // autocomplete (page search and top-bar search share one implementation)
@@ -966,7 +966,7 @@ const G = /*DATA*/;
   function homeData(){
     const fresh=[], soon=[];
     R.forEach(r=>{
-      const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50||hid.has(N[k][0])||(hideHeard&&heard.has(N[k][0]))) return;
+      const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50||hid.has(N[k][0])||(hideHeard&&heard.has(N[k][0]))||(ui.hs===true&&list.includes(N[k][0]))) return;
       if(genre?r[1]!==genre:muted.has(r[1])) return;
       const okT=x=>!rtype||x[3]===rtype;
       const past=r[4].find(x=>x[2]<=TODAY&&okT(x)), fut=r[4].filter(x=>x[2]>TODAY&&okT(x));
@@ -1013,7 +1013,7 @@ const G = /*DATA*/;
 
   function renderHome(){
     const {fresh,soon}=homeData();
-    $('resetf').hidden=!(limit!==100000||genre||rtype||rwin||hideHeard);
+    $('resetf').hidden=!(limit!==100000||genre||rtype||rwin||hideHeard||ui.hs===true);
     const nl=$('newlist'); nl.textContent='';
     $('newmeta').textContent=fresh.length+' release'+(fresh.length===1?'':'s');
     if(!fresh.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No recent releases match these filters.'; const fx=[]; if(limit) fx.push(['Show any size',()=>$('seg').children[0].click()]); if(genre) fx.push(['All genres',()=>$('genres').children[0].click()]); if(rtype) fx.push(['All types',()=>$('rtseg').children[0].click()]); fx.forEach(([t,fn])=>{ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent=t; b.addEventListener('click',fn); li.appendChild(b) }); nl.appendChild(li)}
@@ -1064,7 +1064,10 @@ const G = /*DATA*/;
   { const cap=document.createElement('p'); cap.className='bgcap'; cap.id='bgcap'; $('seg').parentNode.appendChild(cap); setBg() }
   { const hb=document.createElement('button'); hb.type='button'; hb.textContent='Hide artists I\u2019ve heard'; hb.dataset.hh='1'; hb.title='Hides artists whose 30-second preview you have already played on this device'; hb.setAttribute('aria-pressed',hideHeard);
     hb.addEventListener('click',()=>{ hideHeard=!hideHeard; ui.hh=hideHeard; saveUi(); document.querySelectorAll('[data-hh]').forEach(e=>e.setAttribute('aria-pressed',hideHeard)); newShown=24; gemShown=8; renderHome(); if(cur>=0){ shown=24; results=related(cur); render() } });
-    $('hhseg').appendChild(hb); listSum() }
+    $('hhseg').appendChild(hb);
+    const sb=document.createElement('button'); sb.type='button'; sb.textContent='Hide artists on my shortlist'; sb.dataset.hs='1'; sb.title='Hides artists you have already saved'; sb.setAttribute('aria-pressed',ui.hs===true);
+    sb.addEventListener('click',()=>{ ui.hs=!(ui.hs===true); saveUi(); document.querySelectorAll('[data-hs]').forEach(e=>e.setAttribute('aria-pressed',ui.hs)); newShown=24; gemShown=8; renderHome(); if(cur>=0){ shown=24; results=related(cur); render() } });
+    $('hhseg').appendChild(sb); listSum() }
   // genre chips (only genres with enough recent releases)
   (function(){
     const cnt=new Map(); R.forEach(r=>{ if(r[1]&&GN[r[1]]) cnt.set(r[1],(cnt.get(r[1])||0)+1) });
@@ -1093,7 +1096,7 @@ const G = /*DATA*/;
   })();
   $('newmore').addEventListener('click',()=>{const prev=newShown; newShown+=24; renderHome(); const rows=$('newlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
   $('soonmore').addEventListener('click',()=>{const prev=soonShown; soonShown+=12; renderHome(); const rows=$('soonlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
-  $('resetf').addEventListener('click',()=>{ const pick1=(box,sel)=>{const b=box.querySelector(sel); if(b) b.click()}; pick1($('seg'),'button:nth-child(3)'); pick1($('genres'),'.chip:first-child'); pick1($('rtseg'),'button:first-child'); pick1($('rwseg'),'button:first-child'); if(hideHeard){ const hb=$('hhseg').querySelector('button'); if(hb) hb.click() } $('resetf').hidden=true; toast('Filters reset.'); });
+  $('resetf').addEventListener('click',()=>{ const pick1=(box,sel)=>{const b=box.querySelector(sel); if(b) b.click()}; pick1($('seg'),'button:nth-child(3)'); pick1($('genres'),'.chip:first-child'); pick1($('rtseg'),'button:first-child'); pick1($('rwseg'),'button:first-child'); if(hideHeard){ const hb=$('hhseg').querySelector('button'); if(hb) hb.click() } if(ui.hs===true){ const sb=$('hhseg').querySelector('[data-hs]'); if(sb) sb.click() } $('resetf').hidden=true; toast('Filters reset.'); });
   $('shuf').addEventListener('click',()=>{gemSeed=Math.random();gemShown=8;renderHome()});
   $('gemmore').addEventListener('click',()=>{const prev=gemShown; gemShown+=8; renderHome(); const rows=$('gems').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
 
