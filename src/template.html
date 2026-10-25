@@ -205,7 +205,10 @@ button.ptag2{cursor:pointer}
   body.printlist #listbox .lnote{border:0;padding:0;background:none;color:#000;font-style:italic;width:100%}
   body.printlist #listbox .lnote:placeholder-shown,body.printlist #blendol,body.printlist #listbox .lnote+br{display:none!important}
   body.printlist #listbox>summary{font-size:1.4rem;font-weight:700;list-style:none}
-  body.printlist{background:#fff!important;color:#000!important}
+  body.printlist,body.printres{background:#fff!important;color:#000!important}
+  body.printres>*:not(main),body.printres main>*:not(#viewFind){display:none!important}
+  body.printres #viewFind .qwrap,body.printres #viewFind .chips,body.printres #viewFind .ctl,body.printres #viewFind .head button,body.printres #viewFind .head a,body.printres #viewFind .meta,body.printres #viewFind .legend,body.printres #viewFind .axis,body.printres #viewFind .more,body.printres #viewFind .links,body.printres #viewFind .sw,body.printres #viewFind .about,body.printres #viewFind form{display:none!important}
+  body.printres #viewFind .res{list-style:decimal;padding-left:1.4em}body.printres #viewFind .row{break-inside:avoid;animation:none!important;border:0;box-shadow:none;background:none!important;display:list-item;padding:4px 0}body.printres #viewFind .row img,body.printres #viewFind .row canvas,body.printres #viewFind .row .pic{display:none!important}
 }
 .skip{position:absolute;left:12px;top:-60px;z-index:60;background:var(--accent);color:var(--accent-fg);padding:10px 14px;border-radius:8px;font:600 .9rem var(--f-data);text-decoration:none}
 .skip:focus{top:8px}
@@ -457,7 +460,7 @@ ul.res.grid .player{margin-inline:12px}
       <div class="chips scroll" id="hrecent2" role="group" aria-label="Artists you heard most recently" hidden></div>
     </section>
     <section aria-live="polite">
-      <div class="head"><h2 id="title"></h2><button class="shuf" id="hopback" type="button" hidden></button><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="copyres" type="button" hidden>Copy names as text</button><button class="shuf" id="playres" type="button" hidden>Play these results</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button><a class="shuf" id="seedlink" target="_blank" rel="noopener" hidden>Listen on Deezer</a></div>
+      <div class="head"><h2 id="title"></h2><button class="shuf" id="hopback" type="button" hidden></button><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="copyres" type="button" hidden>Copy names as text</button><button class="shuf" id="printres" type="button" hidden>Print results</button><button class="shuf" id="playres" type="button" hidden>Play these results</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button><a class="shuf" id="seedlink" target="_blank" rel="noopener" hidden>Listen on Deezer</a></div>
       <section class="about" id="about" aria-label="About this artist" hidden></section>
       <p class="legend" id="legend" hidden>Each bar shows how big an artist is. Hover over, or tap, the ? at the end of any bar to see what it means for that artist.</p>
     <div class="ctl" id="sortctl" style="margin:0 0 12px"><div class="cap" id="sortlab">Order results by</div><div class="seg" id="sortseg" role="group" aria-labelledby="sortlab"></div></div>
@@ -694,7 +697,7 @@ const G = /*DATA*/;
     { const sl=$('seedlink'); sl.href='https://www.deezer.com/artist/'+N[cur][0]; sl.textContent='Listen to '+N[cur][1]+' on Deezer'; sl.hidden=false }
     const qf=N[cur][2]||0;
     $('meta').textContent=fmt(qf)+' fans · '+results.length+' match'+(results.length===1?'':'es')+(()=>{ const h=results.filter(r=>heard.has(N[r.k][0])).length; return h?' · '+h+' heard':'' })();
-    $('legend').hidden=!results.length; $('saveall').hidden=!results.length; $('copyres').hidden=!results.length; $('playres').hidden=!results.length;
+    $('legend').hidden=!results.length; $('saveall').hidden=!results.length; $('copyres').hidden=!results.length; $('playres').hidden=!results.length; $('printres').hidden=!results.length;
     renderAbout(cur);
     if(!results.length){
       const li=document.createElement('li'); li.className='empty';
@@ -1863,6 +1866,7 @@ const G = /*DATA*/;
     const done=()=>{document.body.classList.remove('printlist'); box.open=wasOpen; removeEventListener('afterprint',done)};
     addEventListener('afterprint',done); window.print();
   });
+  $('printres').addEventListener('click',()=>{ document.body.classList.add('printres'); const done=()=>{ document.body.classList.remove('printres'); removeEventListener('afterprint',done) }; addEventListener('afterprint',done); window.print() });
   $('dlcsv').addEventListener('click',()=>{
     const q=s=>{s=String(s); if(/^[=+\-@\t\r]/.test(s)) s="'"+s; return '"'+s.replace(/"/g,'""')+'"'};
     const hasN=list.some(id=>notes[id]); const rows=[['Artist','Deezer fans','Deezer link'].concat(hasN?['My note']:[])];
