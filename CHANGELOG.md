@@ -160,3 +160,4 @@
 - 2026-10-24: Pressing L opens the shortlist and scrolls to it (press again to close), and the shortcuts list mentions it. Research: keyboard-first listeners want one key to check what they have saved.
 - 2026-10-24: Pressing B on Discover (or My page) while a preview plays saves the playing artist to the shortlist (press again to remove), where before B only worked on Find similar results. Research: the moment you like a sample is the moment you want to save it, whatever tab you are on.
 - 2026-10-24: Pressing F on Discover while a preview plays opens Find similar for the playing artist (F already did this for a selected result on Find similar). Research: following a good find should take one key, not a scroll back to its row.
+- 2026-10-25: Pressing X on Discover while a preview plays hides the playing artist (Z undoes), matching the Not for me button in the now-playing bar. Research: a quick dismiss key keeps the listening flow going.
