@@ -163,3 +163,4 @@
 - 2026-10-25: Pressing X on Discover while a preview plays hides the playing artist (Z undoes), matching the Not for me button in the now-playing bar. Research: a quick dismiss key keeps the listening flow going.
 - 2026-10-25: Pressing O on Discover while a preview plays opens the playing artist on Deezer in a new tab (same as the Deezer button in the now-playing bar). Research: after a 30-second sample, one key to hear the full song.
 - 2026-10-25: Pressing G while a preview plays scrolls back to the playing artist in the list (same as clicking its name in the now-playing bar), and the shortcuts list mentions it. Research: after scrolling far down a long feed, listeners lose the row that is playing.
+- 2026-10-25: Coming soon on Discover has a Copy as text button too (numbered list with release, date, genre and fans plus the site link), so all three Discover lists can be pasted into a chat. Research: people share upcoming releases to plan listening.
