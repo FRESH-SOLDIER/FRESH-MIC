@@ -19,9 +19,10 @@
   --accent:#8F9BFF; --accent-fg:#0F1220; --tiny:#F2C14B; --bar:#3A4268; color-scheme:dark}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html[data-text=l]{font-size:112.5%}html[data-text=xl]{font-size:128%}
 button,a,summary,[role=tab],[role=slider]{touch-action:manipulation}
 [hidden]{display:none!important}
-body{background:var(--bg);color:var(--fg);font:400 16px/1.5 var(--f-body);
+body{background:var(--bg);color:var(--fg);font:400 1rem/1.5 var(--f-body);
   padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 #bgfx{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
 #bgfx i{position:absolute;inset:-6%;opacity:0;transition:opacity 2.4s ease;background-repeat:no-repeat}
@@ -390,6 +391,10 @@ ul.res.grid .player{margin-inline:12px}
     <div>
       <div class="cap" id="mlab">Background</div>
       <div class="seg" role="group" aria-labelledby="mlab"><button type="button" id="stillbtn" aria-pressed="false">Keep still</button></div>
+    </div>
+    <div>
+      <div class="cap" id="zlab">Text size</div>
+      <div class="seg" id="zseg" role="group" aria-labelledby="zlab"></div>
     </div>
     <div id="autowrap" hidden>
       <div class="cap" id="alab">Previews</div>
@@ -1109,6 +1114,9 @@ const G = /*DATA*/;
     ab.addEventListener('click',()=>{auto=!auto; ui.auto=auto; saveUi(); ab.setAttribute('aria-pressed',auto); showMini(); toast(auto?'Autoplay on: the next artist\u2019s preview starts when one ends.':'Autoplay off.')}); }
 
   { const sb=$('stillbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-still',''); else document.documentElement.removeAttribute('data-still'); sb.setAttribute('aria-pressed',on) }; set(ui.still===true); sb.addEventListener('click',()=>{ ui.still=!(ui.still===true); saveUi(); set(ui.still); toast(ui.still?'Background is still.':'Background drifts again.') }) }
+  { const Z=[['','Normal'],['l','Large'],['xl','Extra large']], cur=['l','xl'].includes(ui.text)?ui.text:'';
+    const set=v=>{ if(v) document.documentElement.setAttribute('data-text',v); else document.documentElement.removeAttribute('data-text'); [...$('zseg').children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===v)) };
+    Z.forEach(([v,l])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=l; b.dataset.v=v; b.addEventListener('click',()=>{ ui.text=v; saveUi(); set(v) }); $('zseg').appendChild(b) }); set(cur) }
   const THEMES=[['auto','Auto'],['light','Light'],['dark','Dark']];
   function barColor(t){ const dark=t==='dark'||(t!=='light'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches); const m=document.querySelector('meta[name=theme-color]'); if(m) m.setAttribute('content',dark?'#0F1220':'#E8EBF2') }
   function applyTheme(t){ barColor(t); const r=document.documentElement; if(t==='light'||t==='dark') r.setAttribute('data-theme',t); else r.removeAttribute('data-theme'); [...$('tseg').children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===t)); }
