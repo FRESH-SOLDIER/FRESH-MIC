@@ -397,7 +397,7 @@ ul.res.grid .player{margin-inline:12px}
     <div>
       <div class="cap" id="genlab">Genre</div>
       <div class="chips scroll" id="genres" role="group" aria-labelledby="genlab"></div>
-      <div class="hidbar" id="mutebar" hidden><button type="button" id="mutebtn"></button><span id="mutenote"></span></div>
+      <div class="hidbar" id="mutebar" hidden><button type="button" id="mutebtn"></button><button type="button" id="gshare" hidden>Copy link to this genre</button><span id="mutenote"></span></div>
     </div>
     <div>
       <div class="cap" id="rtlab">Release type</div>
@@ -945,10 +945,12 @@ const G = /*DATA*/;
   const saveMuted=()=>{try{localStorage.setItem('freshmic:mute',JSON.stringify([...muted]))}catch(e){}};
   function renderMute(){
     const bar=$('mutebar'), btn=$('mutebtn'), note=$('mutenote');
+    $('gshare').hidden=!genre;
     if(genre){ bar.hidden=false; const m=muted.has(genre); btn.textContent=m?'Show '+gname(genre)+' in All genres again':'Hide '+gname(genre)+' from All genres'; note.textContent=''; }
     else if(muted.size){ bar.hidden=false; btn.textContent='Show hidden genres again'; note.textContent='Hidden here: '+[...muted].map(gname).join(', '); }
     else bar.hidden=true;
   }
+  $('gshare').addEventListener('click',()=>{ if(!genre) return; const u=location.origin+location.pathname+'#genre='+genre; if(canShare){ navigator.share({title:'Fresh Mic',text:gname(genre)+' artists on Fresh Mic',url:u}).catch(()=>{}); return } if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(()=>toast('Link to '+gname(genre)+' copied.'),()=>toast('Copy failed.')); else toast('Copy failed.') });
   $('mutebtn').addEventListener('click',()=>{
     if(genre){ if(muted.has(genre)) muted.delete(genre); else muted.add(genre); }
     else muted.clear();
@@ -1073,6 +1075,7 @@ const G = /*DATA*/;
     const cnt=new Map(); R.forEach(r=>{ if(r[4].some(x=>x[2]<=TODAY)) cnt.set(r[1],(cnt.get(r[1])||0)+1) });
     const entries=[...cnt.entries()].filter(([g,c])=>GN[g]&&c>=8).sort((a,b)=>b[1]-a[1]);
     const box=$('genres');
+    { const gm=/^#genre=(\d+)$/.exec(location.hash); if(gm&&entries.some(e=>e[0]===+gm[1])){ genre=+gm[1]; ui.genre=genre; saveUi() } }
     if(genre&&!entries.some(e=>e[0]===genre)) genre=0;
     const mkc=(id,label,c)=>{const b=document.createElement('button'); b.type='button'; b.className='chip'; b.setAttribute('aria-pressed',id===genre); b.textContent=label; if(c!=null){const sm=document.createElement('small'); sm.textContent=c; b.appendChild(sm)}
       b.addEventListener('click',()=>{genre=id; ui.genre=id; saveUi(); newShown=24; gemShown=8; [...box.children].forEach(y=>y.setAttribute('aria-pressed',y===b)); renderMute(); renderHome()}); box.appendChild(b)};
