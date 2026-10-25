@@ -158,3 +158,4 @@
 - 2026-10-24: Find similar can now be ordered Biggest first (most fans on top), next to Closest match, Smallest first and Newest release; remembered in the browser. Research: some listeners want the best-known similar artists first, others the obscure ones.
 - 2026-10-24: Find similar also shows the Heard lately row (last 8 artists you played, click one to find similar), under the Recent searches row. Research: the search page is where people go next after a good find.
 - 2026-10-24: Pressing L opens the shortlist and scrolls to it (press again to close), and the shortcuts list mentions it. Research: keyboard-first listeners want one key to check what they have saved.
+- 2026-10-24: Pressing B on Discover (or My page) while a preview plays saves the playing artist to the shortlist (press again to remove), where before B only worked on Find similar results. Research: the moment you like a sample is the moment you want to save it, whatever tab you are on.
