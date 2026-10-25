@@ -218,6 +218,8 @@ ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .mini{position:fixed;left:0;right:0;bottom:0;z-index:35;display:flex;align-items:center;gap:8px;padding:10px max(12px,env(safe-area-inset-right,0px)) max(10px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));background:var(--surface);border-top:2px solid var(--accent);box-shadow:0 -4px 16px rgba(0,0,0,.2)}
 .mini .mname{flex:1;min-width:0;text-align:left;background:none;border:0;color:var(--fg);font:600 .9rem var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;padding:8px 4px}
 .mini button:not(.mname){font:500 .82rem var(--f-data);color:var(--fg);background:transparent;border:1px solid var(--ctl);border-radius:8px;padding:8px 10px;cursor:pointer;white-space:nowrap}
+.mini #mmore{display:none}
+@media (max-width:560px){.mini #mmore{display:inline-block}.mini:not(.more) .mx{display:none!important}}
 .mini #mpos{font:500 .78rem var(--f-data);opacity:.8;white-space:nowrap}
 .mini #mtime{font:500 .78rem var(--f-data);opacity:.8;white-space:nowrap;font-variant-numeric:tabular-nums}
 .mini #mtimer[aria-pressed="true"],.mini #mrep[aria-pressed="true"],.mini #mauto[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
@@ -503,12 +505,13 @@ ul.res.grid .player{margin-inline:12px}
     <button type="button" id="mnext" aria-label="Play the next artist">Next &#9654;&#9654;</button>
     <button type="button" id="msave" aria-pressed="false" aria-label="Save the playing artist to your shortlist">Save</button>
     <button type="button" id="mauto" aria-pressed="false" aria-label="Autoplay next">Auto</button>
-    <button type="button" id="mshare" aria-label="Copy a link to artists like the playing artist">Share</button>
-    <button type="button" id="mhide" aria-label="Hide the playing artist from my results" hidden>Not for me</button>
-    <button type="button" id="mdz" aria-label="Open the playing artist on Deezer (new tab)" hidden>Deezer</button>
-    <button type="button" id="msim" aria-label="Find artists similar to the playing artist" hidden>Similar</button>
-    <button type="button" id="mtimer" aria-pressed="false" aria-label="Sleep timer: stop autoplay after a set time. Off">Timer</button>
-    <button type="button" id="mrep" aria-pressed="false" aria-label="Repeat this preview">Repeat</button>
+    <button type="button" class="mx" id="mshare" aria-label="Copy a link to artists like the playing artist">Share</button>
+    <button type="button" class="mx" id="mhide" aria-label="Hide the playing artist from my results" hidden>Not for me</button>
+    <button type="button" class="mx" id="mdz" aria-label="Open the playing artist on Deezer (new tab)" hidden>Deezer</button>
+    <button type="button" class="mx" id="msim" aria-label="Find artists similar to the playing artist" hidden>Similar</button>
+    <button type="button" class="mx" id="mtimer" aria-pressed="false" aria-label="Sleep timer: stop autoplay after a set time. Off">Timer</button>
+    <button type="button" class="mx" id="mrep" aria-pressed="false" aria-label="Repeat this preview">Repeat</button>
+    <button type="button" id="mmore" aria-expanded="false" aria-label="Show more player buttons">More</button>
     <button type="button" id="mstop" aria-label="Stop the preview">&times;</button>
   </div>
   <button class="top" id="top" type="button" aria-label="Back to top" hidden>↑</button>
@@ -803,6 +806,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   $('mprev').addEventListener('click',()=>{ if(NOW){ const l=NOW.li; if(!(l.previousElementSibling&&[...l.parentNode.children].some(x=>x!==l&&x.compareDocumentPosition(l)&4&&x.querySelector('button.play')))) return; stopNow(); playPrevFrom(l) } });
   { let tm=null, steps=[0,15,30,60], si=0; const b=$('mtimer');
     b.addEventListener('click',()=>{ si=(si+1)%steps.length; clearTimeout(tm); const m=steps[si]; b.setAttribute('aria-pressed',m>0); b.textContent=m?'Timer '+m+'m':'Timer'; b.setAttribute('aria-label','Sleep timer: '+(m?'stop after '+m+' minutes':'off')); if(m){ tm=setTimeout(()=>{ auto=false; ui.auto=false; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',false); ui.rep=false; saveUi(); $('mrep').setAttribute('aria-pressed',false); stopNow(); si=0; b.setAttribute('aria-pressed',false); b.textContent='Timer'; toast('Sleep timer finished. Playback stopped.') },m*60000); toast('Sleep timer: playback stops in '+m+' minutes.') } else toast('Sleep timer off.') }) }
+  $('mmore').addEventListener('click',()=>{ const m=$('mini'); const on=m.classList.toggle('more'); $('mmore').setAttribute('aria-expanded',on); $('mmore').textContent=on?'Less':'More' });
   $('mshare').addEventListener('click',()=>{ if(!NOW||!NOW.id) return; const u=location.origin+location.pathname+'#like='+NOW.id; if(canShare){ navigator.share({title:'Fresh Mic',text:'Artists like '+NOW.who+' on Fresh Mic',url:u}).catch(()=>{}); return } if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(()=>toast('Link to artists like '+NOW.who+' copied.'),()=>toast('Copy failed.')); else toast('Copy failed.') });
   $('mhide').addEventListener('click',()=>{ const hb=NOW&&NOW.li&&NOW.li.querySelector('button.hide'); if(hb){ const l=NOW.li; hb.click(); if(NOW&&NOW.li===l&&!document.body.contains(l)){ stopNow() } } });
   $('mdz').addEventListener('click',()=>{ const u=dzOf(); if(u) window.open(u,'_blank','noopener') });
