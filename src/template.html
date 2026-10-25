@@ -465,7 +465,7 @@ ul.res.grid .player{margin-inline:12px}
       <div class="chips" id="fgen" role="group" aria-label="Quick genres"></div>
       <div class="ctl"><div class="cap" id="flab">Licence</div><div class="seg" id="fseg" role="group" aria-labelledby="flab"></div></div>
       <p class="why" id="fstat" role="status" aria-live="polite"></p>
-      <div><button class="shuf" id="fcopyall" type="button" hidden>Copy all credits</button></div>
+      <div><button class="shuf" id="frand" type="button" hidden>Play a random free song</button><button class="shuf" id="fcopyall" type="button" hidden>Copy all credits</button></div>
       <ul class="res" id="fres"></ul>
       <button class="more" id="fmore" type="button" hidden>Show more</button>
       <details class="fnote"><summary>Before you reuse a song</summary><p class="why" style="max-width:62ch">The licence shown is the one the uploader declared to the Internet Archive, and uploaders can be wrong. Always open the source page and read the licence terms before using a song in your own release. CC BY needs credit to the artist (use Copy credit). CC BY-SA needs credit and that you share your new work under the same terms. CC0 and Public Domain need neither. A cover song can still carry the original songwriter&#8217;s rights. This is general information, not legal advice.</p></details>
@@ -1742,8 +1742,9 @@ const G = /*DATA*/;
       const cb=document.createElement('button'); cb.type='button'; cb.className='sim'; cb.textContent='Copy credit'; cb.addEventListener('click',()=>{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(creditText(it)).then(()=>toast('Credit copied.'),()=>toast('Copy failed.')); else toast('Copy failed.') });
       pb.addEventListener('click',()=>freePlay(it,li,pb)); bx.appendChild(pb); bx.appendChild(cb);
       li.appendChild(d); li.appendChild(bx); ul.appendChild(li) });
-    $('fcopyall').hidden=!list.length;
+    $('fcopyall').hidden=!list.length; $('frand').hidden=!list.length;
     $('fmore').hidden=list.length<=FREE.shown; if(!$('fmore').hidden) $('fmore').textContent='Show '+Math.min(20,list.length-FREE.shown)+' more ('+FREE.shown+' of '+list.length+' shown)' }
+  $('frand').addEventListener('click',()=>{ const rows=[...$('fres').querySelectorAll('li.row')].filter(x=>x.querySelector('button.play')); if(!rows.length) return; const cur=FA&&FA.btn&&FA.btn.closest('li'); const pool=rows.length>1?rows.filter(x=>x!==cur):rows; const li=pool[Math.floor(Math.random()*pool.length)]; li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click() });
   $('fcopyall').addEventListener('click',()=>{ const list=FREE.items.filter(x=>FREE.mode==='all'||x.lic.k===FREE.mode).slice(0,FREE.shown); if(!list.length) return; const t=list.map(creditText).join('\n'); if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(()=>toast('Copied credits for '+list.length+' song'+(list.length===1?'':'s')+'.'),()=>toast('Copy failed.')); else toast('Copy failed.') });
   function freePlay(it,li,btn){
     if(FA&&FA.btn===btn){ stopFree(); return }
