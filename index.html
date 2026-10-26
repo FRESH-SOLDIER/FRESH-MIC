@@ -1029,6 +1029,11 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const sim=document.createElement('button'); sim.type='button'; sim.className='sim'; sim.textContent='Find similar';
     sim.addEventListener('click',()=>{hop(item.k)});
     links.appendChild(sim);
+    if(item.rel&&item.rel[2]>TODAY&&item.rel[2]>=NOWD){ const cb=document.createElement('button'); cb.type='button'; cb.className='sim'; cb.textContent='Add to calendar'; cb.setAttribute('aria-label','Download a calendar reminder for '+a[1]+' release day');
+      cb.addEventListener('click',()=>{ const d=item.rel[2], d0=d.replace(/-/g,''), nx=new Date(d+'T00:00:00Z'); nx.setUTCDate(nx.getUTCDate()+1); const d1=nx.toISOString().slice(0,10).replace(/-/g,''); const esc=t=>String(t).replace(/[\\;,]/g,m=>'\\'+m).replace(/\r?\n/g,' ');
+        const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Fresh Mic//EN','BEGIN:VEVENT','UID:'+a[0]+'-'+item.rel[0]+'@fresh-mic','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z','DTSTART;VALUE=DATE:'+d0,'DTEND;VALUE=DATE:'+d1,'SUMMARY:'+esc(a[1]+' releases '+item.rel[1]),'DESCRIPTION:'+esc('Found on Fresh Mic: '+location.origin+location.pathname),'END:VEVENT','END:VCALENDAR'].join('\r\n')+'\r\n';
+        const u=URL.createObjectURL(new Blob([ics],{type:'text/calendar'})), dl=document.createElement('a'); dl.href=u; dl.download=(a[1].replace(/[^\w]+/g,'-').replace(/^-|-$/g,'')||'release')+'-'+d+'.ics'; document.body.appendChild(dl); dl.click(); dl.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000); toast('Calendar file saved for '+d+'.') });
+      links.appendChild(cb) }
     const sv=document.createElement('button'); sv.type='button'; sv.className='save'; sv.setAttribute('aria-pressed',saved); sv.textContent=saved?'Saved':'Save';
     sv.addEventListener('click',()=>{const i=list.indexOf(a[0]); if(i>=0) list.splice(i,1); else list.push(a[0]); saveList(); sv.setAttribute('aria-pressed',i<0); sv.textContent=i<0?'Saved':'Save'; renderList();});
     links.appendChild(sv);

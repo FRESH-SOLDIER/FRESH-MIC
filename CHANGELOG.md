@@ -195,3 +195,4 @@
 - 2026-10-26: When the Discover name filter finds nothing, the empty message in New releases and Hidden gems has a Clear name filter button. Research: a dead-end empty state should offer the one-tap way out.
 - 2026-10-26: Press Q to jump to the Discover name filter box (opens Discover first from Find similar); listed in the shortcuts card. Research: power users expect a one-key route to a filter, like / for search.
 - 2026-10-26: The Jump to buttons show how many entries each list has right now (for example New releases (3k)), updating with the filters and the name box. Research: result counts on navigation links tell people where the content is before they scroll.
+- 2026-10-26: Upcoming releases on Coming soon have an Add to calendar button that saves a small .ics file (all-day event on release day, made in the browser, no outside service; hidden once the date has passed). Research: people tracking announced drops want a reminder on the day.
