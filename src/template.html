@@ -984,6 +984,7 @@ const G = /*DATA*/;
   });
   const inLimit=f=>!limit||f<=limit;
   let hq=''; const nameMiss=k=>hq&&!N[k][1].toLowerCase().includes(hq);
+  const clearHq=()=>{ hq=''; $('hq').value=''; $('hqlink').hidden=true; newShown=24; soonShown=12; gemShown=8; renderHome() };
 
   function homeData(){
     const fresh=[], soon=[];
@@ -1040,7 +1041,7 @@ const G = /*DATA*/;
     $('resetf').hidden=!(limit!==100000||genre||rtype||rwin||hideHeard||ui.hs===true||hq);
     const nl=$('newlist'); nl.textContent='';
     $('newmeta').textContent=fresh.length+' release'+(fresh.length===1?'':'s');
-    if(!fresh.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No recent releases match these filters.'; const fx=[]; if(limit) fx.push(['Show any size',()=>$('seg').children[0].click()]); if(genre) fx.push(['All genres',()=>$('genres').children[0].click()]); if(rtype) fx.push(['All types',()=>$('rtseg').children[0].click()]); fx.forEach(([t,fn])=>{ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent=t; b.addEventListener('click',fn); li.appendChild(b) }); nl.appendChild(li)}
+    if(!fresh.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No recent releases match these filters.'; const fx=[]; if(limit) fx.push(['Show any size',()=>$('seg').children[0].click()]); if(genre) fx.push(['All genres',()=>$('genres').children[0].click()]); if(rtype) fx.push(['All types',()=>$('rtseg').children[0].click()]); if(hq) fx.push(['Clear name filter',clearHq]); fx.forEach(([t,fn])=>{ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent=t; b.addEventListener('click',fn); li.appendChild(b) }); nl.appendChild(li)}
     fresh.slice(0,newShown).forEach(x=>nl.appendChild(card(x)));
     $('newmore').hidden=fresh.length<=newShown;
     $('newmore').textContent='Show '+Math.max(0,Math.min(24,fresh.length-newShown))+' more ('+Math.min(newShown,fresh.length)+' of '+fresh.length+' shown)';
@@ -1057,7 +1058,7 @@ const G = /*DATA*/;
     for(let i=gems.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[gems[i],gems[j]]=[gems[j],gems[i]]}
     if(ui.gord==='small') gems.sort((a,b)=>a.f-b.f); else if(ui.gord==='new') gems.sort((a,b)=>b.last<a.last?-1:b.last>a.last?1:0);
     const gl=$('gems'); gl.textContent='';
-    if(!gems.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No hidden gems match this filter.'; if(genre){ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent='All genres'; b.addEventListener('click',()=>$('genres').children[0].click()); li.appendChild(b) } gl.appendChild(li)}
+    if(!gems.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No hidden gems match this filter.'; if(genre){ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent='All genres'; b.addEventListener('click',()=>$('genres').children[0].click()); li.appendChild(b) } if(hq){ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent='Clear name filter'; b.addEventListener('click',clearHq); li.appendChild(b) } gl.appendChild(li)}
     gems.slice(0,gemShown).forEach(g=>gl.appendChild(card(g)));
     $('gemmeta').textContent=gems.length?gems.length+' match':'';
     $('gemmore').hidden=gems.length<=gemShown;
