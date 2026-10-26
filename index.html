@@ -430,7 +430,7 @@ ul.res.grid .player{margin-inline:12px}
     <div><button class="shuf" id="resetf" type="button" hidden>Reset filters</button></div>
     <div class="jump" id="jump"><span class="cap">Jump to</span></div>
     <section class="sec" id="secNew" aria-live="polite">
-      <div class="head"><h2>New releases</h2><span class="meta" id="newmeta"></span><button class="shuf" id="playnew" type="button">Play these releases</button><button class="shuf" id="copynew" type="button">Copy as text</button></div>
+      <div class="head"><h2>New releases</h2><span class="meta" id="newmeta"></span><select id="nord" aria-label="Order of new releases"><option value="">Newest first</option><option value="small">Smallest artists first</option><option value="big">Biggest artists first</option></select><button class="shuf" id="playnew" type="button">Play these releases</button><button class="shuf" id="copynew" type="button">Copy as text</button></div>
       <p class="sub">Albums, EPs and singles from the last six months, newest first.</p>
       <ul class="res" id="newlist"></ul>
       <button class="more" id="newmore" type="button" hidden>Show more</button>
@@ -988,6 +988,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       fut.forEach(x=>soon.push({k,f,rel:x,g:r[1]}));
     });
     fresh.sort((a,b)=>b.rel[2].localeCompare(a.rel[2])||a.f-b.f);
+    if(ui.nord==='small') fresh.sort((a,b)=>a.f-b.f); else if(ui.nord==='big') fresh.sort((a,b)=>b.f-a.f);
     soon.sort((a,b)=>a.rel[2].localeCompare(b.rel[2])||a.f-b.f);
     return {fresh,soon};
   }
@@ -1112,6 +1113,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   $('newmore').addEventListener('click',()=>{const prev=newShown; newShown+=24; renderHome(); const rows=$('newlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
   $('soonmore').addEventListener('click',()=>{const prev=soonShown; soonShown+=12; renderHome(); const rows=$('soonlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
   $('resetf').addEventListener('click',()=>{ const pick1=(box,sel)=>{const b=box.querySelector(sel); if(b) b.click()}; pick1($('seg'),'button:nth-child(3)'); pick1($('genres'),'.chip:first-child'); pick1($('rtseg'),'button:first-child'); pick1($('rwseg'),'button:first-child'); if(hideHeard){ const hb=$('hhseg').querySelector('button'); if(hb) hb.click() } if(ui.hs===true){ const sb=$('hhseg').querySelector('[data-hs]'); if(sb) sb.click() } $('resetf').hidden=true; toast('Filters reset.'); });
+  { const g=$('nord'); g.value=['small','big'].includes(ui.nord)?ui.nord:''; g.addEventListener('change',()=>{ ui.nord=g.value; saveUi(); newShown=24; renderHome() }) }
   { const g=$('gord'); g.value=['small','new'].includes(ui.gord)?ui.gord:''; g.addEventListener('change',()=>{ ui.gord=g.value; saveUi(); gemShown=8; renderHome() }) }
   $('shuf').addEventListener('click',()=>{gemSeed=Math.random();gemShown=8;renderHome()});
   $('gemmore').addEventListener('click',()=>{const prev=gemShown; gemShown+=8; renderHome(); const rows=$('gems').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});

@@ -181,3 +181,4 @@
 - 2026-10-25: Hidden gems has an order picker (Shuffled, Smallest first, Newest release first), remembered in the browser; Shuffle still reshuffles when set to Shuffled. Research: gem hunters want to start from the smallest artists or the freshest releases.
 - 2026-10-25: Find similar has a Print results button that prints a clean numbered list of the artists shown (name, why it matches, fans) without controls, pictures or buttons. Research: people take recommendation lists to record shops and festivals on paper.
 - 2026-10-25: Long result lists now render lazily (content-visibility) so scrolling stays smooth.
+- 2026-10-26: New releases has an order picker (Newest first, Smallest artists first, Biggest artists first), remembered between visits. Research: people hunting for small artists want to sort releases by size, not only date.
