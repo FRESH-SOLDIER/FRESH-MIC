@@ -948,7 +948,7 @@ const G = /*DATA*/;
   attachSearch($('gq'),$('gsug'),k=>{pick(k); $('gq').value=''; $('gq').blur(); window.scrollTo(0,0)});
 
   // ---------- Discover ----------
-  const R=G.r||[], TODAY=G.today;
+  const R=G.r||[], TODAY=NOWD;
   const RI=new Map(); R.forEach(r=>RI.set(r[0],r));
   const GN={132:'Pop',116:'Hip-hop',122:'Reggaeton',152:'Rock',113:'Dance',165:'R&B',85:'Alternative',186:'Christian',106:'Electronic',466:'Folk',144:'Reggae',129:'Jazz',84:'Country',67:'Salsa',65:'Mexicano',98:'Classical',173:'Film & games',464:'Metal',169:'Soul & funk',2:'African',16:'Asian',153:'Blues',75:'Brazilian',71:'Cumbia',81:'Indian',95:'Kids',197:'Latin'};
   const gname=id=>GN[id]||'Other';
