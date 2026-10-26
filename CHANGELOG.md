@@ -193,3 +193,4 @@
 - 2026-10-26: The artist-name filter on Discover has a Copy link to this filter button (uses the share sheet on phones), and a link ending #q=name opens Discover already filtered. Research: sharing a view of the lists lets people send a friend straight to an artist's releases.
 - 2026-10-26: The Discover filter box now also matches release titles on New releases and Coming soon (label: artist or release name; Hidden gems still match artist names). Research: people often remember a song or album name, not the artist.
 - 2026-10-26: When the Discover name filter finds nothing, the empty message in New releases and Hidden gems has a Clear name filter button. Research: a dead-end empty state should offer the one-tap way out.
+- 2026-10-26: Press Q to jump to the Discover name filter box (opens Discover first from Find similar); listed in the shortcuts card. Research: power users expect a one-key route to a filter, like / for search.
