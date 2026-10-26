@@ -1046,7 +1046,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const {fresh,soon}=homeData();
     $('resetf').hidden=!(limit!==100000||genre||rtype||rwin||hideHeard||ui.hs===true||hq);
     const nl=$('newlist'); nl.textContent='';
-    $('newmeta').textContent=fresh.length+' release'+(fresh.length===1?'':'s');
+    { const hn=fresh.filter(x=>heard.has(N[x.k][0])).length; $('newmeta').textContent=fresh.length+' release'+(fresh.length===1?'':'s')+(hn?' \u00b7 '+hn+' heard':'') }
     if(!fresh.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No recent releases match these filters.'; const fx=[]; if(limit) fx.push(['Show any size',()=>$('seg').children[0].click()]); if(genre) fx.push(['All genres',()=>$('genres').children[0].click()]); if(rtype) fx.push(['All types',()=>$('rtseg').children[0].click()]); if(hq) fx.push(['Clear name filter',clearHq]); fx.forEach(([t,fn])=>{ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent=t; b.addEventListener('click',fn); li.appendChild(b) }); nl.appendChild(li)}
     fresh.slice(0,newShown).forEach(x=>nl.appendChild(card(x)));
     $('newmore').hidden=fresh.length<=newShown;
@@ -1066,7 +1066,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const gl=$('gems'); gl.textContent='';
     if(!gems.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No hidden gems match this filter.'; if(genre){ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent='All genres'; b.addEventListener('click',()=>$('genres').children[0].click()); li.appendChild(b) } if(hq){ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent='Clear name filter'; b.addEventListener('click',clearHq); li.appendChild(b) } gl.appendChild(li)}
     gems.slice(0,gemShown).forEach(g=>gl.appendChild(card(g)));
-    $('gemmeta').textContent=gems.length?gems.length+' match':'';
+    { const hn=gems.filter(x=>heard.has(N[x.k][0])).length; $('gemmeta').textContent=gems.length?gems.length+' match'+(hn?' \u00b7 '+hn+' heard':''):'' }
     jc={secNew:fresh.length,soonsec:soon.length,secGems:gems.length}; applyJc();
     $('gemmore').hidden=gems.length<=gemShown;
     $('gemmore').textContent='Show '+Math.max(0,Math.min(8,gems.length-gemShown))+' more ('+Math.min(gemShown,gems.length)+' of '+gems.length+' shown)';
