@@ -430,7 +430,7 @@ ul.res.grid .player{margin-inline:12px}
       <div class="cap" id="hhcount" style="margin-top:4px"></div>
       <div class="chips scroll" id="hrecent" role="group" aria-label="Artists you heard most recently" hidden></div>
     </div>
-    <div class="hq"><label class="cap" for="hq">Filter these lists by artist name</label> <input type="search" id="hq" placeholder="Type part of a name" autocomplete="off" maxlength="60"> <button class="shuf" id="hqlink" type="button" hidden>Copy link to this filter</button></div>
+    <div class="hq"><label class="cap" for="hq">Filter these lists by artist or release name</label> <input type="search" id="hq" placeholder="Type part of a name" autocomplete="off" maxlength="60"> <button class="shuf" id="hqlink" type="button" hidden>Copy link to this filter</button></div>
     <div><button class="shuf" id="resetf" type="button" hidden>Reset filters</button></div>
     <div class="jump" id="jump"><span class="cap">Jump to</span></div>
     <section class="sec" id="secNew" aria-live="polite">
@@ -988,9 +988,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   function homeData(){
     const fresh=[], soon=[];
     R.forEach(r=>{
-      const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50||hid.has(N[k][0])||(hideHeard&&heard.has(N[k][0]))||(ui.hs===true&&list.includes(N[k][0]))||nameMiss(k)) return;
+      const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50||hid.has(N[k][0])||(hideHeard&&heard.has(N[k][0]))||(ui.hs===true&&list.includes(N[k][0]))) return;
       if(genre?r[1]!==genre:muted.has(r[1])) return;
-      const okT=x=>!rtype||x[3]===rtype;
+      const nm=!nameMiss(k), okT=x=>(!rtype||x[3]===rtype)&&(nm||!hq||x[1].toLowerCase().includes(hq));
       const past=r[4].find(x=>x[2]<=TODAY&&okT(x)), fut=r[4].filter(x=>x[2]>TODAY&&okT(x));
       if(past&&(!rwin||past[2]>=cutoff(rwin))) fresh.push({k,f,rel:past,g:r[1]});
       fut.forEach(x=>soon.push({k,f,rel:x,g:r[1]}));
