@@ -440,7 +440,7 @@ ul.res.grid .player{margin-inline:12px}
       <button class="more" id="newmore" type="button" hidden>Show more</button>
     </section>
     <section class="sec" id="soonsec" hidden>
-      <div class="head"><h2>Coming soon</h2><span class="meta" id="soonmeta"></span><select id="sord" aria-label="Order of coming soon releases"><option value="">Soonest first</option><option value="small">Smallest artists first</option><option value="big">Biggest artists first</option></select><button class="shuf" id="copysoon" type="button">Copy as text</button><button class="shuf" id="soonics" type="button">Add all to calendar</button></div>
+      <div class="head"><h2>Coming soon</h2><span class="meta" id="soonmeta"></span><select id="sord" aria-label="Order of coming soon releases"><option value="">Soonest first</option><option value="small">Smallest artists first</option><option value="big">Biggest artists first</option></select><button class="shuf" id="copysoon" type="button">Copy as text</button><button class="shuf" id="soonweek" type="button" aria-pressed="false">Next 7 days only</button><button class="shuf" id="soonics" type="button">Add all to calendar</button></div>
       <ul class="res" id="soonlist"></ul>
       <button class="more" id="soonmore" type="button" hidden>Show more</button>
     </section>
@@ -777,6 +777,7 @@ const G = /*DATA*/;
   $('randnew').addEventListener('click',()=>{ const rows=[...$('newlist').querySelectorAll('li.row')].filter(x=>x.querySelector('button.play')); if(!rows.length){ toast('No previews to play with these filters.'); return } const fresh=rows.filter(x=>!x.querySelector('.heardtag')), pool=fresh.length?fresh:rows, li=pool[Math.floor(Math.random()*pool.length)]; li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click() });
   $('randgem').addEventListener('click',()=>{ const rows=[...$('gems').querySelectorAll('li.row')].filter(x=>x.querySelector('button.play')); if(!rows.length){ toast('No previews to play with these filters.'); return } const fresh=rows.filter(x=>!x.querySelector('.heardtag')), pool=fresh.length?fresh:rows, li=pool[Math.floor(Math.random()*pool.length)]; li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click() });
   $('randres').addEventListener('click',()=>{ const rows=[...$('res').querySelectorAll('li.row')].filter(x=>x.querySelector('button.play')); if(!rows.length){ toast('No previews to play with these results.'); return } const fresh=rows.filter(x=>!x.querySelector('.heardtag')), pool=fresh.length?fresh:rows, li=pool[Math.floor(Math.random()*pool.length)]; li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click() });
+  { const wb=$('soonweek'); const sync=()=>{ wb.setAttribute('aria-pressed',ui.sweek===true); wb.textContent=ui.sweek===true?'Showing the next 7 days':'Next 7 days only' }; sync(); wb.addEventListener('click',()=>{ ui.sweek=!(ui.sweek===true); saveUi(); sync(); soonShown=12; renderHome() }) }
   $('soonics').addEventListener('click',()=>{ const rows=lastSoon.slice(0,300); if(!rows.length){ toast('Nothing upcoming to add.'); return } const esc=t=>String(t).replace(/[\\;,]/g,m=>'\\'+m).replace(/\r?\n/g,' '); const stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
     const ev=rows.map(x=>{ const d=x.rel[2], nx=new Date(d+'T00:00:00Z'); nx.setUTCDate(nx.getUTCDate()+1); return ['BEGIN:VEVENT','UID:'+N[x.k][0]+'-'+x.rel[0]+'@fresh-mic','DTSTAMP:'+stamp,'DTSTART;VALUE=DATE:'+d.replace(/-/g,''),'DTEND;VALUE=DATE:'+nx.toISOString().slice(0,10).replace(/-/g,''),'SUMMARY:'+esc(N[x.k][1]+' releases '+x.rel[1]),'DESCRIPTION:'+esc('Found on Fresh Mic: '+location.origin+location.pathname),'END:VEVENT'].join('\r\n') });
     const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Fresh Mic//EN',...ev,'END:VCALENDAR'].join('\r\n')+'\r\n';
@@ -1002,6 +1003,7 @@ const G = /*DATA*/;
       fut.forEach(x=>soon.push({k,f,rel:x,g:r[1]}));
     });
     fresh.sort((a,b)=>b.rel[2].localeCompare(a.rel[2])||a.f-b.f);
+    if(ui.sweek===true){ const lim=new Date(NOWD+'T00:00:00Z'); lim.setUTCDate(lim.getUTCDate()+7); const ls=lim.toISOString().slice(0,10); for(let i=soon.length-1;i>=0;i--) if(soon[i].rel[2]>ls) soon.splice(i,1) }
     if(ui.nord==='small') fresh.sort((a,b)=>a.f-b.f); else if(ui.nord==='big') fresh.sort((a,b)=>b.f-a.f);
     soon.sort((a,b)=>a.rel[2].localeCompare(b.rel[2])||a.f-b.f);
     if(ui.sord==='small') soon.sort((a,b)=>a.f-b.f); else if(ui.sord==='big') soon.sort((a,b)=>b.f-a.f);

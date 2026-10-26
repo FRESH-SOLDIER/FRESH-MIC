@@ -201,3 +201,4 @@
 - 2026-10-26: In the Discover name filter box, Esc clears the filter, and a second Esc leaves the box (works the same in every browser). Research: with the Q shortcut opening the box, a keyboard-only way to clear and leave it completes the loop.
 - 2026-10-26: Upcoming releases show a countdown next to the date (Out Oct 29 (in 3 days), or (tomorrow)). Research: release trackers show time-until so people know what is near without doing date maths.
 - 2026-10-26: Coming soon has an Add all to calendar button that saves one .ics file with every announced release currently listed (respects filters, up to 300). Research: people following many upcoming drops want one import, not one file per release.
+- 2026-10-26: Coming soon has a Next 7 days only toggle (remembered) that narrows the list to releases due within a week; the calendar download and counts follow it. Research: people checking upcoming drops mostly care about what lands this week.
