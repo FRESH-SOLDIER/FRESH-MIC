@@ -440,7 +440,7 @@ ul.res.grid .player{margin-inline:12px}
       <button class="more" id="newmore" type="button" hidden>Show more</button>
     </section>
     <section class="sec" id="soonsec" hidden>
-      <div class="head"><h2>Coming soon</h2><span class="meta" id="soonmeta"></span><select id="sord" aria-label="Order of coming soon releases"><option value="">Soonest first</option><option value="small">Smallest artists first</option><option value="big">Biggest artists first</option></select><button class="shuf" id="copysoon" type="button">Copy as text</button></div>
+      <div class="head"><h2>Coming soon</h2><span class="meta" id="soonmeta"></span><select id="sord" aria-label="Order of coming soon releases"><option value="">Soonest first</option><option value="small">Smallest artists first</option><option value="big">Biggest artists first</option></select><button class="shuf" id="copysoon" type="button">Copy as text</button><button class="shuf" id="soonics" type="button">Add all to calendar</button></div>
       <ul class="res" id="soonlist"></ul>
       <button class="more" id="soonmore" type="button" hidden>Show more</button>
     </section>
@@ -777,6 +777,10 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   $('randnew').addEventListener('click',()=>{ const rows=[...$('newlist').querySelectorAll('li.row')].filter(x=>x.querySelector('button.play')); if(!rows.length){ toast('No previews to play with these filters.'); return } const fresh=rows.filter(x=>!x.querySelector('.heardtag')), pool=fresh.length?fresh:rows, li=pool[Math.floor(Math.random()*pool.length)]; li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click() });
   $('randgem').addEventListener('click',()=>{ const rows=[...$('gems').querySelectorAll('li.row')].filter(x=>x.querySelector('button.play')); if(!rows.length){ toast('No previews to play with these filters.'); return } const fresh=rows.filter(x=>!x.querySelector('.heardtag')), pool=fresh.length?fresh:rows, li=pool[Math.floor(Math.random()*pool.length)]; li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click() });
   $('randres').addEventListener('click',()=>{ const rows=[...$('res').querySelectorAll('li.row')].filter(x=>x.querySelector('button.play')); if(!rows.length){ toast('No previews to play with these results.'); return } const fresh=rows.filter(x=>!x.querySelector('.heardtag')), pool=fresh.length?fresh:rows, li=pool[Math.floor(Math.random()*pool.length)]; li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click() });
+  $('soonics').addEventListener('click',()=>{ const rows=lastSoon.slice(0,300); if(!rows.length){ toast('Nothing upcoming to add.'); return } const esc=t=>String(t).replace(/[\\;,]/g,m=>'\\'+m).replace(/\r?\n/g,' '); const stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+    const ev=rows.map(x=>{ const d=x.rel[2], nx=new Date(d+'T00:00:00Z'); nx.setUTCDate(nx.getUTCDate()+1); return ['BEGIN:VEVENT','UID:'+N[x.k][0]+'-'+x.rel[0]+'@fresh-mic','DTSTAMP:'+stamp,'DTSTART;VALUE=DATE:'+d.replace(/-/g,''),'DTEND;VALUE=DATE:'+nx.toISOString().slice(0,10).replace(/-/g,''),'SUMMARY:'+esc(N[x.k][1]+' releases '+x.rel[1]),'DESCRIPTION:'+esc('Found on Fresh Mic: '+location.origin+location.pathname),'END:VEVENT'].join('\r\n') });
+    const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Fresh Mic//EN',...ev,'END:VCALENDAR'].join('\r\n')+'\r\n';
+    const u=URL.createObjectURL(new Blob([ics],{type:'text/calendar'})), dl=document.createElement('a'); dl.href=u; dl.download='fresh-mic-upcoming.ics'; document.body.appendChild(dl); dl.click(); dl.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000); toast('Calendar file saved with '+rows.length+' release'+(rows.length===1?'':'s')+'.') });
   $('copysoon').addEventListener('click',()=>copyRows('soonlist','upcoming releases'));
   $('playnew').addEventListener('click',()=>{ const rows=[...$('newlist').querySelectorAll('li')]; const li=rows.find(x=>x.querySelector('button.play')&&!x.querySelector('.heardtag'))||rows.find(x=>x.querySelector('button.play')); if(!li){ toast('No previews to play here.'); return } if(!auto){ auto=true; ui.auto=true; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',true) } li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click(); showMini(); toast('Playing these new releases one after another. Autoplay is on.') });
   $('playlist').addEventListener('click',()=>{ const b=$('listol').querySelector('button.play'); if(!b) return; if(!auto){ auto=true; ui.auto=true; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',true) } b.click(); showMini() });
@@ -984,7 +988,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   });
   const inLimit=f=>!limit||f<=limit;
   let hq=''; const nameMiss=k=>hq&&!N[k][1].toLowerCase().includes(hq);
-  let jc=null; const applyJc=()=>{ if(!jc) return; document.querySelectorAll('#jump button[data-base]').forEach(b=>{ const n=jc[b.dataset.sec]; if(n!==undefined) b.textContent=b.dataset.base+' ('+(n>999?Math.floor(n/100)/10+'k':n)+')' }) };
+  let lastSoon=[]; let jc=null; const applyJc=()=>{ if(!jc) return; document.querySelectorAll('#jump button[data-base]').forEach(b=>{ const n=jc[b.dataset.sec]; if(n!==undefined) b.textContent=b.dataset.base+' ('+(n>999?Math.floor(n/100)/10+'k':n)+')' }) };
   const clearHq=()=>{ hq=''; $('hq').value=''; $('hqlink').hidden=true; newShown=24; soonShown=12; gemShown=8; renderHome() };
 
   function homeData(){
@@ -1053,7 +1057,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     $('newmore').textContent='Show '+Math.max(0,Math.min(24,fresh.length-newShown))+' more ('+Math.min(newShown,fresh.length)+' of '+fresh.length+' shown)';
     const sl=$('soonlist'); sl.textContent='';
     $('soonsec').hidden=!soon.length;
-    $('soonmeta').textContent=soon.length+' announced';
+    $('soonmeta').textContent=soon.length+' announced'; lastSoon=soon; $('soonics').hidden=!soon.length;
     soon.slice(0,soonShown).forEach(x=>sl.appendChild(card(x)));
     $('soonmore').hidden=soon.length<=soonShown;
     $('soonmore').textContent='Show '+Math.max(0,Math.min(12,soon.length-soonShown))+' more ('+Math.min(soonShown,soon.length)+' of '+soon.length+' shown)';

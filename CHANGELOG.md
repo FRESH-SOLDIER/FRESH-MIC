@@ -200,3 +200,4 @@
 - 2026-10-26: The New releases and Hidden gems headers show how many of the listed artists you have already heard (for example 3015 releases · 12 heard). Research: progress counts help people see how much of a long list is still new to them.
 - 2026-10-26: In the Discover name filter box, Esc clears the filter, and a second Esc leaves the box (works the same in every browser). Research: with the Q shortcut opening the box, a keyboard-only way to clear and leave it completes the loop.
 - 2026-10-26: Upcoming releases show a countdown next to the date (Out Oct 29 (in 3 days), or (tomorrow)). Research: release trackers show time-until so people know what is near without doing date maths.
+- 2026-10-26: Coming soon has an Add all to calendar button that saves one .ics file with every announced release currently listed (respects filters, up to 300). Research: people following many upcoming drops want one import, not one file per release.
