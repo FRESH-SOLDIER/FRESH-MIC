@@ -335,6 +335,7 @@ button.linkbtn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
 #keys dt{white-space:nowrap}
 #keys dd{margin:0}
 #keys::backdrop{background:rgba(0,0,0,.5)}
+.sec.col>*:not(.head){display:none}
 .shuf{font:500 .85rem var(--f-body);color:var(--accent-fg);background:var(--accent);border:0;border-radius:8px;padding:7px 12px;cursor:pointer}
 .links button.sim{font:500 .86rem var(--f-body);color:var(--accent);background:transparent;border:0;padding:0;cursor:pointer}
 .links button.sim:hover{text-decoration:underline}
@@ -1843,9 +1844,12 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   applyView();
   // jump links
   const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  ['secNew','soonsec','secGems'].forEach(id=>{ const sec=$(id), head=sec.querySelector('.head'), h2=head.querySelector('h2'); const b=document.createElement('button'); b.type='button'; b.className='shuf'; head.appendChild(b);
+    const set=(c,save)=>{ sec.classList.toggle('col',c); b.textContent=c?'Show section':'Collapse'; b.setAttribute('aria-expanded',!c); b.setAttribute('aria-label',(c?'Show ':'Collapse ')+h2.textContent); if(save){ const a=(Array.isArray(ui.col)?ui.col:[]).filter(x=>x!==id); if(c) a.push(id); ui.col=a; saveUi() } };
+    sec._col=set; b.addEventListener('click',()=>set(!sec.classList.contains('col'),true)); set(Array.isArray(ui.col)&&ui.col.includes(id),false) });
   [['secNew','New releases'],['soonsec','Coming soon'],['secGems','Hidden gems'],['listbox','My shortlist']].forEach(([id,l])=>{
     const b=document.createElement('button'); b.type='button'; b.textContent=l;
-    b.addEventListener('click',()=>{const el=$(id); if(el.tagName==='DETAILS') el.open=true; el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})}); $('jump').appendChild(b); if(id==='soonsec'){const sync=()=>{b.hidden=$('soonsec').hidden}; sync(); new MutationObserver(sync).observe($('soonsec'),{attributes:true,attributeFilter:['hidden']})}});
+    b.addEventListener('click',()=>{const el=$(id); if(el.tagName==='DETAILS') el.open=true; if(el._col&&el.classList.contains('col')) el._col(false,true); el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})}); $('jump').appendChild(b); if(id==='soonsec'){const sync=()=>{b.hidden=$('soonsec').hidden}; sync(); new MutationObserver(sync).observe($('soonsec'),{attributes:true,attributeFilter:['hidden']})}});
   updateJump();
   $('top').addEventListener('click',()=>window.scrollTo({top:0,behavior:reduce?'auto':'smooth'}));
   addEventListener('scroll',()=>{$('top').hidden=window.scrollY<700},{passive:true});

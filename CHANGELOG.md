@@ -183,3 +183,4 @@
 - 2026-10-25: Long result lists now render lazily (content-visibility) so scrolling stays smooth.
 - 2026-10-26: New releases has an order picker (Newest first, Smallest artists first, Biggest artists first), remembered between visits. Research: people hunting for small artists want to sort releases by size, not only date.
 - 2026-10-26: Coming soon has an order picker (Soonest first, Smallest artists first, Biggest artists first), remembered between visits, matching New releases. Research: people tracking upcoming drops want the same sorting choices as for out-now releases.
+- 2026-10-26: New releases, Coming soon and Hidden gems each have a Collapse / Show section button (remembered between visits; the Jump to buttons reopen a collapsed section). Research: long discovery pages are easier to scan when sections you skip can be folded away.
