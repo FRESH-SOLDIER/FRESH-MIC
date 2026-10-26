@@ -336,6 +336,8 @@ button.linkbtn:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
 #keys dd{margin:0}
 #keys::backdrop{background:rgba(0,0,0,.5)}
 .sec.col>*:not(.head){display:none}
+.hq{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:8px 0}
+.hq input{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);min-width:0;flex:1 1 180px;max-width:320px}
 .shuf{font:500 .85rem var(--f-body);color:var(--accent-fg);background:var(--accent);border:0;border-radius:8px;padding:7px 12px;cursor:pointer}
 .links button.sim{font:500 .86rem var(--f-body);color:var(--accent);background:transparent;border:0;padding:0;cursor:pointer}
 .links button.sim:hover{text-decoration:underline}
@@ -428,6 +430,7 @@ ul.res.grid .player{margin-inline:12px}
       <div class="cap" id="hhcount" style="margin-top:4px"></div>
       <div class="chips scroll" id="hrecent" role="group" aria-label="Artists you heard most recently" hidden></div>
     </div>
+    <div class="hq"><label class="cap" for="hq">Filter these lists by artist name</label> <input type="search" id="hq" placeholder="Type part of a name" autocomplete="off" maxlength="60"></div>
     <div><button class="shuf" id="resetf" type="button" hidden>Reset filters</button></div>
     <div class="jump" id="jump"><span class="cap">Jump to</span></div>
     <section class="sec" id="secNew" aria-live="polite">
@@ -980,11 +983,12 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     saveMuted(); renderMute(); renderHome();
   });
   const inLimit=f=>!limit||f<=limit;
+  let hq=''; const nameMiss=k=>hq&&!N[k][1].toLowerCase().includes(hq);
 
   function homeData(){
     const fresh=[], soon=[];
     R.forEach(r=>{
-      const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50||hid.has(N[k][0])||(hideHeard&&heard.has(N[k][0]))||(ui.hs===true&&list.includes(N[k][0]))) return;
+      const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50||hid.has(N[k][0])||(hideHeard&&heard.has(N[k][0]))||(ui.hs===true&&list.includes(N[k][0]))||nameMiss(k)) return;
       if(genre?r[1]!==genre:muted.has(r[1])) return;
       const okT=x=>!rtype||x[3]===rtype;
       const past=r[4].find(x=>x[2]<=TODAY&&okT(x)), fut=r[4].filter(x=>x[2]>TODAY&&okT(x));
@@ -1033,7 +1037,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
 
   function renderHome(){
     const {fresh,soon}=homeData();
-    $('resetf').hidden=!(limit!==100000||genre||rtype||rwin||hideHeard||ui.hs===true);
+    $('resetf').hidden=!(limit!==100000||genre||rtype||rwin||hideHeard||ui.hs===true||hq);
     const nl=$('newlist'); nl.textContent='';
     $('newmeta').textContent=fresh.length+' release'+(fresh.length===1?'':'s');
     if(!fresh.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No recent releases match these filters.'; const fx=[]; if(limit) fx.push(['Show any size',()=>$('seg').children[0].click()]); if(genre) fx.push(['All genres',()=>$('genres').children[0].click()]); if(rtype) fx.push(['All types',()=>$('rtseg').children[0].click()]); fx.forEach(([t,fn])=>{ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent=t; b.addEventListener('click',fn); li.appendChild(b) }); nl.appendChild(li)}
@@ -1048,7 +1052,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     $('soonmore').textContent='Show '+Math.max(0,Math.min(12,soon.length-soonShown))+' more ('+Math.min(soonShown,soon.length)+' of '+soon.length+' shown)';
     // hidden gems: small artists with music out in the last year, in a stable shuffled order per Shuffle click
     const gems=[]; const yr=cutoff(365);
-    R.forEach(r=>{const k=r[0], f=N[k][2]; if(f<300||f>3000||!inLimit(f)||hid.has(N[k][0])||(hideHeard&&heard.has(N[k][0]))||(ui.hs===true&&list.includes(N[k][0]))) return; if(r[2]<yr||r[3]<2) return; if(genre?r[1]!==genre:muted.has(r[1])) return; gems.push({k,f,g:r[1],last:r[2]})});
+    R.forEach(r=>{const k=r[0], f=N[k][2]; if(f<300||f>3000||!inLimit(f)||hid.has(N[k][0])||(hideHeard&&heard.has(N[k][0]))||(ui.hs===true&&list.includes(N[k][0]))||nameMiss(k)) return; if(r[2]<yr||r[3]<2) return; if(genre?r[1]!==genre:muted.has(r[1])) return; gems.push({k,f,g:r[1],last:r[2]})});
     let x=gemSeed*2147483647|0; const rnd=()=>{x=(x*1103515245+12345)&0x7fffffff;return x/0x7fffffff};
     for(let i=gems.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[gems[i],gems[j]]=[gems[j],gems[i]]}
     if(ui.gord==='small') gems.sort((a,b)=>a.f-b.f); else if(ui.gord==='new') gems.sort((a,b)=>b.last<a.last?-1:b.last>a.last?1:0);
@@ -1119,7 +1123,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   [['newmore','newlist',()=>{const p=Math.min(newShown,1e9); newShown=1e9; return p},()=>{newShown=24}],['soonmore','soonlist',()=>{const p=soonShown; soonShown=1e9; return p},()=>{soonShown=12}],['gemmore','gems',()=>{const p=gemShown; gemShown=1e9; return p},()=>{gemShown=8}]].forEach(([mid,lid,go,back])=>{ const m=$(mid), b=document.createElement('button'); const fw=document.createElement('button'); fw.type='button'; fw.className='more'; fw.textContent='Show fewer'; fw.hidden=true; fw.id=mid+'few'; m.parentNode.appendChild(fw); fw.addEventListener('click',()=>{ back(); fw.hidden=true; renderHome(); m.closest('section').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'}) }); b.type='button'; b.className='more'; b.id=mid+'all'; b.textContent='Show all'; m.after(b); const sync=()=>{ b.hidden=m.hidden }; sync(); new MutationObserver(sync).observe(m,{attributes:true,attributeFilter:['hidden']});
     b.addEventListener('click',()=>{ const prev=go(); renderHome(); const rows=$(lid).querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true}); fw.hidden=false; toast('Showing all '+rows.length+'.') }) });
   $('soonmore').addEventListener('click',()=>{const prev=soonShown; soonShown+=12; renderHome(); const rows=$('soonlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
-  $('resetf').addEventListener('click',()=>{ const pick1=(box,sel)=>{const b=box.querySelector(sel); if(b) b.click()}; pick1($('seg'),'button:nth-child(3)'); pick1($('genres'),'.chip:first-child'); pick1($('rtseg'),'button:first-child'); pick1($('rwseg'),'button:first-child'); if(hideHeard){ const hb=$('hhseg').querySelector('button'); if(hb) hb.click() } if(ui.hs===true){ const sb=$('hhseg').querySelector('[data-hs]'); if(sb) sb.click() } $('resetf').hidden=true; toast('Filters reset.'); });
+  { let t; $('hq').addEventListener('input',()=>{ clearTimeout(t); t=setTimeout(()=>{ hq=$('hq').value.trim().toLowerCase(); newShown=24; soonShown=12; gemShown=8; renderHome() },200) }) }
+  $('resetf').addEventListener('click',()=>{ if(hq){ hq=''; $('hq').value='' }  const pick1=(box,sel)=>{const b=box.querySelector(sel); if(b) b.click()}; pick1($('seg'),'button:nth-child(3)'); pick1($('genres'),'.chip:first-child'); pick1($('rtseg'),'button:first-child'); pick1($('rwseg'),'button:first-child'); if(hideHeard){ const hb=$('hhseg').querySelector('button'); if(hb) hb.click() } if(ui.hs===true){ const sb=$('hhseg').querySelector('[data-hs]'); if(sb) sb.click() } $('resetf').hidden=true; toast('Filters reset.'); });
   { const g=$('sord'); g.value=['small','big'].includes(ui.sord)?ui.sord:''; g.addEventListener('change',()=>{ ui.sord=g.value; saveUi(); renderHome() }) }
   { const g=$('nord'); g.value=['small','big'].includes(ui.nord)?ui.nord:''; g.addEventListener('change',()=>{ ui.nord=g.value; saveUi(); newShown=24; renderHome() }) }
   { const g=$('gord'); g.value=['small','new'].includes(ui.gord)?ui.gord:''; g.addEventListener('change',()=>{ ui.gord=g.value; saveUi(); gemShown=8; renderHome() }) }
