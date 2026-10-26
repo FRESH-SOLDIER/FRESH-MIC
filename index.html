@@ -955,7 +955,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   function cutoff(days){const d=new Date(TODAY+'T00:00:00Z');d.setUTCDate(d.getUTCDate()-days);return d.toISOString().slice(0,10)}
   function when(date){
     const d=new Date(date+'T00:00:00Z'), m=d.toLocaleString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
-    if(date>TODAY) return 'Out '+m;
+    if(date>TODAY){ const ahead=Math.round((d-new Date(NOWD+'T00:00:00Z'))/864e5); return 'Out '+m+(ahead===1?' (tomorrow)':ahead<=30?' (in '+ahead+' days)':'') }
     const days=Math.round((new Date(NOWD+'T00:00:00Z')-d)/864e5);
     if(days===0) return 'Today';
     if(days<=30) return days+(days===1?' day ago':' days ago');
