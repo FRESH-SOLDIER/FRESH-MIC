@@ -436,7 +436,7 @@ ul.res.grid .player{margin-inline:12px}
       <button class="more" id="newmore" type="button" hidden>Show more</button>
     </section>
     <section class="sec" id="soonsec" hidden>
-      <div class="head"><h2>Coming soon</h2><span class="meta" id="soonmeta"></span><button class="shuf" id="copysoon" type="button">Copy as text</button></div>
+      <div class="head"><h2>Coming soon</h2><span class="meta" id="soonmeta"></span><select id="sord" aria-label="Order of coming soon releases"><option value="">Soonest first</option><option value="small">Smallest artists first</option><option value="big">Biggest artists first</option></select><button class="shuf" id="copysoon" type="button">Copy as text</button></div>
       <ul class="res" id="soonlist"></ul>
       <button class="more" id="soonmore" type="button" hidden>Show more</button>
     </section>
@@ -990,6 +990,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     fresh.sort((a,b)=>b.rel[2].localeCompare(a.rel[2])||a.f-b.f);
     if(ui.nord==='small') fresh.sort((a,b)=>a.f-b.f); else if(ui.nord==='big') fresh.sort((a,b)=>b.f-a.f);
     soon.sort((a,b)=>a.rel[2].localeCompare(b.rel[2])||a.f-b.f);
+    if(ui.sord==='small') soon.sort((a,b)=>a.f-b.f); else if(ui.sord==='big') soon.sort((a,b)=>b.f-a.f);
     return {fresh,soon};
   }
 
@@ -1113,6 +1114,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   $('newmore').addEventListener('click',()=>{const prev=newShown; newShown+=24; renderHome(); const rows=$('newlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
   $('soonmore').addEventListener('click',()=>{const prev=soonShown; soonShown+=12; renderHome(); const rows=$('soonlist').querySelectorAll('li.row'); const f=rows[prev]&&rows[prev].querySelector('a,button'); if(f) f.focus({preventScroll:true})});
   $('resetf').addEventListener('click',()=>{ const pick1=(box,sel)=>{const b=box.querySelector(sel); if(b) b.click()}; pick1($('seg'),'button:nth-child(3)'); pick1($('genres'),'.chip:first-child'); pick1($('rtseg'),'button:first-child'); pick1($('rwseg'),'button:first-child'); if(hideHeard){ const hb=$('hhseg').querySelector('button'); if(hb) hb.click() } if(ui.hs===true){ const sb=$('hhseg').querySelector('[data-hs]'); if(sb) sb.click() } $('resetf').hidden=true; toast('Filters reset.'); });
+  { const g=$('sord'); g.value=['small','big'].includes(ui.sord)?ui.sord:''; g.addEventListener('change',()=>{ ui.sord=g.value; saveUi(); renderHome() }) }
   { const g=$('nord'); g.value=['small','big'].includes(ui.nord)?ui.nord:''; g.addEventListener('change',()=>{ ui.nord=g.value; saveUi(); newShown=24; renderHome() }) }
   { const g=$('gord'); g.value=['small','new'].includes(ui.gord)?ui.gord:''; g.addEventListener('change',()=>{ ui.gord=g.value; saveUi(); gemShown=8; renderHome() }) }
   $('shuf').addEventListener('click',()=>{gemSeed=Math.random();gemShown=8;renderHome()});

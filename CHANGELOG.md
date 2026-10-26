@@ -182,3 +182,4 @@
 - 2026-10-25: Find similar has a Print results button that prints a clean numbered list of the artists shown (name, why it matches, fans) without controls, pictures or buttons. Research: people take recommendation lists to record shops and festivals on paper.
 - 2026-10-25: Long result lists now render lazily (content-visibility) so scrolling stays smooth.
 - 2026-10-26: New releases has an order picker (Newest first, Smallest artists first, Biggest artists first), remembered between visits. Research: people hunting for small artists want to sort releases by size, not only date.
+- 2026-10-26: Coming soon has an order picker (Soonest first, Smallest artists first, Biggest artists first), remembered between visits, matching New releases. Research: people tracking upcoming drops want the same sorting choices as for out-now releases.
