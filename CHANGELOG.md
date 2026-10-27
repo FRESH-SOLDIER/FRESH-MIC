@@ -222,3 +222,4 @@
 - 2026-10-27: Free music tab: Play these in order button (turns on autoplay, starts first song)
 - 2026-10-27: Free music tab: Download credits (.txt) button saves the credit lines for the songs shown, for pasting into video descriptions or project notes
 - 2026-10-27: Free music tab: Copy link to this search button; opening a link ending in #free=word lands on Free music with that search filled in
+- 2026-10-27: Free music tab: Order switch (Most popular or A to Z), remembered in this browser

@@ -485,6 +485,7 @@ ul.res.grid .player{margin-inline:12px}
       <form class="fsearch" id="fform" role="search"><label class="cap" for="fq">Search free music</label><div class="prow"><input id="fq" type="search" autocomplete="off" maxlength="60" placeholder="A word, genre or artist (or leave empty)"><button type="submit" class="shuf">Search</button></div></form>
       <div class="chips" id="fgen" role="group" aria-label="Quick genres"></div>
       <div class="ctl"><div class="cap" id="flab">Licence</div><div class="seg" id="fseg" role="group" aria-labelledby="flab"></div></div>
+      <div class="ctl"><div class="cap" id="fsl">Order</div><div class="seg" id="fsortseg" role="group" aria-labelledby="fsl"></div></div>
       <p class="why" id="fstat" role="status" aria-live="polite"></p>
       <div><button class="shuf" id="frand" type="button" hidden>Play a random free song</button><button class="shuf" id="fplayall" type="button" hidden>Play these in order</button><button class="shuf" id="fcopyall" type="button" hidden>Copy all credits</button><button class="shuf" id="fdlall" type="button" hidden>Download credits (.txt)</button><button class="shuf" id="fshare" type="button" hidden>Copy link to this search</button></div>
       <ul class="res" id="fres"></ul>
@@ -1787,7 +1788,7 @@ const G = /*DATA*/;
 
   // ---------- Free music tab (Internet Archive, open licences only) ----------
   let FA=null; function stopFree(){ if(!FA) return; try{FA.au.pause()}catch(e){} FA.au.remove(); if(FA.tr) FA.tr.remove(); FA.btn.textContent='\u25B6 Play'; FA=null }
-  const FREE={cache:new Map(), items:[], shown:20, mode:(['pd','by'].includes(ui.flic)?ui.flic:'all'), started:false};
+  const FREE={cache:new Map(), items:[], shown:20, mode:(['pd','by'].includes(ui.flic)?ui.flic:'all'), started:false, sort:(ui.fsort==='az'?'az':'pop')};
   const licOf=u=>{ u=String(u||'').trim().toLowerCase(); let m;
     if(/^https?:\/\/creativecommons\.org\/publicdomain\/zero\/1\.0(\/.*)?$/.test(u)) return {k:'pd',label:'CC0 (public domain dedication)',url:'https://creativecommons.org/publicdomain/zero/1.0/',credit:false};
     if(/^https?:\/\/creativecommons\.org\/publicdomain\/mark\/1\.0(\/.*)?$/.test(u)) return {k:'pd',label:'Public Domain Mark',url:'https://creativecommons.org/publicdomain/mark/1.0/',credit:false};
@@ -1802,6 +1803,7 @@ const G = /*DATA*/;
   function freeInit(){ if(FREE.started) return; FREE.started=true;
     const g=$('fgen'); ['ambient','electronic','rock','jazz','classical','hip hop','folk','lo-fi','piano','instrumental'].forEach(w=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=w; b.addEventListener('click',()=>{ $('fq').value=w; freeSearch() }); g.appendChild(b) });
     [['all','All open licences'],['pd','Public domain / CC0 (no credit)'],['by','CC BY / BY-SA (credit needed)']].forEach(([v,l])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=l; b.setAttribute('aria-pressed',v===FREE.mode); b.addEventListener('click',()=>{ FREE.mode=v; ui.flic=v; saveUi(); [...$('fseg').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); FREE.shown=20; freeRender() }); $('fseg').appendChild(b) });
+    [['pop','Most popular'],['az','A to Z']].forEach(([v,l])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=l; b.setAttribute('aria-pressed',v===FREE.sort); b.addEventListener('click',()=>{ FREE.sort=v; ui.fsort=v; saveUi(); [...$('fsortseg').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); FREE.shown=20; stopFree(); freeRender() }); $('fsortseg').appendChild(b) });
     if(typeof ui.fq==='string') $('fq').value=ui.fq.slice(0,60);
     $('fform').addEventListener('submit',e=>{ e.preventDefault(); freeSearch() });
     $('fmore').addEventListener('click',()=>{ FREE.shown+=20; freeRender() });
@@ -1812,13 +1814,14 @@ const G = /*DATA*/;
     const url='https://archive.org/advancedsearch.php?q='+encodeURIComponent(q)+'&fl[]=identifier&fl[]=title&fl[]=creator&fl[]=licenseurl&rows=100&sort[]='+encodeURIComponent('downloads desc')+'&output=json';
     const key=url; $('fstat').textContent='Searching\u2026'; $('fres').textContent=''; $('fmore').hidden=true;
     const done=docs=>{ if(!docs){ $('fstat').textContent='Couldn\u2019t reach the Internet Archive. Check your connection (or an ad blocker) and try again.'; return }
-      FREE.items=[]; docs.forEach(d=>{ const l=licOf(one(d.licenseurl)); if(l&&okId(d.identifier)) FREE.items.push({id:d.identifier,title:String(one(d.title)||d.identifier).slice(0,140),who:String(one(d.creator)||'Unknown artist').slice(0,100),lic:l}) });
+      FREE.items=[]; docs.forEach(d=>{ const l=licOf(one(d.licenseurl)); if(l&&okId(d.identifier)) FREE.items.push({o:FREE.items.length,id:d.identifier,title:String(one(d.title)||d.identifier).slice(0,140),who:String(one(d.creator)||'Unknown artist').slice(0,100),lic:l}) });
       FREE.shown=20; freeRender() };
     if(FREE.cache.has(key)) return done(FREE.cache.get(key));
     fjsonp(url,r=>{ const docs=r&&r.response&&Array.isArray(r.response.docs)?r.response.docs:null; if(docs) FREE.cache.set(key,docs); done(docs) }) }
   function creditText(it){ const base='\u201C'+it.title+'\u201D by '+it.who; const src=' Source: https://archive.org/details/'+it.id;
     return it.lic.credit? base+', licensed under '+it.lic.label+' ('+it.lic.url+').'+src : base+' ('+it.lic.label+', no credit required).'+src }
   function freeRender(){
+    if(FREE.sort==='az') FREE.items.sort((a,b)=>a.title.localeCompare(b.title,undefined,{sensitivity:'base'})||a.o-b.o); else FREE.items.sort((a,b)=>a.o-b.o);
     const list=FREE.items.filter(x=>FREE.mode==='all'||x.lic.k===FREE.mode), ul=$('fres'); ul.textContent='';
     $('fstat').textContent=list.length?list.length+' free song'+(list.length===1?'':'s')+' or albums found. Licence labels come from the uploaders.':'Nothing found with an open licence. Try another word.';
     list.slice(0,FREE.shown).forEach(it=>{
