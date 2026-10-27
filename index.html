@@ -859,7 +859,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   $('mrep').addEventListener('click',()=>{ ui.rep=!ui.rep; saveUi(); $('mrep').setAttribute('aria-pressed',!!ui.rep); toast(ui.rep?'Repeat on: this preview plays again when it ends.':'Repeat off.') });
   $('mauto').addEventListener('click',()=>{ auto=!auto; ui.auto=auto; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',auto); showMini(); toast(auto?'Autoplay on: the next artist\u2019s preview starts when one ends.':'Autoplay off.') });
   $('hopback').addEventListener('click',()=>{ if(hops.length) history.back() });
-  let fanSorted=null;
+  let fanSorted=null, genreFans=null;
   function renderAbout(k){
     const box=$('about'); if(k>=0&&box.dataset.k===String(k)&&NOW&&NOW.li===box) return; box.dataset.k=String(k); box.textContent=''; if(k<0){ box.hidden=true; return }
     const a=N[k], r=RI.get(k), f=a[2]; box.hidden=false;
@@ -868,7 +868,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const tier=f==null?'':f<5000?'Very small (under 5K fans)':f<25000?'Small (under 25K fans)':f<100000?'Growing (under 100K fans)':f<500000?'Established (under 500K fans)':'Big name (500K+ fans)';
     row('Size',f==null?'':fmt(f)+' fans on Deezer. '+tier);
     if(f!=null){ if(!fanSorted){ fanSorted=N.filter(n=>n&&n[2]!=null).map(n=>n[2]).sort((x,y)=>x-y) } let lo=0,hi=fanSorted.length; while(lo<hi){ const m=(lo+hi)>>1; if(fanSorted[m]<f) lo=m+1; else hi=m } const below=lo, tot=fanSorted.length; if(tot>1){ const pct=Math.round(below/tot*100); row('Compared with others','Has more fans than '+pct+'% of the '+tot.toLocaleString('en-US')+' artists on Fresh Mic.') } }
-    if(r){ row('Main genre',gname(r[1])==='Other'?'Not listed':gname(r[1])); row('On Deezer',r[3]+' release'+(r[3]===1?'':'s')+' (albums, EPs and singles)');
+    if(r){ row('Main genre',gname(r[1])==='Other'?'Not listed':gname(r[1]));
+      if(f!=null&&gname(r[1])!=='Other'){ if(!genreFans){ genreFans=new Map(); R.forEach(q=>{ const ff=N[q[0]]&&N[q[0]][2]; if(ff==null) return; const arr=genreFans.get(q[1]); if(arr) arr.push(ff); else genreFans.set(q[1],[ff]) }); genreFans.forEach(a=>a.sort((x,y)=>x-y)) }
+        const arr=genreFans.get(r[1]); if(arr&&arr.length>=20){ let lo=0,hi=arr.length; while(lo<hi){ const m=(lo+hi)>>1; if(arr[m]<f) lo=m+1; else hi=m } row('In '+gname(r[1]),'Has more fans than '+Math.round(lo/arr.length*100)+'% of the '+arr.length.toLocaleString('en-US')+' '+gname(r[1])+' artists with releases here.') } } row('On Deezer',r[3]+' release'+(r[3]===1?'':'s')+' (albums, EPs and singles)');
       const live=r[4].filter(x=>x[2]<=TODAY), soon=r[4].filter(x=>x[2]>TODAY);
       if(live.length) row('Latest release','\u201C'+live[0][1]+'\u201D, a '+live[0][3]+', '+when(live[0][2]).replace(/^Out /,'out '));
       if(soon.length) row('Coming up','\u201C'+soon[0][1]+'\u201D, '+when(soon[0][2]).toLowerCase());
