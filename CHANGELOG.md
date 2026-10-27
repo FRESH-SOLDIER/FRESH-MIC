@@ -210,3 +210,4 @@
 - 2026-10-27: Hidden gems has a size picker (Up to 3,000 / 2,000 / 1,000 / 600 fans), remembered between visits. Research: people hunting for the very smallest artists want to set the ceiling themselves.
 - 2026-10-27: Press W on Discover to switch Coming soon between the next 7 days and everything announced (listed in the shortcuts card). Research: keyboard users get a one-key route to the most-used toggle, like Q for the filter.
 - 2026-10-27: New releases remembers your previous visit (date only, stored in this browser) and marks releases that came out since then with new since your last visit, plus a count in the header. Research: returning visitors want to see only what changed since they were last here.
+- 2026-10-27: New releases has an Only new since my last visit toggle (remembered; shown once the site knows your previous visit). Research: returning visitors want to see just what changed.

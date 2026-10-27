@@ -437,7 +437,7 @@ ul.res.grid .player{margin-inline:12px}
     <div><button class="shuf" id="resetf" type="button" hidden>Reset filters</button></div>
     <div class="jump" id="jump"><span class="cap">Jump to</span></div>
     <section class="sec" id="secNew" aria-live="polite">
-      <div class="head"><h2>New releases</h2><span class="meta" id="newmeta"></span><select id="nord" aria-label="Order of new releases"><option value="">Newest first</option><option value="small">Smallest artists first</option><option value="big">Biggest artists first</option></select><button class="shuf" id="playnew" type="button">Play these releases</button><button class="shuf" id="randnew" type="button">Play a random new release</button><button class="shuf" id="newprint" type="button">Print this list</button><button class="shuf" id="copynew" type="button">Copy as text</button></div>
+      <div class="head"><h2>New releases</h2><span class="meta" id="newmeta"></span><select id="nord" aria-label="Order of new releases"><option value="">Newest first</option><option value="small">Smallest artists first</option><option value="big">Biggest artists first</option></select><button class="shuf" id="newsince" type="button" aria-pressed="false" hidden>Only new since my last visit</button><button class="shuf" id="playnew" type="button">Play these releases</button><button class="shuf" id="randnew" type="button">Play a random new release</button><button class="shuf" id="newprint" type="button">Print this list</button><button class="shuf" id="copynew" type="button">Copy as text</button></div>
       <p class="sub">Albums, EPs and singles from the last six months, newest first. <span id="stalenote" hidden></span></p>
       <ul class="res" id="newlist"></ul>
       <button class="more" id="newmore" type="button" hidden>Show more</button>
@@ -593,6 +593,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     $('hidn').textContent=hid.size+' artist'+(hid.size===1?'':'s')+' hidden';
   }
   const NOWD=(()=>{ try{ const r=new Date().toISOString().slice(0,10); return r>G.today?r:G.today }catch(e){ return G.today } })();
+  let prevVisit=''; try{ const v=JSON.parse(localStorage.getItem('freshmic:visit')||'{}'); let cur=typeof v.cur==='string'?v.cur:'', pv=typeof v.prev==='string'?v.prev:''; if(cur!==NOWD){ pv=cur||pv; cur=NOWD; localStorage.setItem('freshmic:visit',JSON.stringify({cur,prev:pv})) } prevVisit=/^\d{4}-\d{2}-\d{2}$/.test(pv)?pv:'' }catch(e){}
   { const ag=Math.round((new Date(NOWD+'T00:00:00Z')-new Date(G.date+'T00:00:00Z'))/864e5), sn=$('stalenote'); if(ag>7){ sn.textContent='The data was last collected '+ag+' days ago, so releases from the last '+ag+' days may be missing until the next monthly update.'; sn.hidden=false } }
   { const age=Math.round((new Date(NOWD+'T00:00:00Z')-new Date(G.date+'T00:00:00Z'))/864e5); $('snap').textContent='Snapshot: '+G.date+(age>0?' ('+age+(age===1?' day':' days')+' old)':'')+' · '+N.length.toLocaleString()+' artists'; }
 
@@ -781,6 +782,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   $('randnew').addEventListener('click',()=>{ const rows=[...$('newlist').querySelectorAll('li.row')].filter(x=>x.querySelector('button.play')); if(!rows.length){ toast('No previews to play with these filters.'); return } const fresh=rows.filter(x=>!x.querySelector('.heardtag')), pool=fresh.length?fresh:rows, li=pool[Math.floor(Math.random()*pool.length)]; li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click() });
   $('randgem').addEventListener('click',()=>{ const rows=[...$('gems').querySelectorAll('li.row')].filter(x=>x.querySelector('button.play')); if(!rows.length){ toast('No previews to play with these filters.'); return } const fresh=rows.filter(x=>!x.querySelector('.heardtag')), pool=fresh.length?fresh:rows, li=pool[Math.floor(Math.random()*pool.length)]; li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click() });
   $('randres').addEventListener('click',()=>{ const rows=[...$('res').querySelectorAll('li.row')].filter(x=>x.querySelector('button.play')); if(!rows.length){ toast('No previews to play with these results.'); return } const fresh=rows.filter(x=>!x.querySelector('.heardtag')), pool=fresh.length?fresh:rows, li=pool[Math.floor(Math.random()*pool.length)]; li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click() });
+  { const nb=$('newsince'); nb.hidden=!prevVisit; const sync=()=>{ nb.setAttribute('aria-pressed',ui.nsince===true); nb.textContent=ui.nsince===true?'Showing only new since my last visit':'Only new since my last visit' }; sync(); nb.addEventListener('click',()=>{ ui.nsince=!(ui.nsince===true); saveUi(); sync(); newShown=24; renderHome() }) }
   { const wb=$('soonweek'); const sync=()=>{ wb.setAttribute('aria-pressed',ui.sweek===true); wb.textContent=ui.sweek===true?'Showing the next 7 days':'Next 7 days only' }; sync(); wb.addEventListener('click',()=>{ ui.sweek=!(ui.sweek===true); saveUi(); sync(); soonShown=12; renderHome() }) }
   [['soonprint','soonsec'],['newprint','secNew'],['gemprint','secGems']].forEach(([bid,sid])=>{ $(bid).addEventListener('click',()=>{ const sec=$(sid); sec.classList.add('psel'); document.body.classList.add('printsec'); const done=()=>{ document.body.classList.remove('printsec'); sec.classList.remove('psel'); removeEventListener('afterprint',done) }; addEventListener('afterprint',done); window.print() }) });
   { const g=$('gmax'); g.value=[600,1000,2000].includes(ui.gmax)?String(ui.gmax):''; g.addEventListener('change',()=>{ ui.gmax=g.value?+g.value:0; saveUi(); gemShown=8; renderHome() }) }
@@ -965,7 +967,6 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   const GN={132:'Pop',116:'Hip-hop',122:'Reggaeton',152:'Rock',113:'Dance',165:'R&B',85:'Alternative',186:'Christian',106:'Electronic',466:'Folk',144:'Reggae',129:'Jazz',84:'Country',67:'Salsa',65:'Mexicano',98:'Classical',173:'Film & games',464:'Metal',169:'Soul & funk',2:'African',16:'Asian',153:'Blues',75:'Brazilian',71:'Cumbia',81:'Indian',95:'Kids',197:'Latin'};
   const gname=id=>GN[id]||'Other';
   function cutoff(days){const d=new Date(TODAY+'T00:00:00Z');d.setUTCDate(d.getUTCDate()-days);return d.toISOString().slice(0,10)}
-  let prevVisit=''; try{ const v=JSON.parse(localStorage.getItem('freshmic:visit')||'{}'); let cur=typeof v.cur==='string'?v.cur:'', pv=typeof v.prev==='string'?v.prev:''; if(cur!==NOWD){ pv=cur||pv; cur=NOWD; localStorage.setItem('freshmic:visit',JSON.stringify({cur,prev:pv})) } prevVisit=/^\d{4}-\d{2}-\d{2}$/.test(pv)?pv:'' }catch(e){}
   const isNewSince=x=>prevVisit&&x.rel&&x.rel[2]<=TODAY&&x.rel[2]>prevVisit;
   function when(date){
     const d=new Date(date+'T00:00:00Z'), m=d.toLocaleString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
@@ -1012,6 +1013,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       fut.forEach(x=>soon.push({k,f,rel:x,g:r[1]}));
     });
     fresh.sort((a,b)=>b.rel[2].localeCompare(a.rel[2])||a.f-b.f);
+    if(ui.nsince===true&&prevVisit){ for(let i=fresh.length-1;i>=0;i--) if(!isNewSince(fresh[i])) fresh.splice(i,1) }
     if(ui.sweek===true){ const lim=new Date(NOWD+'T00:00:00Z'); lim.setUTCDate(lim.getUTCDate()+7); const ls=lim.toISOString().slice(0,10); for(let i=soon.length-1;i>=0;i--) if(soon[i].rel[2]>ls) soon.splice(i,1) }
     if(ui.nord==='small') fresh.sort((a,b)=>a.f-b.f); else if(ui.nord==='big') fresh.sort((a,b)=>b.f-a.f);
     soon.sort((a,b)=>a.rel[2].localeCompare(b.rel[2])||a.f-b.f);
