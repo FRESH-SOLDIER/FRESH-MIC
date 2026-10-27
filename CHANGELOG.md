@@ -207,3 +207,4 @@
 - 2026-10-27: Upcoming release dates include the weekday (Out Thu, Oct 29 (in 2 days)). Research: people plan around release Fridays and weekdays, so the weekday saves a calendar lookup.
 - 2026-10-27: When the data snapshot is more than 7 days old, New releases says so (releases from the last N days may be missing until the next update). Research: stale data is fine when it is labelled; unlabelled it makes a new-releases list look broken.
 - 2026-10-27: New releases and Hidden gems also have a Print this list button (same clean print layout as Coming soon; it prints the rows currently shown, so use Show all first for everything). Research: the printable list was only on one section, which felt inconsistent.
+- 2026-10-27: Hidden gems has a size picker (Up to 3,000 / 2,000 / 1,000 / 600 fans), remembered between visits. Research: people hunting for the very smallest artists want to set the ceiling themselves.
