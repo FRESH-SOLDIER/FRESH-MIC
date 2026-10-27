@@ -203,3 +203,4 @@
 - 2026-10-26: Coming soon has an Add all to calendar button that saves one .ics file with every announced release currently listed (respects filters, up to 300). Research: people following many upcoming drops want one import, not one file per release.
 - 2026-10-26: Coming soon has a Next 7 days only toggle (remembered) that narrows the list to releases due within a week; the calendar download and counts follow it. Research: people checking upcoming drops mostly care about what lands this week.
 - 2026-10-26: Coming soon has a Print this list button that prints just the upcoming releases (artist, release, date, genre) as a clean list. Research: people take release calendars to the fridge or a record shop.
+- 2026-10-26: Hidden gems has a Last 30 days only toggle (remembered) that keeps just the small artists who put music out this past month. Research: gem hunters want the freshest small-artist releases, not a year of them.
