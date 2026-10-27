@@ -220,3 +220,4 @@
 - 2026-10-27: The About card also shows where the artist sits inside their main genre (for example: more fans than 6% of the 176 Asian artists with releases here). Research: size matters differently per genre, so a within-genre percentile is the fairer comparison.
 - 2026-10-27: The artist About card has a Copy summary button that copies the artist name, size, genre, percentiles, latest release and a Fresh Mic link as plain text. Research: people recommending an artist to a friend want one paste with the facts and a link.
 - 2026-10-27: Free music tab: Play these in order button (turns on autoplay, starts first song)
+- 2026-10-27: Free music tab: Download credits (.txt) button saves the credit lines for the songs shown, for pasting into video descriptions or project notes
