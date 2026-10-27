@@ -235,6 +235,7 @@ ul.res{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .mini #msave[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
 @media (max-width:560px){.mini{flex-wrap:wrap;gap:6px}.mini .mname{flex:1 0 100%;max-width:none;text-align:left}.mini button:not(.mname){flex:1 1 auto;padding:8px 6px;font-size:.78rem}.mini #mstop{flex:0 0 auto}html body.hasmini{padding-bottom:118px}html body.hasmini .top{bottom:calc(max(16px,env(safe-area-inset-bottom,0px)) + 112px)}}
 .lnote{margin-top:6px;width:100%;max-width:420px;font:400 .85rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:8px;padding:6px 10px}
+.fplayed{margin-left:8px;font:500 .72rem var(--f-data);color:var(--muted);border:1px solid var(--line,currentColor);border-radius:99px;padding:1px 7px;vertical-align:middle}
 .heardtag{font:500 .75rem var(--f-data);color:var(--muted);align-self:center;white-space:nowrap;background:none;border:0;padding:4px 2px;cursor:pointer;text-decoration:underline dotted}
 .heardtag:hover,.heardtag:focus-visible{color:var(--fg)}
 .fgl{font:500 .85rem var(--f-data);color:var(--muted);margin-right:6px}
@@ -1828,7 +1829,7 @@ const G = /*DATA*/;
       const li=document.createElement('li'); li.className='row'; const d=document.createElement('div'); const n=document.createElement('div'); n.className='name'; n.textContent=it.title; const w=document.createElement('div'); w.className='why'; w.textContent=it.who;
       const lc=document.createElement('div'); lc.className='fres-lic'; const la=document.createElement('a'); la.href=it.lic.url; la.target='_blank'; la.rel='noopener'; la.textContent=it.lic.label; lc.appendChild(la);
       const src=document.createElement('a'); src.href='https://archive.org/details/'+it.id; src.target='_blank'; src.rel='noopener'; src.textContent='Source page'; src.style.marginLeft='12px'; lc.appendChild(src);
-      d.appendChild(n); d.appendChild(w); d.appendChild(lc);
+      d.appendChild(n); d.appendChild(w); d.appendChild(lc); if(FH.includes(it.id)) fTag(n);
       const bx=document.createElement('div'); bx.className='links'; const pb=document.createElement('button'); pb.type='button'; pb.className='play'; pb.textContent='\u25B6 Play';
       const cb=document.createElement('button'); cb.type='button'; cb.className='sim'; cb.textContent='Copy credit'; cb.addEventListener('click',()=>{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(creditText(it)).then(()=>toast('Credit copied.'),()=>toast('Copy failed.')); else toast('Copy failed.') });
       pb.addEventListener('click',()=>freePlay(it,li,pb)); bx.appendChild(pb); bx.appendChild(cb);
@@ -1840,8 +1841,11 @@ const G = /*DATA*/;
   $('fshare').addEventListener('click',()=>{ const v=$('fq').value.trim().slice(0,60); const u=location.href.split('#')[0]+(v?'#free='+encodeURIComponent(v):'#free='); if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(()=>toast('Link copied. It opens Free music with this search.'),()=>toast('Copy failed.')); else toast('Copy failed.') });
   $('fdlall').addEventListener('click',()=>{ const list=FREE.items.filter(x=>FREE.mode==='all'||x.lic.k===FREE.mode).slice(0,FREE.shown); if(!list.length) return; const t='Credits for free music from the Internet Archive (found with Fresh Mic)\n\n'+list.map(creditText).join('\n\n')+'\n'; const u=URL.createObjectURL(new Blob([t],{type:'text/plain'})), dl=document.createElement('a'); dl.href=u; dl.download='fresh-mic-credits.txt'; document.body.appendChild(dl); dl.click(); dl.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000); toast('Credits file saved for '+list.length+' song'+(list.length===1?'':'s')+'.') });
   $('fcopyall').addEventListener('click',()=>{ const list=FREE.items.filter(x=>FREE.mode==='all'||x.lic.k===FREE.mode).slice(0,FREE.shown); if(!list.length) return; const t=list.map(creditText).join('\n'); if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(()=>toast('Copied credits for '+list.length+' song'+(list.length===1?'':'s')+'.'),()=>toast('Copy failed.')); else toast('Copy failed.') });
+  let FH=[]; try{ const a=JSON.parse(localStorage.getItem('freshmic:fheard')||'[]'); if(Array.isArray(a)) FH=a.filter(x=>typeof x==='string').slice(-300) }catch(e){}
+  function fTag(n){ if(n.querySelector('.fplayed')) return; const t=document.createElement('span'); t.className='fplayed'; t.textContent='Played'; n.appendChild(t) }
   function freePlay(it,li,btn){
     if(FA&&FA.btn===btn){ stopFree(); return }
+    if(!FH.includes(it.id)){ FH.push(it.id); FH=FH.slice(-300); try{localStorage.setItem('freshmic:fheard',JSON.stringify(FH))}catch(e){} } fTag(li.querySelector('.name'));
     stopFree(); stopNow(); btn.textContent='Loading\u2026';
     fjsonp('https://archive.org/metadata/'+encodeURIComponent(it.id)+'?x=1',m=>{
       if(!m||!m.metadata){ btn.textContent='\u25B6 Play'; toast('Couldn\u2019t load this item from the Internet Archive.'); return }
