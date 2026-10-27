@@ -208,3 +208,4 @@
 - 2026-10-27: When the data snapshot is more than 7 days old, New releases says so (releases from the last N days may be missing until the next update). Research: stale data is fine when it is labelled; unlabelled it makes a new-releases list look broken.
 - 2026-10-27: New releases and Hidden gems also have a Print this list button (same clean print layout as Coming soon; it prints the rows currently shown, so use Show all first for everything). Research: the printable list was only on one section, which felt inconsistent.
 - 2026-10-27: Hidden gems has a size picker (Up to 3,000 / 2,000 / 1,000 / 600 fans), remembered between visits. Research: people hunting for the very smallest artists want to set the ceiling themselves.
+- 2026-10-27: Press W on Discover to switch Coming soon between the next 7 days and everything announced (listed in the shortcuts card). Research: keyboard users get a one-key route to the most-used toggle, like Q for the filter.
