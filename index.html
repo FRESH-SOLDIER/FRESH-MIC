@@ -1036,7 +1036,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     if(item.rel){
       why.textContent=(item.rel[3]==='ep'?'EP':item.rel[3]==='single'?'Single':'Album')+' “'+item.rel[1]+'” · '+when(item.rel[2])+' · '+gname(item.g)+(isNewSince(item)?' · new since your last visit':'');
     } else {
-      why.textContent=gname(item.g)+' · last release '+when(item.last);
+      why.textContent=gname(item.g)+' · last release '+when(item.last)+(prevVisit&&item.last>prevVisit&&item.last<=TODAY?' · new since your last visit':'');
     }
     const links=li.querySelector('.links');
     const mk=(txt,href)=>{const x=document.createElement('a');x.target='_blank';x.rel='noopener';x.href=href;x.textContent=txt;links.appendChild(x)};
@@ -1076,14 +1076,14 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     $('soonmore').textContent='Show '+Math.max(0,Math.min(12,soon.length-soonShown))+' more ('+Math.min(soonShown,soon.length)+' of '+soon.length+' shown)';
     // hidden gems: small artists with music out in the last year, in a stable shuffled order per Shuffle click
     const gems=[]; const yr=cutoff(365);
-    R.forEach(r=>{const k=r[0], f=N[k][2]; if(f<300||f>([600,1000,2000].includes(ui.gmax)?ui.gmax:3000)||!inLimit(f)||hid.has(N[k][0])||(hideHeard&&heard.has(N[k][0]))||(ui.hs===true&&list.includes(N[k][0]))||nameMiss(k)) return; if(r[2]<yr||r[3]<2||(ui.gnew===true&&r[2]<cutoff(30))) return; if(genre?r[1]!==genre:muted.has(r[1])) return; gems.push({k,f,g:r[1],last:r[2]})});
+    R.forEach(r=>{const k=r[0], f=N[k][2]; if(f<300||f>([600,1000,2000].includes(ui.gmax)?ui.gmax:3000)||!inLimit(f)||hid.has(N[k][0])||(hideHeard&&heard.has(N[k][0]))||(ui.hs===true&&list.includes(N[k][0]))||nameMiss(k)) return; if(r[2]<yr||r[2]>TODAY||r[3]<2||(ui.gnew===true&&r[2]<cutoff(30))) return; if(genre?r[1]!==genre:muted.has(r[1])) return; gems.push({k,f,g:r[1],last:r[2]})});
     let x=gemSeed*2147483647|0; const rnd=()=>{x=(x*1103515245+12345)&0x7fffffff;return x/0x7fffffff};
     for(let i=gems.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[gems[i],gems[j]]=[gems[j],gems[i]]}
     if(ui.gord==='small') gems.sort((a,b)=>a.f-b.f); else if(ui.gord==='new') gems.sort((a,b)=>b.last<a.last?-1:b.last>a.last?1:0);
     const gl=$('gems'); gl.textContent='';
     if(!gems.length){const li=document.createElement('li'); li.className='empty'; li.textContent='No hidden gems match this filter.'; if(genre){ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent='All genres'; b.addEventListener('click',()=>$('genres').children[0].click()); li.appendChild(b) } if(hq){ const b=document.createElement('button'); b.type='button'; b.className='shuf'; b.style.marginLeft='8px'; b.textContent='Clear name filter'; b.addEventListener('click',clearHq); li.appendChild(b) } gl.appendChild(li)}
     gems.slice(0,gemShown).forEach(g=>gl.appendChild(card(g)));
-    { const hn=gems.filter(x=>heard.has(N[x.k][0])).length; $('gemmeta').textContent=gems.length?gems.length+' match'+(hn?' \u00b7 '+hn+' heard':''):'' }
+    { const hn=gems.filter(x=>heard.has(N[x.k][0])).length, gn=prevVisit?gems.filter(x=>x.last>prevVisit&&x.last<=TODAY).length:0; $('gemmeta').textContent=gems.length?gems.length+' match'+(gn?' \u00b7 '+gn+' new since your last visit':'')+(hn?' \u00b7 '+hn+' heard':''):'' }
     jc={secNew:fresh.length,soonsec:soon.length,secGems:gems.length}; applyJc();
     $('gemmore').hidden=gems.length<=gemShown;
     $('gemmore').textContent='Show '+Math.max(0,Math.min(8,gems.length-gemShown))+' more ('+Math.min(gemShown,gems.length)+' of '+gems.length+' shown)';
