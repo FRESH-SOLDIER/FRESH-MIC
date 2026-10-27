@@ -221,3 +221,4 @@
 - 2026-10-27: The artist About card has a Copy summary button that copies the artist name, size, genre, percentiles, latest release and a Fresh Mic link as plain text. Research: people recommending an artist to a friend want one paste with the facts and a link.
 - 2026-10-27: Free music tab: Play these in order button (turns on autoplay, starts first song)
 - 2026-10-27: Free music tab: Download credits (.txt) button saves the credit lines for the songs shown, for pasting into video descriptions or project notes
+- 2026-10-27: Free music tab: Copy link to this search button; opening a link ending in #free=word lands on Free music with that search filled in
