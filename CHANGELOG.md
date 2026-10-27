@@ -224,3 +224,4 @@
 - 2026-10-27: Free music tab: Copy link to this search button; opening a link ending in #free=word lands on Free music with that search filled in
 - 2026-10-27: Free music tab: Order switch (Most popular or A to Z), remembered in this browser
 - 2026-10-27: Free music tab: songs you have played get a Played tag (list of ids kept in this browser, last 300)
+- 2026-10-27: Free music tab: Hide songs I have played toggle (remembered), works with the Played tag
