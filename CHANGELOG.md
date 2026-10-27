@@ -205,3 +205,4 @@
 - 2026-10-26: Coming soon has a Print this list button that prints just the upcoming releases (artist, release, date, genre) as a clean list. Research: people take release calendars to the fridge or a record shop.
 - 2026-10-26: Hidden gems has a Last 30 days only toggle (remembered) that keeps just the small artists who put music out this past month. Research: gem hunters want the freshest small-artist releases, not a year of them.
 - 2026-10-27: Upcoming release dates include the weekday (Out Thu, Oct 29 (in 2 days)). Research: people plan around release Fridays and weekdays, so the weekday saves a calendar lookup.
+- 2026-10-27: When the data snapshot is more than 7 days old, New releases says so (releases from the last N days may be missing until the next update). Research: stale data is fine when it is labelled; unlabelled it makes a new-releases list look broken.

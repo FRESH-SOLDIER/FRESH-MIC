@@ -438,7 +438,7 @@ ul.res.grid .player{margin-inline:12px}
     <div class="jump" id="jump"><span class="cap">Jump to</span></div>
     <section class="sec" id="secNew" aria-live="polite">
       <div class="head"><h2>New releases</h2><span class="meta" id="newmeta"></span><select id="nord" aria-label="Order of new releases"><option value="">Newest first</option><option value="small">Smallest artists first</option><option value="big">Biggest artists first</option></select><button class="shuf" id="playnew" type="button">Play these releases</button><button class="shuf" id="randnew" type="button">Play a random new release</button><button class="shuf" id="copynew" type="button">Copy as text</button></div>
-      <p class="sub">Albums, EPs and singles from the last six months, newest first.</p>
+      <p class="sub">Albums, EPs and singles from the last six months, newest first. <span id="stalenote" hidden></span></p>
       <ul class="res" id="newlist"></ul>
       <button class="more" id="newmore" type="button" hidden>Show more</button>
     </section>
@@ -593,6 +593,7 @@ const G = /*DATA*/;
     $('hidn').textContent=hid.size+' artist'+(hid.size===1?'':'s')+' hidden';
   }
   const NOWD=(()=>{ try{ const r=new Date().toISOString().slice(0,10); return r>G.today?r:G.today }catch(e){ return G.today } })();
+  { const ag=Math.round((new Date(NOWD+'T00:00:00Z')-new Date(G.date+'T00:00:00Z'))/864e5), sn=$('stalenote'); if(ag>7){ sn.textContent='The data was last collected '+ag+' days ago, so releases from the last '+ag+' days may be missing until the next monthly update.'; sn.hidden=false } }
   { const age=Math.round((new Date(NOWD+'T00:00:00Z')-new Date(G.date+'T00:00:00Z'))/864e5); $('snap').textContent='Snapshot: '+G.date+(age>0?' ('+age+(age===1?' day':' days')+' old)':'')+' · '+N.length.toLocaleString()+' artists'; }
 
   const LMIN=2, LMAX=7; // log10 fans range for the strip
