@@ -859,6 +859,7 @@ const G = /*DATA*/;
   $('mrep').addEventListener('click',()=>{ ui.rep=!ui.rep; saveUi(); $('mrep').setAttribute('aria-pressed',!!ui.rep); toast(ui.rep?'Repeat on: this preview plays again when it ends.':'Repeat off.') });
   $('mauto').addEventListener('click',()=>{ auto=!auto; ui.auto=auto; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',auto); showMini(); toast(auto?'Autoplay on: the next artist\u2019s preview starts when one ends.':'Autoplay off.') });
   $('hopback').addEventListener('click',()=>{ if(hops.length) history.back() });
+  let fanSorted=null;
   function renderAbout(k){
     const box=$('about'); if(k>=0&&box.dataset.k===String(k)&&NOW&&NOW.li===box) return; box.dataset.k=String(k); box.textContent=''; if(k<0){ box.hidden=true; return }
     const a=N[k], r=RI.get(k), f=a[2]; box.hidden=false;
@@ -866,6 +867,7 @@ const G = /*DATA*/;
     const dl=document.createElement('dl'); const row=(t,v)=>{ if(v==null||v==='') return; const dt=document.createElement('dt'), dd=document.createElement('dd'); dt.textContent=t; dd.textContent=v; dl.appendChild(dt); dl.appendChild(dd) };
     const tier=f==null?'':f<5000?'Very small (under 5K fans)':f<25000?'Small (under 25K fans)':f<100000?'Growing (under 100K fans)':f<500000?'Established (under 500K fans)':'Big name (500K+ fans)';
     row('Size',f==null?'':fmt(f)+' fans on Deezer. '+tier);
+    if(f!=null){ if(!fanSorted){ fanSorted=N.filter(n=>n&&n[2]!=null).map(n=>n[2]).sort((x,y)=>x-y) } let lo=0,hi=fanSorted.length; while(lo<hi){ const m=(lo+hi)>>1; if(fanSorted[m]<f) lo=m+1; else hi=m } const below=lo, tot=fanSorted.length; if(tot>1){ const pct=Math.round(below/tot*100); row('Compared with others','Has more fans than '+pct+'% of the '+tot.toLocaleString('en-US')+' artists on Fresh Mic.') } }
     if(r){ row('Main genre',gname(r[1])==='Other'?'Not listed':gname(r[1])); row('On Deezer',r[3]+' release'+(r[3]===1?'':'s')+' (albums, EPs and singles)');
       const live=r[4].filter(x=>x[2]<=TODAY), soon=r[4].filter(x=>x[2]>TODAY);
       if(live.length) row('Latest release','\u201C'+live[0][1]+'\u201D, a '+live[0][3]+', '+when(live[0][2]).replace(/^Out /,'out '));
