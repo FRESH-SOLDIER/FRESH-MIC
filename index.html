@@ -1793,7 +1793,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
 
   // ---------- Free music tab (Internet Archive, open licences only) ----------
   let FA=null; function stopFree(){ if(!FA) return; try{FA.au.pause()}catch(e){} FA.au.remove(); if(FA.tr) FA.tr.remove(); FA.btn.textContent='\u25B6 Play'; FA=null }
-  const FREE={cache:new Map(), items:[], shown:20, mode:(['pd','by'].includes(ui.flic)?ui.flic:'all'), started:false, sort:(ui.fsort==='az'?'az':'pop'), hide:(ui.fhide===true)};
+  const FREE={cache:new Map(), items:[], shown:20, mode:(['pd','by'].includes(ui.flic)?ui.flic:'all'), started:false, sort:(ui.fsort==='az'||ui.fsort==='new'?ui.fsort:'pop'), hide:(ui.fhide===true)};
   const licOf=u=>{ u=String(u||'').trim().toLowerCase(); let m;
     if(/^https?:\/\/creativecommons\.org\/publicdomain\/zero\/1\.0(\/.*)?$/.test(u)) return {k:'pd',label:'CC0 (public domain dedication)',url:'https://creativecommons.org/publicdomain/zero/1.0/',credit:false};
     if(/^https?:\/\/creativecommons\.org\/publicdomain\/mark\/1\.0(\/.*)?$/.test(u)) return {k:'pd',label:'Public Domain Mark',url:'https://creativecommons.org/publicdomain/mark/1.0/',credit:false};
@@ -1808,7 +1808,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   function freeInit(){ if(FREE.started) return; FREE.started=true;
     const g=$('fgen'); ['ambient','electronic','rock','jazz','classical','hip hop','folk','lo-fi','piano','instrumental'].forEach(w=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=w; b.addEventListener('click',()=>{ $('fq').value=w; freeSearch() }); g.appendChild(b) });
     [['all','All open licences'],['pd','Public domain / CC0 (no credit)'],['by','CC BY / BY-SA (credit needed)']].forEach(([v,l])=>{ const b=document.createElement('button'); b.type='button'; b.dataset.v=v; b.dataset.l=l; b.textContent=l; b.setAttribute('aria-pressed',v===FREE.mode); b.addEventListener('click',()=>{ FREE.mode=v; ui.flic=v; saveUi(); [...$('fseg').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); FREE.shown=20; freeRender() }); $('fseg').appendChild(b) });
-    [['pop','Most popular'],['az','A to Z']].forEach(([v,l])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=l; b.setAttribute('aria-pressed',v===FREE.sort); b.addEventListener('click',()=>{ FREE.sort=v; ui.fsort=v; saveUi(); [...$('fsortseg').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); FREE.shown=20; stopFree(); freeRender() }); $('fsortseg').appendChild(b) });
+    [['pop','Most popular'],['new','Newest added'],['az','A to Z']].forEach(([v,l])=>{ const b=document.createElement('button'); b.type='button'; b.textContent=l; b.setAttribute('aria-pressed',v===FREE.sort); b.addEventListener('click',()=>{ FREE.sort=v; ui.fsort=v; saveUi(); [...$('fsortseg').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); FREE.shown=20; stopFree(); freeRender() }); $('fsortseg').appendChild(b) });
     $('fforget').addEventListener('click',()=>{ const old=FH.slice(); FH=[]; try{localStorage.removeItem('freshmic:fheard')}catch(e){} stopFree(); freeRender(); toast('Forgot '+old.length+' played song'+(old.length===1?'':'s')+'.',()=>{ FH=old; try{localStorage.setItem('freshmic:fheard',JSON.stringify(FH))}catch(e){} freeRender() }) });
     $('fhide').addEventListener('click',()=>{ FREE.hide=!FREE.hide; ui.fhide=FREE.hide; saveUi(); FREE.shown=20; stopFree(); freeRender() });
     if(typeof ui.fq==='string') $('fq').value=ui.fq.slice(0,60);
@@ -1819,17 +1819,17 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   function freeSearch(){
     stopFree(); ui.fq=$('fq').value.trim().slice(0,60); if(ui.fq){ const a=(Array.isArray(ui.frecent)?ui.frecent:[]).filter(x=>typeof x==='string'&&x.toLowerCase()!==ui.fq.toLowerCase()); a.unshift(ui.fq); ui.frecent=a.slice(0,5) } saveUi(); freeRecent(); const kw=$('fq').value.trim().replace(/["\\()\[\]{}:^~*?!+\-]/g,' ').replace(/\s+/g,' ').slice(0,60);
     const q=(kw?'('+kw+') AND ':'')+'mediatype:audio AND licenseurl:*';
-    const url='https://archive.org/advancedsearch.php?q='+encodeURIComponent(q)+'&fl[]=identifier&fl[]=title&fl[]=creator&fl[]=licenseurl&rows=100&sort[]='+encodeURIComponent('downloads desc')+'&output=json';
+    const url='https://archive.org/advancedsearch.php?q='+encodeURIComponent(q)+'&fl[]=identifier&fl[]=title&fl[]=creator&fl[]=licenseurl&fl[]=publicdate&rows=100&sort[]='+encodeURIComponent('downloads desc')+'&output=json';
     const key=url; $('fstat').textContent='Searching\u2026'; $('fres').textContent=''; $('fmore').hidden=true;
     const done=docs=>{ if(!docs){ $('fstat').textContent='Couldn\u2019t reach the Internet Archive. Check your connection (or an ad blocker) and try again.'; return }
-      FREE.items=[]; docs.forEach(d=>{ const l=licOf(one(d.licenseurl)); if(l&&okId(d.identifier)) FREE.items.push({o:FREE.items.length,id:d.identifier,title:String(one(d.title)||d.identifier).slice(0,140),who:String(one(d.creator)||'Unknown artist').slice(0,100),lic:l}) });
+      FREE.items=[]; docs.forEach(d=>{ const l=licOf(one(d.licenseurl)); if(l&&okId(d.identifier)) FREE.items.push({o:FREE.items.length,pd:/^\d{4}-\d{2}-\d{2}/.test(String(one(d.publicdate)||''))?String(one(d.publicdate)).slice(0,10):'',id:d.identifier,title:String(one(d.title)||d.identifier).slice(0,140),who:String(one(d.creator)||'Unknown artist').slice(0,100),lic:l}) });
       FREE.shown=20; freeRender() };
     if(FREE.cache.has(key)) return done(FREE.cache.get(key));
     fjsonp(url,r=>{ const docs=r&&r.response&&Array.isArray(r.response.docs)?r.response.docs:null; if(docs) FREE.cache.set(key,docs); done(docs) }) }
   function creditText(it){ const base='\u201C'+it.title+'\u201D by '+it.who; const src=' Source: https://archive.org/details/'+it.id;
     return it.lic.credit? base+', licensed under '+it.lic.label+' ('+it.lic.url+').'+src : base+' ('+it.lic.label+', no credit required).'+src }
   function freeRender(){
-    if(FREE.sort==='az') FREE.items.sort((a,b)=>a.title.localeCompare(b.title,undefined,{sensitivity:'base'})||a.o-b.o); else FREE.items.sort((a,b)=>a.o-b.o);
+    if(FREE.sort==='az') FREE.items.sort((a,b)=>a.title.localeCompare(b.title,undefined,{sensitivity:'base'})||a.o-b.o); else if(FREE.sort==='new') FREE.items.sort((a,b)=>(a.pd<b.pd?1:a.pd>b.pd?-1:0)||a.o-b.o); else FREE.items.sort((a,b)=>a.o-b.o);
     const list=FREE.items.filter(x=>(FREE.mode==='all'||x.lic.k===FREE.mode)&&!(FREE.hide&&FH.includes(x.id))), ul=$('fres'); ul.textContent=''; $('fhide').setAttribute('aria-pressed',FREE.hide); { const cnt={all:FREE.items.length,pd:0,by:0}; FREE.items.forEach(x=>{ cnt[x.lic.k]++ }); [...$('fseg').children].forEach(b=>{ if(b.dataset.l) b.textContent=b.dataset.l+(FREE.items.length?' ('+cnt[b.dataset.v]+')':'') }) } $('fforget').hidden=!FH.length;
     $('fstat').textContent=list.length?list.length+' free song'+(list.length===1?'':'s')+' or albums found. Licence labels come from the uploaders.':'Nothing to show. Try another word'+(FREE.hide?' or turn off Hide songs I have played':'')+'.';
     list.slice(0,FREE.shown).forEach(it=>{
