@@ -240,3 +240,4 @@
 - 2026-10-28: The New releases header also shows how many came out in the last 7 days (for example 3015 releases · 9 in the last 7 days)
 - 2026-10-28: The shortlist (2 or more artists) shows a Sizes line: smallest, typical (median) and biggest fan counts
 - 2026-10-28: The shortlist Sizes line also lists your top 3 genres with counts (for example Genres: Hip-hop (2), Rock (1)), shown on load too
+- 2026-10-28: Find results header names the main genre of the matches when 3 or more share it (for example mostly Hip-hop (22 of 22 with a known genre))

@@ -711,7 +711,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     $('title').textContent='Like '+N[cur][1];
     { const sl=$('seedlink'); sl.href='https://www.deezer.com/artist/'+N[cur][0]; sl.textContent='Listen to '+N[cur][1]+' on Deezer'; sl.hidden=false }
     const qf=N[cur][2]||0;
-    $('meta').textContent=fmt(qf)+' fans · '+results.length+' match'+(results.length===1?'':'es')+(()=>{ const h=results.filter(r=>heard.has(N[r.k][0])).length; return h?' · '+h+' heard':'' })();
+    $('meta').textContent=fmt(qf)+' fans · '+results.length+' match'+(results.length===1?'':'es')+(()=>{ const h=results.filter(r=>heard.has(N[r.k][0])).length; return h?' · '+h+' heard':'' })()+(()=>{ const gc={}; let gt=0; results.forEach(r=>{ const q=RI.get(r.k); if(q&&gname(q[1])!=='Other'){ gc[gname(q[1])]=(gc[gname(q[1])]||0)+1; gt++ } }); const e=Object.entries(gc).sort((x,y)=>y[1]-x[1]||(x[0]<y[0]?-1:1))[0]; return e&&e[1]>=3?' · mostly '+e[0]+' ('+e[1]+' of '+gt+' with a known genre)':'' })();
     $('legend').hidden=!results.length; $('saveall').hidden=!results.length; $('copyres').hidden=!results.length; $('dlres').hidden=!results.length; $('playres').hidden=!results.length; $('randres').hidden=!results.length; $('printres').hidden=!results.length;
     renderAbout(cur);
     if(!results.length){
