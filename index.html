@@ -894,7 +894,9 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     { const lk=document.createElement('div'); lk.className='links'; lk.style.marginTop='10px'; box.appendChild(lk); const lv=r&&r[4].find(x=>x[2]<=TODAY); previewBtn(box,a,lv?lv[0]:null); previewBtn(box,a,null,true);
       const cb=document.createElement('button'); cb.type='button'; cb.className='sim'; cb.textContent='Copy summary'; cb.setAttribute('aria-label','Copy a text summary of '+a[1]);
       cb.addEventListener('click',()=>{ const lines=[a[1]]; dl.querySelectorAll('dt').forEach(dt=>{ if(dt.textContent==='Similar artists') return; lines.push(dt.textContent+': '+dt.nextElementSibling.textContent) }); lines.push('', 'Found on Fresh Mic: '+location.origin+location.pathname+'#like='+a[0]); const t=lines.join('\n'); if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(()=>toast('Summary of '+a[1]+' copied.'),()=>toast('Copy failed.')); else toast('Copy failed.') });
-      lk.appendChild(cb) }
+      lk.appendChild(cb);
+      if(r&&gname(r[1])!=='Other'){ const gb=document.createElement('button'); gb.type='button'; gb.className='sim'; gb.textContent='Browse '+gname(r[1])+' on Discover'; gb.addEventListener('click',()=>{ setTab('home'); const c=[...$('genres').children].find(x=>x.id!=='rgenre'&&x.firstChild&&x.firstChild.textContent===gname(r[1])); if(c){ c.click(); window.scrollTo(0,0) } else toast('That genre has no releases listed right now.') }); lk.appendChild(gb) }
+    }
     if(r&&r[4].length>1){ const ul=document.createElement('ul'); r[4].forEach(x=>{ const li=document.createElement('li'); li.textContent='\u201C'+x[1]+'\u201D \u00B7 '+x[3]+' \u00B7 '+when(x[2]); ul.appendChild(li) }); const cap=document.createElement('div'); cap.className='cap'; cap.style.marginTop='10px'; cap.textContent='Recent releases'; box.appendChild(cap); box.appendChild(ul) }
   }
   function pick(k,stay,nohash){ if(!stay) setTab('find'); cur=k;
