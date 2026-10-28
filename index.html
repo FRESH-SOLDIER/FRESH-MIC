@@ -506,6 +506,7 @@ ul.res.grid .player{margin-inline:12px}
 
   <details class="list" id="listbox">
     <summary id="listsum">Your shortlist</summary>
+    <p class="why" id="listsize" hidden></p>
     <ol id="listol"></ol>
     <button class="copy" id="copy" type="button">Copy list</button>
     <button class="copy" id="copylink" type="button">Copy shortlist link</button>
@@ -753,7 +754,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   let idIdx=null;
   function heardChips(){ ['hrecent','hrecent2'].forEach(fillHeard) }
   function fillHeard(id){ const box=$(id); if(!box) return; const ids=[...heard].slice(-8).reverse(); if(!idIdx){ idIdx=new Map(); N.forEach((n,k)=>{ if(n) idIdx.set(n[0],k) }) } box.textContent=''; const cap=document.createElement('span'); cap.className='cap'; cap.textContent='Heard lately'; box.appendChild(cap); let c=0; ids.forEach(id=>{ const k=idIdx.get(id); if(k===undefined||!E[k]&&!REV[k].length) return; const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=N[k][1]; b.title='Find artists similar to '+N[k][1]; b.addEventListener('click',()=>{ setTab('find'); hop(k) }); box.appendChild(b); c++ }); box.hidden=!c }
-  function listSum(){ heardChips(); const hc=$('hhcount'); if(hc) hc.textContent=heard.size?heard.size+' artist'+(heard.size===1?'':'s')+' heard on this device':'No previews heard yet'; const h=list.filter(id=>heard.has(id)).length; { const rb=$('rmheard'); if(rb) rb.hidden=!h } $('listsum').textContent='Your shortlist ('+list.length+(h?' \u00b7 '+h+' heard':'')+')' }
+  function listSum(){ heardChips(); const hc=$('hhcount'); if(hc) hc.textContent=heard.size?heard.size+' artist'+(heard.size===1?'':'s')+' heard on this device':'No previews heard yet'; const h=list.filter(id=>heard.has(id)).length; { const rb=$('rmheard'); if(rb) rb.hidden=!h } $('listsum').textContent='Your shortlist ('+list.length+(h?' \u00b7 '+h+' heard':'')+')'; { const ls=$('listsize'), fs=list.map(id=>{ const k=N.findIndex(q=>q[0]===id); return k<0?null:N[k][2] }).filter(v=>v!=null).sort((x,y)=>x-y); if(fs.length>=2){ const md=fs.length%2?fs[(fs.length-1)/2]:Math.round((fs[fs.length/2-1]+fs[fs.length/2])/2); ls.textContent='Sizes: smallest '+fmt(fs[0])+', typical '+fmt(md)+', biggest '+fmt(fs[fs.length-1])+' fans'; ls.hidden=false } else { ls.textContent=''; ls.hidden=true } } }
   function renderList(){
     const ol=$('listol'); ol.textContent='';
     const idx=new Map(N.map((a,i)=>[a[0],i]));
