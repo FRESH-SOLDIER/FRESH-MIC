@@ -493,7 +493,7 @@ ul.res.grid .player{margin-inline:12px}
       <div><button class="shuf" id="frand" type="button" hidden>Play a random free song</button><button class="shuf" id="fplayall" type="button" hidden>Play these in order</button><button class="shuf" id="fcopyall" type="button" hidden>Copy all credits</button><button class="shuf" id="fdlall" type="button" hidden>Download credits (.txt)</button><button class="shuf" id="fshare" type="button" hidden>Copy link to this search</button></div>
       <ul class="res" id="fres"></ul>
       <button class="more" id="fmore" type="button" hidden>Show more</button>
-      <details class="fnote"><summary>Before you reuse a song</summary><p class="why" style="max-width:62ch">The licence shown is the one the uploader declared to the Internet Archive, and uploaders can be wrong. Always open the source page and read the licence terms before using a song in your own release. CC BY needs credit to the artist (use Copy credit). CC BY-SA needs credit and that you share your new work under the same terms. CC0 and Public Domain need neither. A cover song can still carry the original songwriter&#8217;s rights. This is general information, not legal advice.</p></details>
+      <details class="fnote"><summary>Before you reuse a song</summary><p class="why" style="max-width:62ch">The licence shown is the one the uploader declared to the Internet Archive, and uploaders can be wrong. Press Space to pause and the left and right arrow keys to skip 5 seconds. Always open the source page and read the licence terms before using a song in your own release. CC BY needs credit to the artist (use Copy credit). CC BY-SA needs credit and that you share your new work under the same terms. CC0 and Public Domain need neither. A cover song can still carry the original songwriter&#8217;s rights. This is general information, not legal advice.</p></details>
     </section>
   </div>
   <div id="viewPage" role="tabpanel" aria-labelledby="tabPage" class="panel" hidden>
@@ -1756,6 +1756,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     if(e.ctrlKey||e.metaKey||e.altKey||e.defaultPrevented) return;
     const a=document.activeElement, typing=a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.tagName==='SELECT'||a.isContentEditable);
     if(!typing&&FA&&$('viewFree').hidden===false&&e.key===' '&&(!a||a===document.body)){ e.preventDefault(); if(FA.au.paused) FA.au.play().catch(()=>{}); else FA.au.pause(); return }
+    if(!typing&&FA&&$('viewFree').hidden===false&&(e.key==='ArrowLeft'||e.key==='ArrowRight')&&(!a||a===document.body)&&FA.au.duration){ e.preventDefault(); FA.au.currentTime=Math.max(0,Math.min(FA.au.duration-0.1,FA.au.currentTime+(e.key==='ArrowRight'?5:-5))); return }
     if(typing||$('viewPage').hidden===false||$('viewFree').hidden===false) return;
     if(e.key==='Escape'&&NOW){ e.preventDefault(); stopNow(); return }
     if((e.key==='ArrowLeft'||e.key==='ArrowRight')&&NOW&&(!a||a===document.body)&&NOW.au.duration){ e.preventDefault(); const au=NOW.au; au.currentTime=Math.max(0,Math.min(au.duration-0.1,au.currentTime+(e.key==='ArrowRight'?5:-5))); return }
