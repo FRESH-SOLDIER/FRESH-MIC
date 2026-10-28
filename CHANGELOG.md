@@ -228,3 +228,4 @@
 - 2026-10-28: The artist About card has a Release pace line (about one release every N weeks or months, from their latest releases in the snapshot)
 - 2026-10-28: The artist About card has a Catalog line (how many releases Deezer lists and the mix of their latest ones, for example 13 releases listed. Latest 3: 3 singles)
 - 2026-10-28: Free music tab: Forget played songs button (with Undo) clears the Played tags
+- 2026-10-28: Free music tab: your last 5 searches show as Recent chips under the genre chips (kept in this browser)

@@ -485,6 +485,7 @@ ul.res.grid .player{margin-inline:12px}
       <p class="why" style="max-width:62ch">Full songs shared by their makers under open licences, streamed from the <a href="https://archive.org/details/audio" target="_blank" rel="noopener">Internet Archive</a>. Only items marked CC0, Public Domain or Creative Commons BY / BY-SA appear. Nothing is copied to this site, and the Internet Archive sees your browser when you use this tab.</p>
       <form class="fsearch" id="fform" role="search"><label class="cap" for="fq">Search free music</label><div class="prow"><input id="fq" type="search" autocomplete="off" maxlength="60" placeholder="A word, genre or artist (or leave empty)"><button type="submit" class="shuf">Search</button></div></form>
       <div class="chips" id="fgen" role="group" aria-label="Quick genres"></div>
+      <div class="chips" id="frecent" role="group" aria-label="Your recent searches" hidden></div>
       <div class="ctl"><div class="cap" id="flab">Licence</div><div class="seg" id="fseg" role="group" aria-labelledby="flab"></div></div>
       <div class="ctl"><div class="cap" id="fsl">Order</div><div class="seg" id="fsortseg" role="group" aria-labelledby="fsl"></div></div>
       <div class="ctl"><button class="sim" id="fhide" type="button" aria-pressed="false">Hide songs I have played</button> <button class="sim" id="fforget" type="button" hidden>Forget played songs</button></div>
@@ -1814,8 +1815,9 @@ const G = /*DATA*/;
     $('fform').addEventListener('submit',e=>{ e.preventDefault(); freeSearch() });
     $('fmore').addEventListener('click',()=>{ FREE.shown+=20; freeRender() });
     freeSearch() }
+  function freeRecent(){ const box=$('frecent'); box.textContent=''; const a=Array.isArray(ui.frecent)?ui.frecent:[]; box.hidden=!a.length; if(!a.length) return; const lb=document.createElement('span'); lb.className='why'; lb.textContent='Recent:'; lb.style.alignSelf='center'; box.appendChild(lb); a.forEach(w=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.textContent=w; b.addEventListener('click',()=>{ $('fq').value=w; freeSearch() }); box.appendChild(b) }); }
   function freeSearch(){
-    stopFree(); ui.fq=$('fq').value.trim().slice(0,60); saveUi(); const kw=$('fq').value.trim().replace(/["\\()\[\]{}:^~*?!+\-]/g,' ').replace(/\s+/g,' ').slice(0,60);
+    stopFree(); ui.fq=$('fq').value.trim().slice(0,60); if(ui.fq){ const a=(Array.isArray(ui.frecent)?ui.frecent:[]).filter(x=>typeof x==='string'&&x.toLowerCase()!==ui.fq.toLowerCase()); a.unshift(ui.fq); ui.frecent=a.slice(0,5) } saveUi(); freeRecent(); const kw=$('fq').value.trim().replace(/["\\()\[\]{}:^~*?!+\-]/g,' ').replace(/\s+/g,' ').slice(0,60);
     const q=(kw?'('+kw+') AND ':'')+'mediatype:audio AND licenseurl:*';
     const url='https://archive.org/advancedsearch.php?q='+encodeURIComponent(q)+'&fl[]=identifier&fl[]=title&fl[]=creator&fl[]=licenseurl&rows=100&sort[]='+encodeURIComponent('downloads desc')+'&output=json';
     const key=url; $('fstat').textContent='Searching\u2026'; $('fres').textContent=''; $('fmore').hidden=true;
