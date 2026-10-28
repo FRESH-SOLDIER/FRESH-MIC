@@ -241,3 +241,4 @@
 - 2026-10-28: The shortlist (2 or more artists) shows a Sizes line: smallest, typical (median) and biggest fan counts
 - 2026-10-28: The shortlist Sizes line also lists your top 3 genres with counts (for example Genres: Hip-hop (2), Rock (1)), shown on load too
 - 2026-10-28: Find results header names the main genre of the matches when 3 or more share it (for example mostly Hip-hop (22 of 22 with a known genre))
+- 2026-10-28: Works offline after one visit: a small same-site helper (sw.js) keeps the last copy of the page, tries the network first so updates still arrive, and falls back to the saved copy with no connection (previews and free music still need internet)
