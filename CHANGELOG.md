@@ -234,3 +234,4 @@
 - 2026-10-28: Free music tab: each result shows the year it was added to the Internet Archive (Added 2007)
 - 2026-10-28: Free music tab: left and right arrow keys skip 5 seconds in the playing song (when no button or field has focus); mentioned in the note under the list
 - 2026-10-28: Find results have a Download results (CSV) button (rank, artist, Deezer fans, Deezer link; formula-safe) for the artists shown
+- 2026-10-28: New releases, Coming soon and Hidden gems each have a Download CSV button (rank, artist, details, fans, Deezer link; formula-safe) for the rows shown
