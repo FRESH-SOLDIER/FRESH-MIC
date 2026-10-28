@@ -244,3 +244,4 @@
 - 2026-10-28: Works offline after one visit: a small same-site helper (sw.js) keeps the last copy of the page, tries the network first so updates still arrive, and falls back to the saved copy with no connection (previews and free music still need internet)
 - 2026-10-28: A note appears at the top when your device goes offline (the last saved data still works; previews and Free music need a connection) and disappears when you are back online
 - 2026-10-28: Browsers that support installing web apps show an Install app bar at the top (with Not now, remembered) so Fresh Mic can be added to the home screen or desktop
+- 2026-10-28: Hidden gems rows show how many releases the artist has (for example Alternative · 30 releases · last release 26 days ago); it also appears in the gems CSV and copied text
