@@ -1102,7 +1102,7 @@ const G = /*DATA*/;
     $('newmore').textContent='Show '+Math.max(0,Math.min(24,fresh.length-newShown))+' more ('+Math.min(newShown,fresh.length)+' of '+fresh.length+' shown)';
     const sl=$('soonlist'); sl.textContent='';
     $('soonsec').hidden=!soon.length;
-    $('soonmeta').textContent=soon.length+' announced'; lastSoon=soon; $('soonics').hidden=!soon.length; $('soonprint').hidden=!soon.length;
+    { const tm=cutoff(-1), wk=cutoff(-7); let nt=0, nm=0, nw=0; soon.forEach(x=>{ const d=x.rel&&x.rel[2]; if(!d) return; if(d===TODAY) nt++; else if(d===tm) nm++; if(d<=wk) nw++ }); const bits=[]; if(nt) bits.push(nt+' today'); if(nm) bits.push(nm+' tomorrow'); if(nw&&nw!==soon.length) bits.push(nw+' within 7 days'); $('soonmeta').textContent=soon.length+' announced'+(bits.length?' ('+bits.join(', ')+')':''); } lastSoon=soon; $('soonics').hidden=!soon.length; $('soonprint').hidden=!soon.length;
     soon.slice(0,soonShown).forEach(x=>sl.appendChild(card(x)));
     $('soonmore').hidden=soon.length<=soonShown;
     $('soonmore').textContent='Show '+Math.max(0,Math.min(12,soon.length-soonShown))+' more ('+Math.min(soonShown,soon.length)+' of '+soon.length+' shown)';
