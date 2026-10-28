@@ -469,7 +469,7 @@ ul.res.grid .player{margin-inline:12px}
       <div class="chips scroll" id="hrecent2" role="group" aria-label="Artists you heard most recently" hidden></div>
     </section>
     <section aria-live="polite">
-      <div class="head"><h2 id="title"></h2><button class="shuf" id="hopback" type="button" hidden></button><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="copyres" type="button" hidden>Copy names as text</button><button class="shuf" id="printres" type="button" hidden>Print results</button><button class="shuf" id="playres" type="button" hidden>Play these results</button><button class="shuf" id="randres" type="button" hidden>Play a random result</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button><a class="shuf" id="seedlink" target="_blank" rel="noopener" hidden>Listen on Deezer</a></div>
+      <div class="head"><h2 id="title"></h2><button class="shuf" id="hopback" type="button" hidden></button><span class="meta" id="meta"></span><button class="shuf" id="sharelink" type="button" hidden>Copy link to these results</button><button class="shuf" id="dlres" type="button" hidden>Download results (CSV)</button><button class="shuf" id="copyres" type="button" hidden>Copy names as text</button><button class="shuf" id="printres" type="button" hidden>Print results</button><button class="shuf" id="playres" type="button" hidden>Play these results</button><button class="shuf" id="randres" type="button" hidden>Play a random result</button><button class="shuf" id="saveall" type="button" hidden>Save all shown</button><a class="shuf" id="seedlink" target="_blank" rel="noopener" hidden>Listen on Deezer</a></div>
       <section class="about" id="about" aria-label="About this artist" hidden></section>
       <p class="legend" id="legend" hidden>Each bar shows how big an artist is. Hover over, or tap, the ? at the end of any bar to see what it means for that artist.</p>
     <div class="ctl" id="sortctl" style="margin:0 0 12px"><div class="cap" id="sortlab">Order results by</div><div class="seg" id="sortseg" role="group" aria-labelledby="sortlab"></div></div>
@@ -711,7 +711,7 @@ const G = /*DATA*/;
     { const sl=$('seedlink'); sl.href='https://www.deezer.com/artist/'+N[cur][0]; sl.textContent='Listen to '+N[cur][1]+' on Deezer'; sl.hidden=false }
     const qf=N[cur][2]||0;
     $('meta').textContent=fmt(qf)+' fans · '+results.length+' match'+(results.length===1?'':'es')+(()=>{ const h=results.filter(r=>heard.has(N[r.k][0])).length; return h?' · '+h+' heard':'' })();
-    $('legend').hidden=!results.length; $('saveall').hidden=!results.length; $('copyres').hidden=!results.length; $('playres').hidden=!results.length; $('randres').hidden=!results.length; $('printres').hidden=!results.length;
+    $('legend').hidden=!results.length; $('saveall').hidden=!results.length; $('copyres').hidden=!results.length; $('dlres').hidden=!results.length; $('playres').hidden=!results.length; $('randres').hidden=!results.length; $('printres').hidden=!results.length;
     renderAbout(cur);
     if(!results.length){
       const li=document.createElement('li'); li.className='empty';
@@ -897,6 +897,12 @@ const G = /*DATA*/;
   }
   const canShare=!!navigator.share&&window.matchMedia&&matchMedia('(pointer: coarse)').matches;
   if(canShare) $('sharelink').textContent='Share these results';
+  $('dlres').addEventListener('click',()=>{
+    const q=s=>{s=String(s); if(/^[=+\-@\t\r]/.test(s)) s="'"+s; return '"'+s.replace(/"/g,'""')+'"'};
+    const rows=[['Rank','Artist','Deezer fans','Deezer link']]; results.slice(0,shown).forEach((r,i)=>rows.push([i+1,N[r.k][1],N[r.k][2]||0,'https://www.deezer.com/artist/'+N[r.k][0]]));
+    const nm=(cur>=0?N[cur][1]:'results').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'')||'results';
+    const blob=new Blob(['\ufeff'+rows.map(r=>r.map(q).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='fresh-mic-like-'+nm+'.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); toast('Saved '+(rows.length-1)+' artists as a spreadsheet file.') });
   $('copyres').addEventListener('click',()=>{
     const rows=results.slice(0,shown).map((r,i)=>(i+1)+'. '+N[r.k][1]+' ('+fmt(N[r.k][2]||0)+' fans)');
     const t='Artists like '+(cur>=0?N[cur][1]:'this one')+' (Fresh Mic):\n'+rows.join('\n')+'\n'+location.href;
