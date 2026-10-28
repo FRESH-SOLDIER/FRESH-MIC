@@ -237,3 +237,4 @@
 - 2026-10-28: New releases, Coming soon and Hidden gems each have a Download CSV button (rank, artist, details, fans, Deezer link; formula-safe) for the rows shown
 - 2026-10-28: The artist About card has a Browse <genre> on Discover button that jumps to Discover with that genre selected
 - 2026-10-28: The Coming soon header breaks down the count, for example 42 announced (1 tomorrow, 8 within 7 days)
+- 2026-10-28: The New releases header also shows how many came out in the last 7 days (for example 3015 releases · 9 in the last 7 days)
