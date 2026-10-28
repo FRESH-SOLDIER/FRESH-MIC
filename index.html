@@ -876,6 +876,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
         const arr=genreFans.get(r[1]); if(arr&&arr.length>=20){ let lo=0,hi=arr.length; while(lo<hi){ const m=(lo+hi)>>1; if(arr[m]<f) lo=m+1; else hi=m } row('In '+gname(r[1]),'Has more fans than '+Math.round(lo/arr.length*100)+'% of the '+arr.length.toLocaleString('en-US')+' '+gname(r[1])+' artists with releases here.') } } row('On Deezer',r[3]+' release'+(r[3]===1?'':'s')+' (albums, EPs and singles)');
       const live=r[4].filter(x=>x[2]<=TODAY), soon=r[4].filter(x=>x[2]>TODAY);
       if(live.length) row('Latest release','\u201C'+live[0][1]+'\u201D, a '+live[0][3]+', '+when(live[0][2]).replace(/^Out /,'out '));
+      if(live.length>1){ const dd=x=>Date.UTC(+x.slice(0,4),+x.slice(5,7)-1,+x.slice(8,10))/864e5; const gap=Math.round((dd(live[0][2])-dd(live[live.length-1][2]))/(live.length-1)); if(gap>=0) row('Release pace', gap<7?'Several releases within a week of each other (based on the '+live.length+' latest)':'About one release every '+(gap<60?Math.round(gap/7)+' week'+(Math.round(gap/7)===1?'':'s'):Math.round(gap/30.4)+' months')+' (based on the '+live.length+' latest)') }
       if(soon.length) row('Coming up','\u201C'+soon[0][1]+'\u201D, '+when(soon[0][2]).toLowerCase());
     } else row('Releases','No release details in this snapshot.');
     row('Similar artists',results.length+' found in this list');

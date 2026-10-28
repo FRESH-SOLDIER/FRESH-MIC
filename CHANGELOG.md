@@ -225,3 +225,4 @@
 - 2026-10-27: Free music tab: Order switch (Most popular or A to Z), remembered in this browser
 - 2026-10-27: Free music tab: songs you have played get a Played tag (list of ids kept in this browser, last 300)
 - 2026-10-27: Free music tab: Hide songs I have played toggle (remembered), works with the Played tag
+- 2026-10-28: The artist About card has a Release pace line (about one release every N weeks or months, from their latest releases in the snapshot)
