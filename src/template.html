@@ -439,7 +439,7 @@ ul.res.grid .player{margin-inline:12px}
     <div class="hq"><label class="cap" for="hq">Filter these lists by artist or release name</label> <input type="search" id="hq" placeholder="Type part of a name" autocomplete="off" maxlength="60"> <button class="shuf" id="hqlink" type="button" hidden>Copy link to this filter</button></div>
     <div><button class="shuf" id="resetf" type="button" hidden>Reset filters</button></div>
     <div class="jump" id="jump"><span class="cap">Jump to</span></div>
-    <section class="sec" id="secPick" hidden><div class="head"><h2>Today&rsquo;s pick</h2><span class="meta" id="pickmeta"></span></div><ul class="res" id="picklist"></ul></section>
+    <section class="sec" id="secPick" hidden><div class="head"><h2>Today&rsquo;s pick</h2><span class="meta" id="pickmeta"></span><button class="shuf" id="pickshare" type="button">Copy to share</button></div><ul class="res" id="picklist"></ul></section>
     <section class="sec" id="secNew" aria-live="polite">
       <div class="head"><h2>New releases</h2><span class="meta" id="newmeta"></span><select id="nord" aria-label="Order of new releases"><option value="">Newest first</option><option value="small">Smallest artists first</option><option value="big">Biggest artists first</option></select><button class="shuf" id="newsince" type="button" aria-pressed="false" hidden>Only new since my last visit</button><button class="shuf" id="markseen" type="button" hidden>Mark all as seen</button><button class="shuf" id="playnew" type="button">Play these releases</button><button class="shuf" id="randnew" type="button">Play a random new release</button><button class="shuf" id="newprint" type="button">Print this list</button><button class="shuf" id="dlnew" type="button">Download CSV</button><button class="shuf" id="copynew" type="button">Copy as text</button></div>
       <p class="sub">Albums, EPs and singles from the last six months, newest first. <span id="stalenote" hidden></span></p>
@@ -1065,6 +1065,7 @@ const G = /*DATA*/;
     c.sort((x,y)=>x[0]-y[0]); if(!c.length){ sec.hidden=true; return }
     let h=0; for(const ch of NOWD) h=(h*31+ch.charCodeAt(0))>>>0; const r=c[h%c.length];
     ul.appendChild(card({k:r[0],f:N[r[0]][2],g:r[1],last:r[2],n:r[3]}));
+    { const a=N[r[0]], t='Today\u2019s pick on Fresh Mic: '+a[1]+' ('+gname(r[1])+', '+fmt(a[2])+' fans). '+location.origin+location.pathname+'#like='+a[0]; $('pickshare').onclick=()=>{ if(canShare&&navigator.share){ navigator.share({title:'Fresh Mic',text:t}).catch(()=>{}) } else if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(()=>toast('Copied today\u2019s pick.'),()=>toast('Copy failed.')); else toast('Copy failed.') } }
     $('pickmeta').textContent='A small artist with recent music, the same for everyone today'; sec.hidden=false }
   function card(item,kind){
     const a=N[item.k], li=document.createElement('li'); li.className='row';

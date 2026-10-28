@@ -247,3 +247,4 @@
 - 2026-10-28: Hidden gems rows show how many releases the artist has (for example Alternative · 30 releases · last release 26 days ago); it also appears in the gems CSV and copied text
 - 2026-10-28: Discover has a Today's pick card: one small artist (300 to 3,000 fans, 2+ releases, music in the last 90 days) chosen from today's date, so it is the same for everyone and changes daily; it ignores your filters and has the usual Play 30s, Save and Find similar buttons
 - 2026-10-28: Today's pick moved to the top of Discover (above New releases) and added to the Jump to row
+- 2026-10-28: Today's pick has a Copy to share button (name, genre, fans and a link that opens Find similar for that artist; uses the phone share sheet where available)
