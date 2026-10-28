@@ -450,6 +450,7 @@ ul.res.grid .player{margin-inline:12px}
       <ul class="res" id="soonlist"></ul>
       <button class="more" id="soonmore" type="button" hidden>Show more</button>
     </section>
+    <section class="sec" id="secPick" hidden><div class="head"><h2>Today&rsquo;s pick</h2><span class="meta" id="pickmeta"></span></div><ul class="res" id="picklist"></ul></section>
     <section class="sec" id="secGems">
       <div class="head"><h2>Hidden gems</h2><span class="meta" id="gemmeta"></span><button class="shuf" id="shuf" type="button">Shuffle</button><select id="gord" aria-label="Order of hidden gems"><option value="">Shuffled</option><option value="small">Smallest first</option><option value="new">Newest release first</option></select><select id="gmax" aria-label="Largest fan count for hidden gems"><option value="">Up to 3,000 fans</option><option value="2000">Up to 2,000 fans</option><option value="1000">Up to 1,000 fans</option><option value="600">Up to 600 fans</option></select><button class="shuf" id="gemsince" type="button" aria-pressed="false" hidden>Only new since my last visit</button><button class="shuf" id="gemnew" type="button" aria-pressed="false">Last 30 days only</button><button class="shuf" id="playgems" type="button">Play these gems</button><button class="shuf" id="randgem" type="button">Play a random gem</button><button class="shuf" id="gemprint" type="button">Print this list</button><button class="shuf" id="dlgems" type="button">Download CSV</button><button class="shuf" id="copygems" type="button">Copy as text</button></div>
       <p class="sub">Artists with a few thousand fans or fewer who have put music out in the last year.</p>
@@ -1058,6 +1059,13 @@ const G = /*DATA*/;
     return {fresh,soon};
   }
 
+  function renderPick(){
+    const sec=$('secPick'), ul=$('picklist'); ul.textContent=''; const c90=cutoff(90), c=[];
+    R.forEach(r=>{ const f=N[r[0]]&&N[r[0]][2]; if(f==null||f<300||f>3000||r[3]<2||r[2]<c90||r[2]>TODAY) return; c.push(r) });
+    c.sort((x,y)=>x[0]-y[0]); if(!c.length){ sec.hidden=true; return }
+    let h=0; for(const ch of NOWD) h=(h*31+ch.charCodeAt(0))>>>0; const r=c[h%c.length];
+    ul.appendChild(card({k:r[0],f:N[r[0]][2],g:r[1],last:r[2],n:r[3]}));
+    $('pickmeta').textContent='A small artist with recent music, the same for everyone today'; sec.hidden=false }
   function card(item,kind){
     const a=N[item.k], li=document.createElement('li'); li.className='row';
     const saved=list.includes(a[0]);
@@ -1122,6 +1130,7 @@ const G = /*DATA*/;
     gems.slice(0,gemShown).forEach(g=>gl.appendChild(card(g)));
     { const hn=gems.filter(x=>heard.has(N[x.k][0])).length, gn=prevVisit?gems.filter(x=>x.last>prevVisit&&x.last<=TODAY).length:0; $('gemmeta').textContent=gems.length?gems.length+' match'+(gn?' \u00b7 '+gn+' new since your last visit':'')+(hn?' \u00b7 '+hn+' heard':''):'' }
     jc={secNew:fresh.length,soonsec:soon.length,secGems:gems.length}; applyJc();
+    try{ renderPick() }catch(e){ $('secPick').hidden=true }
     $('gemmore').hidden=gems.length<=gemShown;
     $('gemmore').textContent='Show '+Math.max(0,Math.min(8,gems.length-gemShown))+' more ('+Math.min(gemShown,gems.length)+' of '+gems.length+' shown)';
   }

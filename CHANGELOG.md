@@ -245,3 +245,4 @@
 - 2026-10-28: A note appears at the top when your device goes offline (the last saved data still works; previews and Free music need a connection) and disappears when you are back online
 - 2026-10-28: Browsers that support installing web apps show an Install app bar at the top (with Not now, remembered) so Fresh Mic can be added to the home screen or desktop
 - 2026-10-28: Hidden gems rows show how many releases the artist has (for example Alternative · 30 releases · last release 26 days ago); it also appears in the gems CSV and copied text
+- 2026-10-28: Discover has a Today's pick card: one small artist (300 to 3,000 fans, 2+ releases, music in the last 90 days) chosen from today's date, so it is the same for everyone and changes daily; it ignores your filters and has the usual Play 30s, Save and Find similar buttons
