@@ -1835,7 +1835,7 @@ const G = /*DATA*/;
     list.slice(0,FREE.shown).forEach(it=>{
       const li=document.createElement('li'); li.className='row'; const d=document.createElement('div'); const n=document.createElement('div'); n.className='name'; n.textContent=it.title; const w=document.createElement('div'); w.className='why'; w.textContent=it.who;
       const lc=document.createElement('div'); lc.className='fres-lic'; const la=document.createElement('a'); la.href=it.lic.url; la.target='_blank'; la.rel='noopener'; la.textContent=it.lic.label; lc.appendChild(la);
-      const src=document.createElement('a'); src.href='https://archive.org/details/'+it.id; src.target='_blank'; src.rel='noopener'; src.textContent='Source page'; src.style.marginLeft='12px'; lc.appendChild(src);
+      const src=document.createElement('a'); src.href='https://archive.org/details/'+it.id; src.target='_blank'; src.rel='noopener'; src.textContent='Source page'; src.style.marginLeft='12px'; lc.appendChild(src); if(it.pd){ const ad=document.createElement('span'); ad.className='why'; ad.style.marginLeft='12px'; ad.textContent='Added '+it.pd.slice(0,4); lc.appendChild(ad) }
       d.appendChild(n); d.appendChild(w); d.appendChild(lc); if(FH.includes(it.id)) fTag(n);
       const bx=document.createElement('div'); bx.className='links'; const pb=document.createElement('button'); pb.type='button'; pb.className='play'; pb.textContent='\u25B6 Play';
       const cb=document.createElement('button'); cb.type='button'; cb.className='sim'; cb.textContent='Copy credit'; cb.addEventListener('click',()=>{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(creditText(it)).then(()=>toast('Credit copied.'),()=>toast('Copy failed.')); else toast('Copy failed.') });

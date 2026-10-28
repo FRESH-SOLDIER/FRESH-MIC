@@ -231,3 +231,4 @@
 - 2026-10-28: Free music tab: your last 5 searches show as Recent chips under the genre chips (kept in this browser)
 - 2026-10-28: Free music tab: the licence switch shows how many results each choice has, for example Public domain / CC0 (21)
 - 2026-10-28: Free music tab: Order switch gains Newest added (by the date the item was added to the Internet Archive)
+- 2026-10-28: Free music tab: each result shows the year it was added to the Internet Archive (Added 2007)
