@@ -243,3 +243,4 @@
 - 2026-10-28: Find results header names the main genre of the matches when 3 or more share it (for example mostly Hip-hop (22 of 22 with a known genre))
 - 2026-10-28: Works offline after one visit: a small same-site helper (sw.js) keeps the last copy of the page, tries the network first so updates still arrive, and falls back to the saved copy with no connection (previews and free music still need internet)
 - 2026-10-28: A note appears at the top when your device goes offline (the last saved data still works; previews and Free music need a connection) and disappears when you are back online
+- 2026-10-28: Browsers that support installing web apps show an Install app bar at the top (with Not now, remembered) so Fresh Mic can be added to the home screen or desktop
