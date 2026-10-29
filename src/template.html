@@ -527,6 +527,9 @@ ul.res.grid .player{margin-inline:12px}
     <button class="copy" id="rmheard" type="button" hidden>Remove artists I've heard</button>
     <button class="copy" id="blendbtn" type="button" hidden>Suggest artists from my shortlist</button>
     <button class="copy" id="clrlist" type="button" hidden>Clear shortlist</button>
+    <button class="copy" id="bkup" type="button">Back up my shortlist and notes</button>
+    <button class="copy" id="bkrest" type="button">Restore from a backup</button>
+    <input type="file" id="bkfile" accept=".json,application/json" hidden>
     <span class="cap" id="copied" style="margin-left:10px"></span>
     <ol id="blendol" class="blend" hidden></ol>
   </details>
@@ -816,6 +819,28 @@ const G = /*DATA*/;
     const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Fresh Mic//EN',...ev,'END:VCALENDAR'].join('\r\n')+'\r\n';
     const u=URL.createObjectURL(new Blob([ics],{type:'text/calendar'})), dl=document.createElement('a'); dl.href=u; dl.download=fname; document.body.appendChild(dl); dl.click(); dl.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000); toast('Calendar file saved with '+rows.length+' release'+(rows.length===1?'':'s')+'.') };
   $('soonics').addEventListener('click',()=>saveIcs(lastSoon.slice(0,300),'fresh-mic-upcoming.ics'));
+  $('bkup').addEventListener('click',()=>{
+    const g=k=>{ try{ return JSON.parse(localStorage.getItem('freshmic:'+k)||'null') }catch(e){ return null } };
+    const d={app:'fresh-mic',v:1,saved:new Date().toISOString().slice(0,10),list:list.slice(),heard:Array.from(heard),notes:notes};
+    const blob=new Blob([JSON.stringify(d)],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='fresh-mic-backup-'+d.saved+'.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+    toast('Saved a backup of '+list.length+' artists, '+d.heard.length+' heard and '+Object.keys(notes).length+' notes.') });
+  $('bkrest').addEventListener('click',()=>$('bkfile').click());
+  $('bkfile').addEventListener('change',()=>{
+    const f=$('bkfile').files[0]; $('bkfile').value=''; if(!f) return;
+    if(f.size>2000000){ toast('That file is too big to be a Fresh Mic backup.'); return }
+    f.text().then(t=>{
+      let d; try{ d=JSON.parse(t) }catch(e){ d=null }
+      if(!d||d.app!=='fresh-mic'||!Array.isArray(d.list)){ toast('That is not a Fresh Mic backup file.'); return }
+      const ids=a=>Array.isArray(a)?a.map(Number).filter(n=>Number.isInteger(n)&&n>0):[];
+      const nl=ids(d.list), nh=ids(d.heard), nn={};
+      if(d.notes&&typeof d.notes==='object') Object.keys(d.notes).forEach(k=>{ if(/^\d+$/.test(k)&&typeof d.notes[k]==='string') nn[k]=d.notes[k].slice(0,80) });
+      const ml=Array.from(new Set(list.concat(nl))).slice(0,500), mh=Array.from(new Set(Array.from(heard).concat(nh)));
+      const mn=Object.assign({},nn,notes);
+      try{ localStorage.setItem('freshmic:list',JSON.stringify(ml)); localStorage.setItem('freshmic:heard',JSON.stringify(mh)); localStorage.setItem('freshmic:notes',JSON.stringify(mn)) }catch(e){ toast('Could not save in this browser.'); return }
+      toast('Restored: now '+ml.length+' saved artists. Reloading...'); setTimeout(()=>location.reload(),900);
+    },()=>toast('Could not read that file.'));
+  });
   $('listics').addEventListener('click',()=>{ const rows=[]; list.forEach(id=>{ const k=N.findIndex(q=>q[0]===id), r=k<0?null:RI.get(k); if(r) r[4].filter(x=>x[2]>=NOWD).forEach(x=>rows.push({k,rel:x})) }); saveIcs(rows,'fresh-mic-my-shortlist.ics') });
   $('copysoon').addEventListener('click',()=>copyRows('soonlist','upcoming releases'));
   $('playnew').addEventListener('click',()=>{ const rows=[...$('newlist').querySelectorAll('li')]; const li=rows.find(x=>x.querySelector('button.play')&&!x.querySelector('.heardtag'))||rows.find(x=>x.querySelector('button.play')); if(!li){ toast('No previews to play here.'); return } if(!auto){ auto=true; ui.auto=true; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',true) } li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click(); showMini(); toast('Playing these new releases one after another. Autoplay is on.') });
