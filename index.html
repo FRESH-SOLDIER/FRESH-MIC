@@ -1995,8 +1995,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   $('printres').addEventListener('click',()=>{ document.body.classList.add('printres'); const done=()=>{ document.body.classList.remove('printres'); removeEventListener('afterprint',done) }; addEventListener('afterprint',done); window.print() });
   $('dlcsv').addEventListener('click',()=>{
     const q=s=>{s=String(s); if(/^[=+\-@\t\r]/.test(s)) s="'"+s; return '"'+s.replace(/"/g,'""')+'"'};
-    const hasN=list.some(id=>notes[id]); const rows=[['Artist','Deezer fans','Deezer link'].concat(hasN?['My note']:[])];
-    list.forEach(id=>{const k=IDX.get(id); if(k==null) return; rows.push([N[k][1],N[k][2]||0,'https://www.deezer.com/artist/'+id].concat(hasN?[notes[id]||'']:[]))});
+    const hasN=list.some(id=>notes[id]); const rows=[['Artist','Deezer fans','Deezer link','Genre','Latest release','Release date'].concat(hasN?['My note']:[])];
+    list.forEach(id=>{const k=IDX.get(id); if(k==null) return; { const rr=RI.get(k), lv=rr&&rr[4].find(x=>x[2]<=TODAY); rows.push([N[k][1],N[k][2]||0,'https://www.deezer.com/artist/'+id,rr&&gname(rr[1])!=='Other'?gname(rr[1]):'',lv?lv[1]:'',lv?lv[2]:''].concat(hasN?[notes[id]||'']:[])) }});
     const blob=new Blob(['\ufeff'+rows.map(r=>r.map(q).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});
     const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='my-fresh-mic-shortlist.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
     $('copied').textContent='Downloaded '+(rows.length-1)+' artists.'; setTimeout(()=>$('copied').textContent='',3000);
