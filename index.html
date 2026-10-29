@@ -530,6 +530,7 @@ ul.res.grid .player{margin-inline:12px}
     <button class="copy" id="rmheard" type="button" hidden>Remove artists I've heard</button>
     <button class="copy" id="blendbtn" type="button" hidden>Suggest artists from my shortlist</button>
     <button class="copy" id="clrlist" type="button" hidden>Clear shortlist</button>
+    <button class="copy" id="clrnotes" type="button" hidden>Clear all my notes</button>
     <button class="copy" id="bkup" type="button">Back up my shortlist and notes</button>
     <button class="copy" id="bkrest" type="button">Restore from a backup</button>
     <input type="file" id="bkfile" accept=".json,application/json" hidden>
@@ -785,12 +786,12 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       li.appendChild(x);
       { const lk=document.createElement('span'); lk.className='links'; lk.style.display='inline-flex'; lk.style.margin='0 8px'; li.insertBefore(lk,a.nextSibling); const rr=RI.get(k); previewBtn(li,N[k],(rr&&rr[4].length&&rr[4][0][2]<=TODAY)?rr[4][0][0]:null) }
       { const nt=document.createElement('input'); nt.type='text'; nt.className='lnote'; nt.maxLength=80; nt.placeholder='Add a private note (kept only in this browser)'; nt.setAttribute('aria-label','Private note for '+N[k][1]); nt.value=notes[id]||'';
-        nt.addEventListener('change',()=>{ const v=nt.value.trim().slice(0,80); if(v) notes[id]=v; else delete notes[id]; try{ localStorage.setItem('freshmic:notes',JSON.stringify(notes)) }catch(e){} nt.value=v });
+        nt.addEventListener('change',()=>{ const v=nt.value.trim().slice(0,80); if(v) notes[id]=v; else delete notes[id]; try{ localStorage.setItem('freshmic:notes',JSON.stringify(notes)) }catch(e){} nt.value=v; $('clrnotes').hidden=!list.some(i=>notes[i]) });
         li.appendChild(document.createElement('br')); li.appendChild(nt) }
       ol.appendChild(li)});
     listSum();
     updateJump();
-    $('copy').hidden=!list.length; $('copymd').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('randsaved').hidden=list.length<2; $('sortaz').hidden=list.length<3; $('sortsmall').hidden=list.length<3; $('sortbig').hidden=list.length<3; $('revlist').hidden=list.length<2; $('sortnew').hidden=list.length<3; { let up=0; try{ list.forEach(id=>{ const k=N.findIndex(q=>q[0]===id), r=k<0?null:RI.get(k); if(r&&r[4].some(x=>x[2]>=NOWD)) up++ }) }catch(e){} $('listics').hidden=!up } $('sortgenre').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
+    $('copy').hidden=!list.length; $('copymd').hidden=!list.length; $('clrnotes').hidden=!list.some(i=>notes[i]); $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('randsaved').hidden=list.length<2; $('sortaz').hidden=list.length<3; $('sortsmall').hidden=list.length<3; $('sortbig').hidden=list.length<3; $('revlist').hidden=list.length<2; $('sortnew').hidden=list.length<3; { let up=0; try{ list.forEach(id=>{ const k=N.findIndex(q=>q[0]===id), r=k<0?null:RI.get(k); if(r&&r[4].some(x=>x[2]>=NOWD)) up++ }) }catch(e){} $('listics').hidden=!up } $('sortgenre').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
   }
 
@@ -2047,6 +2048,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       if(list.length!==before.length){ saveList(); renderList(); refreshAll(); $('listbox').open=true;
         toast('Added '+(list.length-before.length)+' artists from a shared shortlist.',()=>{list=before; saveList(); renderList(); refreshAll()}); }
       try{history.replaceState(null,'',location.pathname+location.search)}catch(e){} } }
+  $('clrnotes').addEventListener('click',()=>{ const old=Object.assign({},notes); const n=list.filter(i=>notes[i]).length; if(!n) return; list.forEach(i=>{ delete notes[i] }); const sv=()=>{ try{ localStorage.setItem('freshmic:notes',JSON.stringify(notes)) }catch(e){} }; sv(); renderList(); toast('Cleared '+n+' note'+(n===1?'':'s')+'.',()=>{ Object.assign(notes,old); sv(); renderList() }) });
   $('copymd').addEventListener('click',()=>{
     const idx=new Map(N.map((a,i)=>[a[0],i]));
     const esc=t=>String(t).replace(/([\\\[\]`*_<>])/g,'\\$1');

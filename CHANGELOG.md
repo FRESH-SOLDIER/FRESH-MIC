@@ -263,3 +263,4 @@
 - 2026-10-29: The shortlist (3 or more artists) has a Sort biggest first button (most fans first, with Undo), next to Sort smallest first
 - 2026-10-29: The shortlist (2 or more artists) has a Reverse order button (flips the whole list, with Undo)
 - 2026-10-29: The shortlist has a Copy as links (Markdown) button: a numbered list with each artist name linked to its Deezer page, plus your note, ready to paste into docs, chats and forums that read Markdown
+- 2026-10-29: The shortlist has a Clear all my notes button (shown only when you have written notes; removes every note but keeps the artists, with Undo)
