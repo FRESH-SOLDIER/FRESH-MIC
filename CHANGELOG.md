@@ -268,3 +268,4 @@
 - 2026-10-29: The shortlist (2 or more artists) has a Copy names on one line button (names separated by commas, in your current order, for pasting into a message or a playlist title)
 - 2026-10-29: The artist About card has a Save to shortlist button (turns into Saved, tap again to remove; shows a message with Undo)
 - 2026-10-29: The shortlist has a Download as text file button (numbered artists with fan counts, your notes and Deezer links, saved as fresh-mic-shortlist.txt)
+- 2026-10-29: New releases, Coming soon and Hidden gems each have a Save these artists button that adds every artist currently shown in that list to your shortlist (skips ones already saved, with Undo)
