@@ -254,3 +254,4 @@
 - 2026-10-29: The release type buttons show how many artists have a release of each type (for example Albums (1k), EPs (404), Singles (2.6k)); the numbers match what each button shows when clicked
 - 2026-10-29: When you come back to an open Fresh Mic tab and a newer version has been published, a bar says A newer version is ready with a Reload button (checks at most every 10 minutes, only on the web version)
 - 2026-10-29: The artist About card has a Vs your shortlist line (bigger than N of your M saved artists, smaller than K) when you have 2 or more saved and the artist is not one of them
+- 2026-10-29: Shortlist entries show a New: line (title and date) when the artist put music out in the last 30 days, or a Coming: line for an announced release
