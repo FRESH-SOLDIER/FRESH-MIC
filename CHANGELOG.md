@@ -261,3 +261,4 @@
 - 2026-10-29: The shortlist has an Add upcoming releases to calendar button (shown when a saved artist has an announced release) that downloads an .ics file with just those releases; shares its code with the Coming soon calendar file
 - 2026-10-29: The shortlist has Back up my shortlist and notes (downloads a small .json file with saved artists, heard artists and notes) and Restore from a backup (merges a backup file into this browser, keeps your existing notes, then reloads), for moving to another device or browser
 - 2026-10-29: The shortlist (3 or more artists) has a Sort biggest first button (most fans first, with Undo), next to Sort smallest first
+- 2026-10-29: The shortlist (2 or more artists) has a Reverse order button (flips the whole list, with Undo)
