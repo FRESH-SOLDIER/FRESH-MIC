@@ -1041,16 +1041,18 @@ const G = /*DATA*/;
   const clearHq=()=>{ hq=''; $('hq').value=''; $('hqlink').hidden=true; newShown=24; soonShown=12; gemShown=8; renderHome() };
 
   function homeData(){
-    const fresh=[], soon=[];
+    const fresh=[], soon=[], tc={album:0,ep:0,single:0};
     R.forEach(r=>{
       const k=r[0], f=N[k][2]; if(!inLimit(f)||f<50||hid.has(N[k][0])||(hideHeard&&heard.has(N[k][0]))||(ui.hs===true&&list.includes(N[k][0]))) return;
       if(genre?r[1]!==genre:muted.has(r[1])) return;
       const nm=!nameMiss(k), okT=x=>(!rtype||x[3]===rtype)&&(nm||!hq||x[1].toLowerCase().includes(hq));
+      for(const t of ['album','ep','single']){ const px=r[4].find(x=>x[2]<=TODAY&&x[3]===t&&(nm||!hq||x[1].toLowerCase().includes(hq))); if(px&&(!rwin||px[2]>=cutoff(rwin))) tc[t]++ }
       const past=r[4].find(x=>x[2]<=TODAY&&okT(x)), fut=r[4].filter(x=>x[2]>TODAY&&okT(x));
       if(past&&(!rwin||past[2]>=cutoff(rwin))) fresh.push({k,f,rel:past,g:r[1]});
       fut.forEach(x=>soon.push({k,f,rel:x,g:r[1]}));
     });
     fresh.sort((a,b)=>b.rel[2].localeCompare(a.rel[2])||a.f-b.f);
+    { const tot=tc.album+tc.ep+tc.single; document.querySelectorAll('#rtseg button').forEach(b=>{ const v=b.dataset.v, l=b.dataset.l; if(!l) return; const n=v===''?fresh.length:tc[v]; b.textContent=l+' ('+(n>999?Math.floor(n/100)/10+'k':n)+')' }) }
     if(ui.nsince===true&&prevVisit){ for(let i=fresh.length-1;i>=0;i--) if(!isNewSince(fresh[i])) fresh.splice(i,1) }
     if(ui.sweek===true){ const lim=new Date(NOWD+'T00:00:00Z'); lim.setUTCDate(lim.getUTCDate()+7); const ls=lim.toISOString().slice(0,10); for(let i=soon.length-1;i>=0;i--) if(soon[i].rel[2]>ls) soon.splice(i,1) }
     if(ui.nord==='small') fresh.sort((a,b)=>a.f-b.f); else if(ui.nord==='big') fresh.sort((a,b)=>b.f-a.f);
@@ -1228,7 +1230,7 @@ const G = /*DATA*/;
   applyTheme(ui.theme==='light'||ui.theme==='dark'?ui.theme:'auto');
 
   [['','All types'],['album','Albums'],['ep','EPs'],['single','Singles']].forEach(([v,l])=>{
-    const b=document.createElement('button'); b.type='button'; b.textContent=l; b.dataset.v=v; b.setAttribute('aria-pressed',v===rtype);
+    const b=document.createElement('button'); b.type='button'; b.textContent=l; b.dataset.v=v; b.dataset.l=l; b.setAttribute('aria-pressed',v===rtype);
     b.addEventListener('click',()=>{rtype=v; ui.rtype=v; saveUi(); [...$('rtseg').children].forEach(x=>x.setAttribute('aria-pressed',x===b)); newShown=24; renderHome()});
     $('rtseg').appendChild(b);
   });
