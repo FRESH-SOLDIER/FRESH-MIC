@@ -514,6 +514,7 @@ ul.res.grid .player{margin-inline:12px}
     <ol id="listol"></ol>
     <button class="copy" id="copy" type="button">Copy list</button>
     <button class="copy" id="copymd" type="button" hidden>Copy as links (Markdown)</button>
+    <button class="copy" id="copyone" type="button" hidden>Copy names on one line</button>
     <button class="copy" id="copylink" type="button">Copy shortlist link</button>
     <button class="copy" id="dlcsv" type="button">Download as spreadsheet (CSV)</button>
     <button class="copy" id="prlist" type="button">Print shortlist</button>
@@ -792,7 +793,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       ol.appendChild(li)});
     listSum();
     updateJump();
-    $('copy').hidden=!list.length; $('copymd').hidden=!list.length; $('clrnotes').hidden=!list.some(i=>notes[i]); $('top10').hidden=list.length<=10; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('randsaved').hidden=list.length<2; $('sortaz').hidden=list.length<3; $('sortsmall').hidden=list.length<3; $('sortbig').hidden=list.length<3; $('revlist').hidden=list.length<2; $('sortnew').hidden=list.length<3; { let up=0; try{ list.forEach(id=>{ const k=N.findIndex(q=>q[0]===id), r=k<0?null:RI.get(k); if(r&&r[4].some(x=>x[2]>=NOWD)) up++ }) }catch(e){} $('listics').hidden=!up } $('sortgenre').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
+    $('copy').hidden=!list.length; $('copymd').hidden=!list.length; $('copyone').hidden=list.length<2; $('clrnotes').hidden=!list.some(i=>notes[i]); $('top10').hidden=list.length<=10; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('randsaved').hidden=list.length<2; $('sortaz').hidden=list.length<3; $('sortsmall').hidden=list.length<3; $('sortbig').hidden=list.length<3; $('revlist').hidden=list.length<2; $('sortnew').hidden=list.length<3; { let up=0; try{ list.forEach(id=>{ const k=N.findIndex(q=>q[0]===id), r=k<0?null:RI.get(k); if(r&&r[4].some(x=>x[2]>=NOWD)) up++ }) }catch(e){} $('listics').hidden=!up } $('sortgenre').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
   }
 
@@ -2051,6 +2052,12 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       try{history.replaceState(null,'',location.pathname+location.search)}catch(e){} } }
   $('top10').addEventListener('click',()=>{ if(list.length<=10) return; const old=list.slice(), n=list.length-10; list.length=10; saveList(); refreshAll(); renderList(); toast('Kept the first 10 and removed '+n+'.',()=>{ list.length=0; list.push(...old); saveList(); refreshAll(); renderList() }) });
   $('clrnotes').addEventListener('click',()=>{ const old=Object.assign({},notes); const n=list.filter(i=>notes[i]).length; if(!n) return; list.forEach(i=>{ delete notes[i] }); const sv=()=>{ try{ localStorage.setItem('freshmic:notes',JSON.stringify(notes)) }catch(e){} }; sv(); renderList(); toast('Cleared '+n+' note'+(n===1?'':'s')+'.',()=>{ Object.assign(notes,old); sv(); renderList() }) });
+  $('copyone').addEventListener('click',()=>{
+    const idx=new Map(N.map((a,i)=>[a[0],i]));
+    const txt=list.map(id=>{ const k=idx.get(id); return k==null?'':N[k][1] }).filter(Boolean).join(', ');
+    const done=m=>{$('copied').textContent=m; setTimeout(()=>$('copied').textContent='',2200)};
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>done('Copied on one line'),()=>done('Copy failed'))} else done('Copy failed');
+  });
   $('copymd').addEventListener('click',()=>{
     const idx=new Map(N.map((a,i)=>[a[0],i]));
     const esc=t=>String(t).replace(/([\\\[\]`*_<>])/g,'\\$1');

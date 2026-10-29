@@ -265,3 +265,4 @@
 - 2026-10-29: The shortlist has a Copy as links (Markdown) button: a numbered list with each artist name linked to its Deezer page, plus your note, ready to paste into docs, chats and forums that read Markdown
 - 2026-10-29: The shortlist has a Clear all my notes button (shown only when you have written notes; removes every note but keeps the artists, with Undo)
 - 2026-10-29: The shortlist has a Keep only the first 10 button (shown when you have more than 10 saved; trims the list, with Undo), handy after sorting by biggest or latest release
+- 2026-10-29: The shortlist (2 or more artists) has a Copy names on one line button (names separated by commas, in your current order, for pasting into a message or a playlist title)
