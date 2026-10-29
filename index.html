@@ -523,6 +523,7 @@ ul.res.grid .player{margin-inline:12px}
     <button class="copy" id="sortsmall" type="button" hidden>Sort smallest first</button>
     <button class="copy" id="sortgenre" type="button" hidden>Sort by genre</button>
     <button class="copy" id="sortnew" type="button" hidden>Sort by latest release</button>
+    <button class="copy" id="listics" type="button" hidden>Add upcoming releases to calendar</button>
     <button class="copy" id="rmheard" type="button" hidden>Remove artists I've heard</button>
     <button class="copy" id="blendbtn" type="button" hidden>Suggest artists from my shortlist</button>
     <button class="copy" id="clrlist" type="button" hidden>Clear shortlist</button>
@@ -783,7 +784,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       ol.appendChild(li)});
     listSum();
     updateJump();
-    $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('randsaved').hidden=list.length<2; $('sortaz').hidden=list.length<3; $('sortsmall').hidden=list.length<3; $('sortnew').hidden=list.length<3; $('sortgenre').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
+    $('copy').hidden=!list.length; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('randsaved').hidden=list.length<2; $('sortaz').hidden=list.length<3; $('sortsmall').hidden=list.length<3; $('sortnew').hidden=list.length<3; { let up=0; try{ list.forEach(id=>{ const k=N.findIndex(q=>q[0]===id), r=k<0?null:RI.get(k); if(r&&r[4].some(x=>x[2]>=NOWD)) up++ }) }catch(e){} $('listics').hidden=!up } $('sortgenre').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
   }
 
@@ -810,10 +811,12 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   [['soonprint','soonsec'],['newprint','secNew'],['gemprint','secGems']].forEach(([bid,sid])=>{ $(bid).addEventListener('click',()=>{ const sec=$(sid); sec.classList.add('psel'); document.body.classList.add('printsec'); const done=()=>{ document.body.classList.remove('printsec'); sec.classList.remove('psel'); removeEventListener('afterprint',done) }; addEventListener('afterprint',done); window.print() }) });
   { const g=$('gmax'); g.value=[600,1000,2000].includes(ui.gmax)?String(ui.gmax):''; g.addEventListener('change',()=>{ ui.gmax=g.value?+g.value:0; saveUi(); gemShown=8; renderHome() }) }
   { const gb=$('gemnew'); const sync=()=>{ gb.setAttribute('aria-pressed',ui.gnew===true); gb.textContent=ui.gnew===true?'Showing the last 30 days':'Last 30 days only' }; sync(); gb.addEventListener('click',()=>{ ui.gnew=!(ui.gnew===true); saveUi(); sync(); gemShown=8; renderHome() }) }
-  $('soonics').addEventListener('click',()=>{ const rows=lastSoon.slice(0,300); if(!rows.length){ toast('Nothing upcoming to add.'); return } const esc=t=>String(t).replace(/[\\;,]/g,m=>'\\'+m).replace(/\r?\n/g,' '); const stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+  const saveIcs=(rows,fname)=>{ if(!rows.length){ toast('Nothing upcoming to add.'); return } const esc=t=>String(t).replace(/[\\;,]/g,m=>'\\'+m).replace(/\r?\n/g,' '); const stamp=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
     const ev=rows.map(x=>{ const d=x.rel[2], nx=new Date(d+'T00:00:00Z'); nx.setUTCDate(nx.getUTCDate()+1); return ['BEGIN:VEVENT','UID:'+N[x.k][0]+'-'+x.rel[0]+'@fresh-mic','DTSTAMP:'+stamp,'DTSTART;VALUE=DATE:'+d.replace(/-/g,''),'DTEND;VALUE=DATE:'+nx.toISOString().slice(0,10).replace(/-/g,''),'SUMMARY:'+esc(N[x.k][1]+' releases '+x.rel[1]),'DESCRIPTION:'+esc('Found on Fresh Mic: '+location.origin+location.pathname),'END:VEVENT'].join('\r\n') });
     const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Fresh Mic//EN',...ev,'END:VCALENDAR'].join('\r\n')+'\r\n';
-    const u=URL.createObjectURL(new Blob([ics],{type:'text/calendar'})), dl=document.createElement('a'); dl.href=u; dl.download='fresh-mic-upcoming.ics'; document.body.appendChild(dl); dl.click(); dl.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000); toast('Calendar file saved with '+rows.length+' release'+(rows.length===1?'':'s')+'.') });
+    const u=URL.createObjectURL(new Blob([ics],{type:'text/calendar'})), dl=document.createElement('a'); dl.href=u; dl.download=fname; document.body.appendChild(dl); dl.click(); dl.remove(); setTimeout(()=>URL.revokeObjectURL(u),2000); toast('Calendar file saved with '+rows.length+' release'+(rows.length===1?'':'s')+'.') };
+  $('soonics').addEventListener('click',()=>saveIcs(lastSoon.slice(0,300),'fresh-mic-upcoming.ics'));
+  $('listics').addEventListener('click',()=>{ const rows=[]; list.forEach(id=>{ const k=N.findIndex(q=>q[0]===id), r=k<0?null:RI.get(k); if(r) r[4].filter(x=>x[2]>=NOWD).forEach(x=>rows.push({k,rel:x})) }); saveIcs(rows,'fresh-mic-my-shortlist.ics') });
   $('copysoon').addEventListener('click',()=>copyRows('soonlist','upcoming releases'));
   $('playnew').addEventListener('click',()=>{ const rows=[...$('newlist').querySelectorAll('li')]; const li=rows.find(x=>x.querySelector('button.play')&&!x.querySelector('.heardtag'))||rows.find(x=>x.querySelector('button.play')); if(!li){ toast('No previews to play here.'); return } if(!auto){ auto=true; ui.auto=true; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',true) } li.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'}); li.querySelector('button.play').click(); showMini(); toast('Playing these new releases one after another. Autoplay is on.') });
   $('playlist').addEventListener('click',()=>{ const b=$('listol').querySelector('button.play'); if(!b) return; if(!auto){ auto=true; ui.auto=true; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',true) } b.click(); showMini() });

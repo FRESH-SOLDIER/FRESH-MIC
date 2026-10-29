@@ -258,3 +258,4 @@
 - 2026-10-29: The shortlist summary line says how many saved artists put music out in the last 30 days (for example 3 of 5 put music out in the last 30 days)
 - 2026-10-29: The shortlist (3 or more artists) has a Sort by latest release button (newest music first, with Undo)
 - 2026-10-29: The shortlist spreadsheet download adds Genre, Latest release and Release date columns (before the optional My note column)
+- 2026-10-29: The shortlist has an Add upcoming releases to calendar button (shown when a saved artist has an announced release) that downloads an .ics file with just those releases; shares its code with the Coming soon calendar file
