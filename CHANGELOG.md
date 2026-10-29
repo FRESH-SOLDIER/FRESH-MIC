@@ -249,3 +249,4 @@
 - 2026-10-28: Today's pick moved to the top of Discover (above New releases) and added to the Jump to row
 - 2026-10-28: Today's pick has a Copy to share button (name, genre, fans and a link that opens Find similar for that artist; uses the phone share sheet where available)
 - 2026-10-29: Today's pick follows the genre you picked on Discover (a small Rock artist, for example); with All genres it picks from everything, and it falls back to all genres if that genre has no match
+- 2026-10-29: Press D on Discover to jump to Today's pick and play its preview (listed in the shortcuts card)
