@@ -366,6 +366,7 @@ ul.res.grid .player{margin-inline:12px}
 <div id="bgfx" aria-hidden="true"></div>
 <a class="skip" href="#bar">Skip to search and results</a>
 <main>
+  <div class="hidbar" id="updbar" role="status" hidden><span>A newer version of Fresh Mic is ready.</span><button type="button" id="updbtn">Reload</button></div>
   <div class="hidbar" id="installbar" hidden><span>Add Fresh Mic to your home screen or desktop to open it like an app.</span><button type="button" id="installbtn">Install app</button><button type="button" id="installno">Not now</button></div>
   <div class="hidbar" id="offnote" role="status" hidden>You are offline. Fresh Mic still shows the last data it saved, but previews and Free music need a connection.</div>
   <header>
@@ -2023,5 +2024,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     addEventListener('appinstalled',()=>{ ip=null; if(bar) bar.hidden=true });
     document.getElementById('installbtn').addEventListener('click',()=>{ if(!ip) return; const e=ip; ip=null; bar.hidden=true; try{ e.prompt() }catch(x){} });
     document.getElementById('installno').addEventListener('click',()=>{ bar.hidden=true; try{ localStorage.setItem('freshmic:noinstall','1') }catch(e){} }) }
+  if(/^https?:$/.test(location.protocol)){ let base=null, last=0; const sig=r=>(r.headers.get('etag')||'')+'|'+(r.headers.get('last-modified')||'')+'|'+(r.headers.get('content-length')||'');
+    const chk=()=>{ if(document.hidden||Date.now()-last<(window.__fmGap===0?0:600000)||!navigator.onLine) return; last=Date.now(); fetch(location.pathname,{cache:'no-store'}).then(r=>{ if(!r.ok) return; const g=sig(r); if(g==='||') return; if(base===null) base=g; else if(g!==base){ const b=document.getElementById('updbar'); if(b) b.hidden=false } }).catch(()=>{}) };
+    document.addEventListener('visibilitychange',chk); addEventListener('load',()=>setTimeout(chk,3000)); document.getElementById('updbtn').addEventListener('click',()=>location.reload()) }
 </script>
 <noscript><p style="max-width:60ch;margin:24px auto;padding:0 16px">Discover newer and lesser-known artists: new releases, upcoming albums, hidden gems by genre, and a similar-artist finder with 30-second previews.</p></noscript></body></html>

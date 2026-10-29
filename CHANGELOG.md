@@ -252,3 +252,4 @@
 - 2026-10-29: Press D on Discover to jump to Today's pick and play its preview (listed in the shortcuts card)
 - 2026-10-29: Today's pick has an Earlier picks (all genres) list for the past 7 days, worked out from each day's date the same way, with Find similar buttons
 - 2026-10-29: The release type buttons show how many artists have a release of each type (for example Albums (1k), EPs (404), Singles (2.6k)); the numbers match what each button shows when clicked
+- 2026-10-29: When you come back to an open Fresh Mic tab and a newer version has been published, a bar says A newer version is ready with a Reload button (checks at most every 10 minutes, only on the web version)
