@@ -1062,11 +1062,12 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   function renderPick(){
     const sec=$('secPick'), ul=$('picklist'); ul.textContent=''; const c90=cutoff(90), c=[];
     R.forEach(r=>{ const f=N[r[0]]&&N[r[0]][2]; if(f==null||f<300||f>3000||r[3]<2||r[2]<c90||r[2]>TODAY) return; c.push(r) });
+    let inG=false; if(genre){ const cg=c.filter(r=>r[1]===genre); if(cg.length){ c.length=0; cg.forEach(r=>c.push(r)); inG=true } }
     c.sort((x,y)=>x[0]-y[0]); if(!c.length){ sec.hidden=true; return }
     let h=0; for(const ch of NOWD) h=(h*31+ch.charCodeAt(0))>>>0; const r=c[h%c.length];
     ul.appendChild(card({k:r[0],f:N[r[0]][2],g:r[1],last:r[2],n:r[3]}));
     { const a=N[r[0]], t='Today\u2019s pick on Fresh Mic: '+a[1]+' ('+gname(r[1])+', '+fmt(a[2])+' fans). '+location.origin+location.pathname+'#like='+a[0]; $('pickshare').onclick=()=>{ if(canShare&&navigator.share){ navigator.share({title:'Fresh Mic',text:t}).catch(()=>{}) } else if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(()=>toast('Copied today\u2019s pick.'),()=>toast('Copy failed.')); else toast('Copy failed.') } }
-    $('pickmeta').textContent='A small artist with recent music, the same for everyone today'; sec.hidden=false }
+    $('pickmeta').textContent=inG?'A small '+gname(genre)+' artist with recent music, the same for everyone today':'A small artist with recent music, the same for everyone today'; sec.hidden=false }
   function card(item,kind){
     const a=N[item.k], li=document.createElement('li'); li.className='row';
     const saved=list.includes(a[0]);
