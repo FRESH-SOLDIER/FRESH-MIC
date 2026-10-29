@@ -256,3 +256,4 @@
 - 2026-10-29: The artist About card has a Vs your shortlist line (bigger than N of your M saved artists, smaller than K) when you have 2 or more saved and the artist is not one of them
 - 2026-10-29: Shortlist entries show a New: line (title and date) when the artist put music out in the last 30 days, or a Coming: line for an announced release
 - 2026-10-29: The shortlist summary line says how many saved artists put music out in the last 30 days (for example 3 of 5 put music out in the last 30 days)
+- 2026-10-29: The shortlist (3 or more artists) has a Sort by latest release button (newest music first, with Undo)
