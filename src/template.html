@@ -895,6 +895,7 @@ const G = /*DATA*/;
       if(live.length>1){ const dd=x=>Date.UTC(+x.slice(0,4),+x.slice(5,7)-1,+x.slice(8,10))/864e5; const gap=Math.round((dd(live[0][2])-dd(live[live.length-1][2]))/(live.length-1)); if(gap>=0) row('Release pace', gap<7?'Several releases within a week of each other (based on the '+live.length+' latest)':'About one release every '+(gap<60?Math.round(gap/7)+' week'+(Math.round(gap/7)===1?'':'s'):Math.round(gap/30.4)+' months')+' (based on the '+live.length+' latest)') }
       if(soon.length) row('Coming up','\u201C'+soon[0][1]+'\u201D, '+when(soon[0][2]).toLowerCase());
     } else row('Releases','No release details in this snapshot.');
+    if(f!=null&&list.length>=2&&!list.includes(a[0])){ const fs=list.map(id=>{ const q=N.findIndex(z=>z[0]===id); return q<0?null:N[q][2] }).filter(v=>v!=null); if(fs.length>=2){ const sm=fs.filter(v=>v<f).length, bg=fs.filter(v=>v>f).length, eq=fs.length-sm-bg; row('Vs your shortlist','Bigger than '+sm+' of your '+fs.length+' saved artists'+(bg?', smaller than '+bg:'')+(eq?', same size as '+eq:'')) } }
     row('Similar artists',results.length+' found in this list');
     box.appendChild(dl);
     { const lk=document.createElement('div'); lk.className='links'; lk.style.marginTop='10px'; box.appendChild(lk); const lv=r&&r[4].find(x=>x[2]<=TODAY); previewBtn(box,a,lv?lv[0]:null); previewBtn(box,a,null,true);
