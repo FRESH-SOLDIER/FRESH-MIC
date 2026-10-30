@@ -270,3 +270,4 @@
 - 2026-10-29: The shortlist has a Download as text file button (numbered artists with fan counts, your notes and Deezer links, saved as fresh-mic-shortlist.txt)
 - 2026-10-29: New releases, Coming soon and Hidden gems each have a Save these artists button that adds every artist currently shown in that list to your shortlist (skips ones already saved, with Undo)
 - 2026-10-29: Free music tab: each song has a Keep button (heart); Show my kept songs switches to your kept songs (kept only in this browser, up to 200, with Play and Copy credit), and Back to search results returns
+- 2026-10-29: Free music tab: in Show my kept songs, Copy credits and Download credits (.txt) now work on your kept songs (all of them, whatever the search or licence filter)
