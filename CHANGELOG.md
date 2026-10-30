@@ -289,3 +289,4 @@
 - 2026-10-30: New releases, Coming soon and Hidden gems each have a Copy as links (Markdown) button: numbered artists linked to Deezer with the release details and fan count
 - 2026-10-30: Artist rows on Discover have a Mark heard button, for artists you already know without playing a preview; it adds the Heard tag (which still unmarks when clicked) and counts toward Hide artists I've heard
 - 2026-10-30: Mark heard polish: the button disappears once an artist counts as heard (including after a preview plays) and comes back if you click the Heard tag to unmark it
+- 2026-10-30: Free music tab: Order switch gains Shuffled (a new random order each time you press it; Most popular puts the original order back)
