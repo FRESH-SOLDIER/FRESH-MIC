@@ -284,3 +284,4 @@
 - 2026-10-30: Every shortlist entry (except the first) has a Top button that moves that artist to the top of the shortlist in one tap, with Undo
 - 2026-10-30: Accessibility: the result counts on New releases, Coming soon, Hidden gems and Find similar are announced politely by screen readers when a filter or order changes (for example 1620 match)
 - 2026-10-30: The artist About card has a Compare with a saved artist picker (shown when you have other artists saved): one plain sentence on who has more fans and by how much, who released more recently, and whether they share a genre
+- 2026-10-30: Find similar has a Copy as links (Markdown) button: a numbered list of the artists shown, each name linked to Deezer with its fan count, ready to paste into docs, chats and forums
