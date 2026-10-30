@@ -545,6 +545,7 @@ ul.res.grid .player{margin-inline:12px}
     <button class="copy" id="randsaved" type="button" hidden>Play a random saved artist</button>
     <button class="copy" id="shufflelist" type="button" hidden>Shuffle shortlist</button>
     <button class="copy" id="sortaz" type="button" hidden>Sort A to Z</button>
+    <button class="copy" id="sortza" type="button" hidden>Sort Z to A</button>
     <button class="copy" id="sortsmall" type="button" hidden>Sort smallest first</button>
     <button class="copy" id="sortbig" type="button" hidden>Sort biggest first</button>
     <button class="copy" id="revlist" type="button" hidden>Reverse order</button>
@@ -818,7 +819,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       ol.appendChild(li)});
     listSum();
     updateJump();
-    $('copy').hidden=!list.length; $('copymd').hidden=!list.length; $('copyone').hidden=list.length<2; $('dltxt').hidden=!list.length; $('clrnotes').hidden=!list.some(i=>notes[i]); $('top10').hidden=list.length<=10; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('randsaved').hidden=list.length<2; $('sortaz').hidden=list.length<3; $('sortsmall').hidden=list.length<3; $('sortbig').hidden=list.length<3; $('revlist').hidden=list.length<2; $('sortnew').hidden=list.length<3; { let up=0; try{ list.forEach(id=>{ const k=N.findIndex(q=>q[0]===id), r=k<0?null:RI.get(k); if(r&&r[4].some(x=>x[2]>=NOWD)) up++ }) }catch(e){} $('listics').hidden=!up } $('sortgenre').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
+    $('copy').hidden=!list.length; $('copymd').hidden=!list.length; $('copyone').hidden=list.length<2; $('dltxt').hidden=!list.length; $('clrnotes').hidden=!list.some(i=>notes[i]); $('top10').hidden=list.length<=10; $('copylink').hidden=!list.length; $('clrlist').hidden=!list.length; $('playlist').hidden=!list.length; $('shufflelist').hidden=list.length<3; $('randsaved').hidden=list.length<2; $('sortaz').hidden=list.length<3; $('sortza').hidden=list.length<3; $('sortsmall').hidden=list.length<3; $('sortbig').hidden=list.length<3; $('revlist').hidden=list.length<2; $('sortnew').hidden=list.length<3; { let up=0; try{ list.forEach(id=>{ const k=N.findIndex(q=>q[0]===id), r=k<0?null:RI.get(k); if(r&&r[4].some(x=>x[2]>=NOWD)) up++ }) }catch(e){} $('listics').hidden=!up } $('sortgenre').hidden=list.length<3; $('blendbtn').hidden=list.length<2; if(list.length<2) $('blendol').hidden=true;
     if(!list.length){const li=document.createElement('li'); li.style.listStyle='none'; li.style.marginLeft='-1.2em'; li.style.color='var(--muted)'; li.textContent='Save artists from the results to keep them here.'; ol.appendChild(li)}
   }
 
@@ -898,6 +899,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   $('blendbtn').addEventListener('click',blend);
   const sortList=(cmp,msg)=>{ if(list.length<3) return; const old=list.slice(), ix=new Map(N.map((a,i)=>[a[0],i])); const key=id=>{ const k=ix.get(id); return k==null?null:N[k] }; list.sort((a,b)=>{ const x=key(a), y=key(b); if(!x||!y) return 0; return cmp(x,y) }); saveList(); renderList(); toast(msg,()=>{ list.length=0; list.push(...old); saveList(); renderList() }) };
   $('sortaz').addEventListener('click',()=>sortList((x,y)=>x[1].localeCompare(y[1],undefined,{sensitivity:'base'}),'Shortlist sorted A to Z.'));
+  $('sortza').addEventListener('click',()=>sortList((x,y)=>y[1].localeCompare(x[1],undefined,{sensitivity:'base'}),'Shortlist sorted Z to A.'));
   $('rmheard').addEventListener('click',()=>{ const old=list.slice(), keep=list.filter(id=>!heard.has(id)); const n=old.length-keep.length; if(!n) return; list.length=0; list.push(...keep); saveList(); refreshAll(); renderList(); toast('Removed '+n+' artist'+(n===1?'':'s')+' you have already heard.',()=>{ list.length=0; list.push(...old); saveList(); refreshAll(); renderList() }) });
   $('sortgenre').addEventListener('click',()=>{ const gn=x=>{ const r=RI.get(IDX.get(x[0])); return r&&r[1]&&GN[r[1]]?gname(r[1]):'\uffff' }; sortList((x,y)=>{ const a=gn(x), b=gn(y); return a===b?x[1].localeCompare(y[1],undefined,{sensitivity:'base'}):a.localeCompare(b) },'Shortlist grouped by genre.') });
   $('sortnew').addEventListener('click',()=>{ const ld=x=>{ const r=RI.get(IDX.get(x[0])); const v=r&&r[4].find(q=>q[2]<=TODAY); return v?v[2]:'' }; sortList((x,y)=>{ const a=ld(x), b=ld(y); return a===b?x[1].localeCompare(y[1],undefined,{sensitivity:'base'}):(a<b?1:-1) },'Shortlist sorted by latest release.') });
