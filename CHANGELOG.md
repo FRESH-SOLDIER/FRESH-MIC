@@ -283,3 +283,4 @@
 - 2026-10-30: Display options has a Reset display options button that puts the view (List), theme (Auto), text size (Normal), keep still, hide pictures, higher contrast and compact rows back to their defaults in one tap
 - 2026-10-30: Every shortlist entry (except the first) has a Top button that moves that artist to the top of the shortlist in one tap, with Undo
 - 2026-10-30: Accessibility: the result counts on New releases, Coming soon, Hidden gems and Find similar are announced politely by screen readers when a filter or order changes (for example 1620 match)
+- 2026-10-30: The artist About card has a Compare with a saved artist picker (shown when you have other artists saved): one plain sentence on who has more fans and by how much, who released more recently, and whether they share a genre
