@@ -272,3 +272,4 @@
 - 2026-10-29: Free music tab: each song has a Keep button (heart); Show my kept songs switches to your kept songs (kept only in this browser, up to 200, with Play and Copy credit), and Back to search results returns
 - 2026-10-29: Free music tab: in Show my kept songs, Copy credits and Download credits (.txt) now work on your kept songs (all of them, whatever the search or licence filter)
 - 2026-10-30: Back up my shortlist and notes now also saves your kept Free music songs, and Restore from a backup merges them back in (checks each song and only accepts https licence links)
+- 2026-10-30: Free music tab: a Clear kept songs button (shown inside Show my kept songs) removes all kept songs, with Undo
