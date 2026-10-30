@@ -1197,6 +1197,7 @@ const G = /*DATA*/;
     const sv=document.createElement('button'); sv.type='button'; sv.className='save'; sv.setAttribute('aria-pressed',saved); sv.textContent=saved?'Saved':'Save';
     sv.addEventListener('click',()=>{const i=list.indexOf(a[0]); if(i>=0) list.splice(i,1); else list.push(a[0]); saveList(); sv.setAttribute('aria-pressed',i<0); sv.textContent=i<0?'Saved':'Save'; renderList();});
     links.appendChild(sv);
+    if(!heard.has(a[0])){ const mh=document.createElement('button'); mh.type='button'; mh.className='sim'; mh.textContent='Mark heard'; mh.setAttribute('aria-label','Mark '+a[1]+' as heard'); mh.addEventListener('click',()=>{ markHeard(li,a[0]); mh.remove(); toast(a[1]+' marked as heard.') }); links.appendChild(mh) }
     const hb=document.createElement('button'); hb.type='button'; hb.className='hide'; hb.textContent='Not for me'; hb.setAttribute('aria-label','Hide '+a[1]+' from my results');
     hb.addEventListener('click',e=>hideArtist(item.k,e.currentTarget)); links.appendChild(hb);
     return li;

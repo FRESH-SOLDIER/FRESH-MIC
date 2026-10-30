@@ -287,3 +287,4 @@
 - 2026-10-30: Find similar has a Copy as links (Markdown) button: a numbered list of the artists shown, each name linked to Deezer with its fan count, ready to paste into docs, chats and forums
 - 2026-10-30: The shortlist (3 or more artists) has a Sort Z to A button (reverse alphabetical, with Undo), next to Sort A to Z
 - 2026-10-30: New releases, Coming soon and Hidden gems each have a Copy as links (Markdown) button: numbered artists linked to Deezer with the release details and fan count
+- 2026-10-30: Artist rows on Discover have a Mark heard button, for artists you already know without playing a preview; it adds the Heard tag (which still unmarks when clicked) and counts toward Hide artists I've heard
