@@ -275,3 +275,4 @@
 - 2026-10-30: Free music tab: a Clear kept songs button (shown inside Show my kept songs) removes all kept songs, with Undo
 - 2026-10-30: Free music tab: a Keep all shown button keeps every song currently shown in one tap (up to the 200 limit, with Undo)
 - 2026-10-30: The Earlier picks list under Today's pick has a Save button on each artist (turns into Saved, tap again to remove)
+- 2026-10-30: First-time visitors see a short New here? tip bar at the top (search, Discover, Save, press ? for shortcuts) with a Got it button; it stays hidden for anyone who has dismissed it, has a shortlist, or has visited before

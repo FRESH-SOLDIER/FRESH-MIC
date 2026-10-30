@@ -368,6 +368,7 @@ ul.res.grid .player{margin-inline:12px}
 <main>
   <div class="hidbar" id="updbar" role="status" hidden><span>A newer version of Fresh Mic is ready.</span><button type="button" id="updbtn">Reload</button></div>
   <div class="hidbar" id="installbar" hidden><span>Add Fresh Mic to your home screen or desktop to open it like an app.</span><button type="button" id="installbtn">Install app</button><button type="button" id="installno">Not now</button></div>
+  <div class="hidbar" id="welcome" role="region" aria-label="Quick tour" hidden><span><b>New here?</b> Search an artist to find similar ones, browse small artists with new music on Discover, and tap Save to build a shortlist. Press <kbd>?</kbd> any time for keyboard shortcuts.</span><button type="button" id="welcomeno">Got it</button></div>
   <div class="hidbar" id="offnote" role="status" hidden>You are offline. Fresh Mic still shows the last data it saved, but previews and Free music need a connection.</div>
   <header>
     <h1>Fresh Mic</h1>
@@ -2096,6 +2097,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     else done('Select the list to copy');
   });
 })();
+  { const w=document.getElementById('welcome'); let seen=false; try{ seen=localStorage.getItem('freshmic:welcome')==='1'||!!localStorage.getItem('freshmic:visit')&&JSON.parse(localStorage.getItem('freshmic:visit')||'{}').prev }catch(x){} let has=false; try{ const l=JSON.parse(localStorage.getItem('freshmic:list')||'[]'); has=Array.isArray(l)&&l.length>0 }catch(x){} if(w&&!seen&&!has) w.hidden=false;
+    const wn=document.getElementById('welcomeno'); if(wn) wn.addEventListener('click',()=>{ w.hidden=true; try{ localStorage.setItem('freshmic:welcome','1') }catch(x){} }) }
   if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)) addEventListener('load',()=>{ try{ navigator.serviceWorker.register('sw.js').catch(()=>{}) }catch(e){} });
   { const on=()=>{ const n=document.getElementById('offnote'); if(n) n.hidden=navigator.onLine!==false }; addEventListener('online',on); addEventListener('offline',on); on() }
   { let ip=null; const bar=document.getElementById('installbar'); let dis=false; try{ dis=localStorage.getItem('freshmic:noinstall')==='1' }catch(e){}
