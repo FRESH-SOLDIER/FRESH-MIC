@@ -279,3 +279,4 @@
 - 2026-10-30: The footer has Erase everything saved here (tap twice to confirm): removes the shortlist, notes, heard list, kept songs and settings stored in this browser, then reloads
 - 2026-10-30: Display options has a Pictures switch, Hide artist pictures: shows coloured initials instead of the artist pictures (remembered in this browser; the picture files are not downloaded while it is on, which helps on slow or limited connections)
 - 2026-10-30: Display options has a Contrast switch, Higher contrast: darker secondary text and stronger borders and controls in both light and dark themes (remembered in this browser)
+- 2026-10-30: Display options has a Density switch, Compact rows: tighter spacing and smaller pictures in the artist lists so more fit on screen (remembered in this browser)

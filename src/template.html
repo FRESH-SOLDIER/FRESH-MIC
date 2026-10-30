@@ -29,6 +29,8 @@ body{background:var(--bg);color:var(--fg);font:400 1rem/1.5 var(--f-body);
 #bgfx i.on{opacity:1}
 html[data-still] #bgfx i{animation:none!important}
 html[data-nopics] .pic{background-image:none!important}
+@media (min-width:481px){html[data-compact] .row{grid-template-columns:40px minmax(0,1fr) auto;padding:8px 0;gap:3px 12px}html[data-compact] .pic{width:40px;font-size:.9rem}html[data-compact] ul.res.grid .row>.pic{width:100%}}
+@media (max-width:480px){html[data-compact] .row{padding:8px 0;row-gap:2px}}
 :root[data-hc]{--muted:#343a52;--line:#7d84a0;--ctl:#454c68}
 @media (prefers-color-scheme:dark){:root[data-hc]:not([data-theme="light"]){--muted:#cfd4ec;--line:#5d6894;--ctl:#a3acd2}}
 :root[data-hc][data-theme="dark"]{--muted:#cfd4ec;--line:#5d6894;--ctl:#a3acd2}
@@ -420,6 +422,10 @@ ul.res.grid .player{margin-inline:12px}
     <div>
       <div class="cap" id="hlab">Contrast</div>
       <div class="seg" role="group" aria-labelledby="hlab"><button type="button" id="hcbtn" aria-pressed="false">Higher contrast</button></div>
+    </div>
+    <div>
+      <div class="cap" id="dlab">Density</div>
+      <div class="seg" role="group" aria-labelledby="dlab"><button type="button" id="compbtn" aria-pressed="false">Compact rows</button></div>
     </div>
     <div>
       <div class="cap" id="zlab">Text size</div>
@@ -1285,6 +1291,7 @@ const G = /*DATA*/;
   if(G.embed){ const ab=$('autobtn'); $('autowrap').hidden=false; ab.setAttribute('aria-pressed',auto);
     ab.addEventListener('click',()=>{auto=!auto; ui.auto=auto; saveUi(); ab.setAttribute('aria-pressed',auto); showMini(); toast(auto?'Autoplay on: the next artist\u2019s preview starts when one ends.':'Autoplay off.')}); }
 
+  { const cb=$('compbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-compact',''); else document.documentElement.removeAttribute('data-compact'); cb.setAttribute('aria-pressed',on) }; set(ui.compact===true); cb.addEventListener('click',()=>{ ui.compact=!(ui.compact===true); saveUi(); set(ui.compact); toast(ui.compact?'Compact rows are on.':'Rows are back to normal spacing.') }) }
   { const hb=$('hcbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-hc',''); else document.documentElement.removeAttribute('data-hc'); hb.setAttribute('aria-pressed',on) }; set(ui.hc===true); hb.addEventListener('click',()=>{ ui.hc=!(ui.hc===true); saveUi(); set(ui.hc); toast(ui.hc?'Higher contrast is on.':'Normal contrast.') }) }
   { const pb=$('nopicbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-nopics',''); else document.documentElement.removeAttribute('data-nopics'); pb.setAttribute('aria-pressed',on) }; set(ui.nopics===true); pb.addEventListener('click',()=>{ ui.nopics=!(ui.nopics===true); saveUi(); set(ui.nopics); toast(ui.nopics?'Artist pictures hidden (initials shown).':'Artist pictures are back.') }) }
   { const sb=$('stillbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-still',''); else document.documentElement.removeAttribute('data-still'); sb.setAttribute('aria-pressed',on) }; set(ui.still===true); sb.addEventListener('click',()=>{ ui.still=!(ui.still===true); saveUi(); set(ui.still); toast(ui.still?'Background is still.':'Background drifts again.') }) }
