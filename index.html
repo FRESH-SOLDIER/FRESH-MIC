@@ -830,10 +830,10 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   $('soonics').addEventListener('click',()=>saveIcs(lastSoon.slice(0,300),'fresh-mic-upcoming.ics'));
   $('bkup').addEventListener('click',()=>{
     const g=k=>{ try{ return JSON.parse(localStorage.getItem('freshmic:'+k)||'null') }catch(e){ return null } };
-    const d={app:'fresh-mic',v:1,saved:new Date().toISOString().slice(0,10),list:list.slice(),heard:Array.from(heard),notes:notes};
+    const d={app:'fresh-mic',v:1,saved:new Date().toISOString().slice(0,10),list:list.slice(),heard:Array.from(heard),notes:notes,kept:(()=>{ try{ const a=JSON.parse(localStorage.getItem('freshmic:fkeep')||'[]'); return Array.isArray(a)?a:[] }catch(e){ return [] } })()};
     const blob=new Blob([JSON.stringify(d)],{type:'application/json'});
     const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='fresh-mic-backup-'+d.saved+'.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),2000);
-    toast('Saved a backup of '+list.length+' artists, '+d.heard.length+' heard and '+Object.keys(notes).length+' notes.') });
+    toast('Saved a backup of '+list.length+' artists, '+d.heard.length+' heard, '+Object.keys(notes).length+' notes and '+d.kept.length+' kept songs.') });
   $('bkrest').addEventListener('click',()=>$('bkfile').click());
   $('bkfile').addEventListener('change',()=>{
     const f=$('bkfile').files[0]; $('bkfile').value=''; if(!f) return;
@@ -846,6 +846,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       if(d.notes&&typeof d.notes==='object') Object.keys(d.notes).forEach(k=>{ if(/^\d+$/.test(k)&&typeof d.notes[k]==='string') nn[k]=d.notes[k].slice(0,80) });
       const ml=Array.from(new Set(list.concat(nl))).slice(0,500), mh=Array.from(new Set(Array.from(heard).concat(nh)));
       const mn=Object.assign({},nn,notes);
+      try{ const cur=JSON.parse(localStorage.getItem('freshmic:fkeep')||'[]'), have=new Set((Array.isArray(cur)?cur:[]).map(x=>x&&x.id)); const inc=(Array.isArray(d.kept)?d.kept:[]).filter(x=>x&&typeof x.id==='string'&&typeof x.title==='string'&&typeof x.who==='string'&&x.lic&&typeof x.lic.url==='string'&&/^https:\/\//.test(x.lic.url)&&!have.has(x.id)).map(x=>({id:x.id,title:x.title.slice(0,200),who:x.who.slice(0,200),lic:x.lic,pd:typeof x.pd==='string'?x.pd.slice(0,10):''})); if(inc.length) localStorage.setItem('freshmic:fkeep',JSON.stringify((Array.isArray(cur)?cur:[]).concat(inc).slice(0,200))) }catch(e){}
       try{ localStorage.setItem('freshmic:list',JSON.stringify(ml)); localStorage.setItem('freshmic:heard',JSON.stringify(mh)); localStorage.setItem('freshmic:notes',JSON.stringify(mn)) }catch(e){ toast('Could not save in this browser.'); return }
       toast('Restored: now '+ml.length+' saved artists. Reloading...'); setTimeout(()=>location.reload(),900);
     },()=>toast('Could not read that file.'));
