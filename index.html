@@ -563,6 +563,7 @@ ul.res.grid .player{margin-inline:12px}
   <footer class="foot">
     <span>Similarity and release data come from Deezer. The Free music tab streams openly licensed music from the Internet Archive. Fan counts are Deezer followers as of the snapshot date below, so an artist can be bigger elsewhere. A new release here may be missing if Deezer has not listed it.</span>
     <span id="snap"></span>
+    <span>Your shortlist, notes and settings stay only in this browser. <button type="button" class="linkbtn" id="erasebtn">Erase everything saved here</button></span>
     <span>Keyboard: press <kbd>?</kbd> for the list of shortcuts, or <button type="button" class="linkbtn" id="keysOpen">show shortcuts</button>.</span>
     <span>Only artists in this snapshot can be searched. If yours is missing, try a similar one.</span>
   </footer>
@@ -2099,6 +2100,8 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
 })();
   { const w=document.getElementById('welcome'); let seen=false; try{ seen=localStorage.getItem('freshmic:welcome')==='1'||!!localStorage.getItem('freshmic:visit')&&JSON.parse(localStorage.getItem('freshmic:visit')||'{}').prev }catch(x){} let has=false; try{ const l=JSON.parse(localStorage.getItem('freshmic:list')||'[]'); has=Array.isArray(l)&&l.length>0 }catch(x){} if(w&&!seen&&!has) w.hidden=false;
     const wn=document.getElementById('welcomeno'); if(wn) wn.addEventListener('click',()=>{ w.hidden=true; try{ localStorage.setItem('freshmic:welcome','1') }catch(x){} }) }
+  { const eb=document.getElementById('erasebtn'); let armed=false, tm=0; if(eb) eb.addEventListener('click',()=>{ if(!armed){ armed=true; eb.textContent='Tap again to erase your shortlist, notes and settings'; clearTimeout(tm); tm=setTimeout(()=>{ armed=false; eb.textContent='Erase everything saved here' },6000); return }
+      clearTimeout(tm); let n=0; try{ Object.keys(localStorage).filter(k=>k.indexOf('freshmic:')===0||k.indexOf('undertow:')===0).forEach(k=>{ localStorage.removeItem(k); n++ }) }catch(x){} eb.textContent='Erased '+n+' saved item'+(n===1?'':'s')+'. Reloading...'; setTimeout(()=>location.reload(),900) }) }
   if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)) addEventListener('load',()=>{ try{ navigator.serviceWorker.register('sw.js').catch(()=>{}) }catch(e){} });
   { const on=()=>{ const n=document.getElementById('offnote'); if(n) n.hidden=navigator.onLine!==false }; addEventListener('online',on); addEventListener('offline',on); on() }
   { let ip=null; const bar=document.getElementById('installbar'); let dis=false; try{ dis=localStorage.getItem('freshmic:noinstall')==='1' }catch(e){}
