@@ -28,6 +28,8 @@ body{background:var(--bg);color:var(--fg);font:400 1rem/1.5 var(--f-body);
 #bgfx i{position:absolute;inset:-6%;opacity:0;transition:opacity 2.4s ease;background-repeat:no-repeat}
 #bgfx i.on{opacity:1}
 html[data-still] #bgfx i{animation:none!important}
+html[data-nopics] .pic{background-image:none!important}
+html[data-nopics] .pic:empty{background-color:#4b4fb8}html[data-nopics] .pic:empty::after{content:attr(data-i)}
 @media (prefers-reduced-motion:no-preference){#bgfx i{animation:bgdrift 90s ease-in-out infinite alternate}#bgfx i:nth-child(2n){animation-duration:120s;animation-direction:alternate-reverse}}
 @keyframes bgdrift{from{transform:translate3d(-1.5%,-1%,0) scale(1)}to{transform:translate3d(1.5%,1.2%,0) scale(1.04)}}
 .bgcap{font-size:.8rem;color:var(--muted);margin:6px 0 0}
@@ -408,6 +410,10 @@ ul.res.grid .player{margin-inline:12px}
       <div class="seg" role="group" aria-labelledby="mlab"><button type="button" id="stillbtn" aria-pressed="false">Keep still</button></div>
     </div>
     <div>
+      <div class="cap" id="plab">Pictures</div>
+      <div class="seg" role="group" aria-labelledby="plab"><button type="button" id="nopicbtn" aria-pressed="false">Hide artist pictures</button></div>
+    </div>
+    <div>
       <div class="cap" id="zlab">Text size</div>
       <div class="seg" id="zseg" role="group" aria-labelledby="zlab"></div>
     </div>
@@ -654,7 +660,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   const initials=n=>n.replace(/[^\p{L}\p{N} ]/gu,'').split(' ').filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'?';
   const enc=encodeURIComponent;
   function pic(k){
-    const a=N[k], d=document.createElement('div'); d.className='pic'; d.setAttribute('aria-hidden','true');
+    const a=N[k], d=document.createElement('div'); d.className='pic'; d.setAttribute('aria-hidden','true'); d.dataset.i=initials(a[1]);
     if(!NOPIC.has(k)){const sh=Math.floor(k/100), q=k%100, c=q%10, w=Math.floor(q/10); d.style.backgroundImage='url(sheets/m'+sh+'.jpg)'; d.style.backgroundPosition=(c/9*100).toFixed(3)+'% '+(w/9*100).toFixed(3)+'%'}
     else{d.style.cssText=tileStyle(a[0]); d.textContent=initials(a[1])}
     return d;
@@ -1271,6 +1277,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   if(G.embed){ const ab=$('autobtn'); $('autowrap').hidden=false; ab.setAttribute('aria-pressed',auto);
     ab.addEventListener('click',()=>{auto=!auto; ui.auto=auto; saveUi(); ab.setAttribute('aria-pressed',auto); showMini(); toast(auto?'Autoplay on: the next artist\u2019s preview starts when one ends.':'Autoplay off.')}); }
 
+  { const pb=$('nopicbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-nopics',''); else document.documentElement.removeAttribute('data-nopics'); pb.setAttribute('aria-pressed',on) }; set(ui.nopics===true); pb.addEventListener('click',()=>{ ui.nopics=!(ui.nopics===true); saveUi(); set(ui.nopics); toast(ui.nopics?'Artist pictures hidden (initials shown).':'Artist pictures are back.') }) }
   { const sb=$('stillbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-still',''); else document.documentElement.removeAttribute('data-still'); sb.setAttribute('aria-pressed',on) }; set(ui.still===true); sb.addEventListener('click',()=>{ ui.still=!(ui.still===true); saveUi(); set(ui.still); toast(ui.still?'Background is still.':'Background drifts again.') }) }
   { const Z=[['','Normal'],['l','Large'],['xl','Extra large']], cur=['l','xl'].includes(ui.text)?ui.text:'';
     const set=v=>{ if(v) document.documentElement.setAttribute('data-text',v); else document.documentElement.removeAttribute('data-text'); [...$('zseg').children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===v)) };

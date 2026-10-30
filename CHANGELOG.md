@@ -277,3 +277,4 @@
 - 2026-10-30: The Earlier picks list under Today's pick has a Save button on each artist (turns into Saved, tap again to remove)
 - 2026-10-30: First-time visitors see a short New here? tip bar at the top (search, Discover, Save, press ? for shortcuts) with a Got it button; it stays hidden for anyone who has dismissed it, has a shortlist, or has visited before
 - 2026-10-30: The footer has Erase everything saved here (tap twice to confirm): removes the shortlist, notes, heard list, kept songs and settings stored in this browser, then reloads
+- 2026-10-30: Display options has a Pictures switch, Hide artist pictures: shows coloured initials instead of the artist pictures (remembered in this browser; the picture files are not downloaded while it is on, which helps on slow or limited connections)
