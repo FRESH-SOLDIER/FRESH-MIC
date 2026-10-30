@@ -280,3 +280,4 @@
 - 2026-10-30: Display options has a Pictures switch, Hide artist pictures: shows coloured initials instead of the artist pictures (remembered in this browser; the picture files are not downloaded while it is on, which helps on slow or limited connections)
 - 2026-10-30: Display options has a Contrast switch, Higher contrast: darker secondary text and stronger borders and controls in both light and dark themes (remembered in this browser)
 - 2026-10-30: Display options has a Density switch, Compact rows: tighter spacing and smaller pictures in the artist lists so more fit on screen (remembered in this browser)
+- 2026-10-30: Display options has a Reset display options button that puts the view (List), theme (Auto), text size (Normal), keep still, hide pictures, higher contrast and compact rows back to their defaults in one tap

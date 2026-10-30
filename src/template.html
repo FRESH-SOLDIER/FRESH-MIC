@@ -435,6 +435,7 @@ ul.res.grid .player{margin-inline:12px}
       <div class="cap" id="alab">Previews</div>
       <div class="seg" role="group" aria-labelledby="alab"><button type="button" id="autobtn" aria-pressed="false">Autoplay next</button></div>
     </div>
+    <div><button type="button" class="linkbtn" id="dispreset">Reset display options</button></div>
     </div></details>
   </section>
 
@@ -2125,6 +2126,9 @@ const G = /*DATA*/;
     const wn=document.getElementById('welcomeno'); if(wn) wn.addEventListener('click',()=>{ w.hidden=true; try{ localStorage.setItem('freshmic:welcome','1') }catch(x){} }) }
   { const eb=document.getElementById('erasebtn'); let armed=false, tm=0; if(eb) eb.addEventListener('click',()=>{ if(!armed){ armed=true; eb.textContent='Tap again to erase your shortlist, notes and settings'; clearTimeout(tm); tm=setTimeout(()=>{ armed=false; eb.textContent='Erase everything saved here' },6000); return }
       clearTimeout(tm); let n=0; try{ Object.keys(localStorage).filter(k=>k.indexOf('freshmic:')===0||k.indexOf('undertow:')===0).forEach(k=>{ localStorage.removeItem(k); n++ }) }catch(x){} eb.textContent='Erased '+n+' saved item'+(n===1?'':'s')+'. Reloading...'; setTimeout(()=>location.reload(),900) }) }
+  { const rb=document.getElementById('dispreset'); if(rb) rb.addEventListener('click',()=>{ let n=0; ['stillbtn','nopicbtn','hcbtn','compbtn'].forEach(id=>{ const b=document.getElementById(id); if(b&&b.getAttribute('aria-pressed')==='true'){ b.click(); n++ } });
+      ['zseg','tseg','vseg'].forEach(id=>{ const g=document.getElementById(id); if(!g) return; const b=[...g.children].find(x=>/^(Normal|Auto|List)$/.test(x.textContent.trim())); if(b&&b.getAttribute('aria-pressed')!=='true'){ b.click(); n++ } });
+      rb.textContent=n?'Display options reset ('+n+' changed)':'Already on the defaults'; setTimeout(()=>{ rb.textContent='Reset display options' },3000) }) }
   if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)) addEventListener('load',()=>{ try{ navigator.serviceWorker.register('sw.js').catch(()=>{}) }catch(e){} });
   { const on=()=>{ const n=document.getElementById('offnote'); if(n) n.hidden=navigator.onLine!==false }; addEventListener('online',on); addEventListener('offline',on); on() }
   { let ip=null; const bar=document.getElementById('installbar'); let dis=false; try{ dis=localStorage.getItem('freshmic:noinstall')==='1' }catch(e){}
