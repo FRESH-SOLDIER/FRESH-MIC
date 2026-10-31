@@ -311,3 +311,4 @@
 - 2026-10-31: Free music tab: a Reset filters button (shown when the licence filter, Hide songs I have played or Hide songs I have kept is on) puts all three back to default, with Undo
 - 2026-10-31: Free music tab: while a free song is playing the browser tab title starts with a play mark (and loses it on pause or stop), like the artist previews
 - 2026-10-31: Free music songs now show their title and artist on the phone lock screen, headphones and browser media keys, with play, pause, next and previous song
+- 2026-10-31: Free music tab: a Sleep timer (stop after 15 minutes, 30 minutes or 1 hour) stops the playing song and turns Autoplay off when time is up, handy for listening in bed
