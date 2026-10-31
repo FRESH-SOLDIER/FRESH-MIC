@@ -313,3 +313,4 @@
 - 2026-10-31: Free music songs now show their title and artist on the phone lock screen, headphones and browser media keys, with play, pause, next and previous song
 - 2026-10-31: Free music tab: a Sleep timer (stop after 15 minutes, 30 minutes or 1 hour) stops the playing song and turns Autoplay off when time is up, handy for listening in bed
 - 2026-10-31: Free music tab: the Sleep timer shows how many minutes are left (Stops in 10 min) next to the timer, and clears when the timer fires or is turned off
+- 2026-10-31: Free music tab: press G to scroll back to the song that is playing (listed in the shortcuts card)
