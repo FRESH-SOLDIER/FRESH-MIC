@@ -306,3 +306,4 @@
 - 2026-10-31: The shortlist has a Mark all saved as heard button (shown when some saved artists are not yet heard): adds the Heard tag to every saved artist, with Undo
 - 2026-10-31: The shortlist has a Mark all saved as not heard button (shown when some saved artists are heard): clears the Heard tag on every saved artist, with Undo
 - 2026-10-31: The shortlist has a Sort artists with notes first button (shown when some but not all saved artists have a private note), with Undo
+- 2026-10-31: Find similar rows have a Mark heard button (for artists you already know without playing a preview), like Discover; it disappears once heard and returns if you click the Heard tag

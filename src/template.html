@@ -792,6 +792,7 @@ const G = /*DATA*/;
       });
       li.querySelector('.sim').addEventListener('click',()=>{hop(r.k)});
       li.querySelector('.hide').addEventListener('click',e=>hideArtist(r.k,e.currentTarget));
+      { const links=li.querySelector('.links'), mh=document.createElement('button'); mh.type='button'; mh.className='sim'; mh.textContent='Mark heard'; mh.setAttribute('aria-label','Mark '+a[1]+' as heard'); mh.addEventListener('click',()=>{ markHeard(li,a[0]); mh.remove(); toast(a[1]+' marked as heard.') }); li._mh=mh; li._remark=()=>{ if(!mh.isConnected&&links) links.appendChild(mh) }; if(links&&!heard.has(a[0])) links.appendChild(mh) }
       res.appendChild(li);
     });
     $('more').hidden=results.length<=shown;
