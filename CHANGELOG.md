@@ -293,3 +293,4 @@
 - 2026-10-30: Free music tab: the Order switch (A to Z, Newest added, Shuffled) now also orders your kept songs; Most popular keeps them in the order you kept them
 - 2026-10-31: New releases and Hidden gems have a Mark all shown as heard button (adds the Heard tag to every artist on screen, with Undo), handy for clearing a list you have already looked through
 - 2026-10-31: The shortlist has a Sort unheard first button (shown when some but not all saved artists are heard): moves artists you have not heard to the top, with Undo
+- 2026-10-31: Every shortlist entry (except the last) has a Bottom button that moves that artist to the bottom of the shortlist in one tap, with Undo (pairs with Top)
