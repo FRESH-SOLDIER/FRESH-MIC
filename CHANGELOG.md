@@ -301,3 +301,4 @@
 - 2026-10-31: Free music tab: press N or ] to play the next song in the list and [ for the previous one (listed in the shortcuts card)
 - 2026-10-31: Free music tab: Print this list prints just the songs shown (or your kept songs) with artist, licence and source, without buttons or players
 - 2026-10-31: Free music tab: a Show all button (next to Show more, when more than 20 songs are left) lists every song found at once
+- 2026-10-31: Free music tab: a Hide songs I have kept toggle (remembered) hides songs already in your kept list from the results; the copy, credits, CSV and Keep all buttons now also follow the same filters as the list
