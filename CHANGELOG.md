@@ -303,3 +303,4 @@
 - 2026-10-31: Free music tab: a Show all button (next to Show more, when more than 20 songs are left) lists every song found at once
 - 2026-10-31: Free music tab: a Hide songs I have kept toggle (remembered) hides songs already in your kept list from the results; the copy, credits, CSV and Keep all buttons now also follow the same filters as the list
 - 2026-10-31: Free music tab: pressing Esc in the search box clears what you typed (with a short hint to press Enter for the most popular songs)
+- 2026-10-31: The shortlist has a Mark all saved as heard button (shown when some saved artists are not yet heard): adds the Heard tag to every saved artist, with Undo
