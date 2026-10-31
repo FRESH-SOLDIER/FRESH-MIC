@@ -296,3 +296,4 @@
 - 2026-10-31: Every shortlist entry (except the last) has a Bottom button that moves that artist to the bottom of the shortlist in one tap, with Undo (pairs with Top)
 - 2026-10-31: Find similar has a Mark all shown as heard button (adds the Heard tag to every artist on screen, with Undo), like New releases and Hidden gems
 - 2026-10-31: Free music tab: Copy as links (Markdown) button copies the songs shown (or your kept songs) as a numbered list linked to their Internet Archive pages, with artist and licence
+- 2026-10-31: Free music tab: Download as spreadsheet (CSV) saves the songs shown (or your kept songs) with title, artist, licence, licence link, credit required, year added and Internet Archive page
