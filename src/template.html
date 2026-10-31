@@ -1958,6 +1958,7 @@ const G = /*DATA*/;
     $('fhidek').addEventListener('click',()=>{ FREE.hidek=!FREE.hidek; ui.fhidek=FREE.hidek; saveUi(); FREE.shown=20; stopFree(); freeRender() });
     $('fhide').addEventListener('click',()=>{ FREE.hide=!FREE.hide; ui.fhide=FREE.hide; saveUi(); FREE.shown=20; stopFree(); freeRender() });
     if(typeof ui.fq==='string') $('fq').value=ui.fq.slice(0,60);
+    $('fq').addEventListener('keydown',e=>{ if(e.key==='Escape'&&$('fq').value){ e.preventDefault(); e.stopPropagation(); $('fq').value=''; toast('Search box cleared. Press Enter to show the most popular songs.') } });
     $('fform').addEventListener('submit',e=>{ e.preventDefault(); freeSearch() });
     $('fmore').addEventListener('click',()=>{ FREE.shown+=20; freeRender() });
     $('fmoreall').addEventListener('click',()=>{ FREE.shown=100000; freeRender(); toast('Showing every song found.') });
