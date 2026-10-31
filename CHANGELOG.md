@@ -298,3 +298,4 @@
 - 2026-10-31: Free music tab: Copy as links (Markdown) button copies the songs shown (or your kept songs) as a numbered list linked to their Internet Archive pages, with artist and licence
 - 2026-10-31: Free music tab: Download as spreadsheet (CSV) saves the songs shown (or your kept songs) with title, artist, licence, licence link, credit required, year added and Internet Archive page
 - 2026-10-31: Free music tab: press K to keep or unkeep the song that is playing (listed in the shortcuts card)
+- 2026-10-31: Free music tab: press N or ] to play the next song in the list and [ for the previous one (listed in the shortcuts card)
