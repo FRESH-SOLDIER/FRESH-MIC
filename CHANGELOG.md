@@ -309,3 +309,4 @@
 - 2026-10-31: Find similar rows have a Mark heard button (for artists you already know without playing a preview), like Discover; it disappears once heard and returns if you click the Heard tag
 - 2026-10-31: Free music tab: the Recent searches row has a Clear chip that removes the saved recent searches, with Undo
 - 2026-10-31: Free music tab: a Reset filters button (shown when the licence filter, Hide songs I have played or Hide songs I have kept is on) puts all three back to default, with Undo
+- 2026-10-31: Free music tab: while a free song is playing the browser tab title starts with a play mark (and loses it on pause or stop), like the artist previews
