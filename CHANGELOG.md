@@ -324,3 +324,4 @@
 - 2026-11-01: Shortlist entries have Up and Down buttons that move an artist one place (next to Top and Bottom), with Undo
 - 2026-11-01: Display options has a Buttons switch, Bigger buttons: every button and link in the lists is at least 44 pixels tall for easier tapping (remembered in this browser; Reset display options clears it)
 - 2026-11-01: Display options has a Font switch, Plain, spaced font: uses your device's plain system font with a little extra letter and word spacing and taller lines, for easier reading (no outside fonts; remembered in this browser; Reset display options clears it)
+- 2026-11-01: Display options has a Numbers switch, Exact fan counts: shows 1,332 instead of 1.3K everywhere (updates the lists straight away; remembered in this browser; Reset display options clears it)
