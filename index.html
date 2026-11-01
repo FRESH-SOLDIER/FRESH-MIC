@@ -443,7 +443,11 @@ ul.res.grid .player{margin-inline:12px}
     </div>
     <div>
       <div class="cap" id="exlab">Numbers</div>
-      <div class="seg" role="group" aria-labelledby="exlab"><button type="button" id="exactbtn" aria-pressed="false">Exact fan counts</button><button type="button" id="datebtn" aria-pressed="false">Calendar dates</button></div>
+      <div class="seg" role="group" aria-labelledby="exlab"><button type="button" id="exactbtn" aria-pressed="false">Exact fan counts</button><button type="button" id="datebtn" aria-pressed="false">Calendar dates</button>
+    </div>
+    <div>
+      <div class="cap" id="histlab">Listening history</div>
+      <div class="seg" role="group" aria-labelledby="histlab"><button type="button" id="histbtn" aria-pressed="false">Don't track what I've heard</button></div></div>
     </div>
     <div>
       <div class="cap" id="zlab">Text size</div>
@@ -751,7 +755,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
             pr.addEventListener('click',e=>{ const r=pr.getBoundingClientRect(); if(au.duration&&r.width) au.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*au.duration });
             pr.addEventListener('keydown',e=>{ if(!au.duration) return; if(e.key==='ArrowRight'||e.key==='ArrowLeft'){ e.preventDefault(); au.currentTime=Math.max(0,Math.min(au.duration,au.currentTime+(e.key==='ArrowRight'?5:-5))) } }); }
                     try{ if('mediaSession' in navigator&&window.MediaMetadata){ navigator.mediaSession.metadata=new MediaMetadata({title:t.title_short,artist:a[1],album:'Fresh Mic \u00B7 30-second preview'}); const ms=navigator.mediaSession; ms.setActionHandler('play',()=>{au.play().catch(()=>{})}); ms.setActionHandler('pause',()=>{au.pause()}); ms.setActionHandler('nexttrack',()=>{ const l=li; stopNow(); playNextFrom(l) }); } }catch(e){}
-          NOW={el,au,bar,li,title:t.title_short,who:a[1],id:a[0]}; markHeard(li,a[0]); showMini(); au.addEventListener('timeupdate',()=>{ if(NOW&&NOW.au===au&&au.duration){ $('mprog').style.width=(au.currentTime/au.duration*100).toFixed(1)+'%'; const f=n=>Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0'); $('mtime').textContent=f(au.currentTime)+' / '+f(au.duration) } }); au.addEventListener('play',tabMark); au.addEventListener('pause',tabMark); el.textContent='\u25A0 Stop'; el.setAttribute('aria-pressed','true');
+          NOW={el,au,bar,li,title:t.title_short,who:a[1],id:a[0]}; if(ui.noheard!==true) markHeard(li,a[0]); showMini(); au.addEventListener('timeupdate',()=>{ if(NOW&&NOW.au===au&&au.duration){ $('mprog').style.width=(au.currentTime/au.duration*100).toFixed(1)+'%'; const f=n=>Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0'); $('mtime').textContent=f(au.currentTime)+' / '+f(au.duration) } }); au.addEventListener('play',tabMark); au.addEventListener('pause',tabMark); el.textContent='\u25A0 Stop'; el.setAttribute('aria-pressed','true');
           au.addEventListener('timeupdate',()=>{ const tmE=bar.querySelector('.tm'); if(tmE&&au.duration){ const f=n=>Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0'); tmE.textContent=f(au.currentTime)+' / '+f(au.duration) } const i=bar.querySelector('i'); if(i&&au.duration){ const v=au.currentTime/au.duration*100; i.style.width=v+'%'; bar.querySelector('.prog').setAttribute('aria-valuenow',Math.round(v)) }});
           au.addEventListener('ended',()=>{
             if(ui.rep){ au.currentTime=0; au.play().catch(()=>{}); return }
@@ -1350,6 +1354,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   if(G.embed){ const ab=$('autobtn'); $('autowrap').hidden=false; ab.setAttribute('aria-pressed',auto);
     ab.addEventListener('click',()=>{auto=!auto; ui.auto=auto; saveUi(); ab.setAttribute('aria-pressed',auto); showMini(); toast(auto?'Autoplay on: the next artist\u2019s preview starts when one ends.':'Autoplay off.')}); }
 
+  { const hb=$('histbtn'); hb.setAttribute('aria-pressed',ui.noheard===true); hb.addEventListener('click',()=>{ ui.noheard=!(ui.noheard===true); saveUi(); hb.setAttribute('aria-pressed',ui.noheard); toast(ui.noheard?'Playing a preview no longer adds the Heard tag. (Mark heard still works.)':'Playing a preview adds the Heard tag again.') }) }
   { const db=$('datebtn'); db.setAttribute('aria-pressed',DATEX); db.addEventListener('click',()=>{ DATEX=!DATEX; ui.datex=DATEX; saveUi(); db.setAttribute('aria-pressed',DATEX); refreshAll(); try{ renderList() }catch(e){} toast(DATEX?'Showing calendar dates (for example Oct 3, 2026).':'Showing short dates (for example 3 days ago).') }) }
   { const xb=$('exactbtn'); xb.setAttribute('aria-pressed',EXACT); xb.addEventListener('click',()=>{ EXACT=!EXACT; ui.exact=EXACT; saveUi(); xb.setAttribute('aria-pressed',EXACT); refreshAll(); try{ renderList() }catch(e){} toast(EXACT?'Showing exact fan counts (for example 25,201).':'Showing short fan counts (for example 25.2K).') }) }
   { const fb=$('fontbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-plainfont',''); else document.documentElement.removeAttribute('data-plainfont'); fb.setAttribute('aria-pressed',on) }; set(ui.plainfont===true); fb.addEventListener('click',()=>{ ui.plainfont=!(ui.plainfont===true); saveUi(); set(ui.plainfont); toast(ui.plainfont?'Plain, spaced font is on.':'Original fonts are back.') }) }
@@ -2056,7 +2061,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   function fTag(n){ if(n.querySelector('.fplayed')) return; const t=document.createElement('span'); t.className='fplayed'; t.textContent='Played'; n.appendChild(t) }
   function freePlay(it,li,btn){
     if(FA&&FA.btn===btn){ stopFree(); return }
-    if(!FH.includes(it.id)){ FH.push(it.id); FH=FH.slice(-300); try{localStorage.setItem('freshmic:fheard',JSON.stringify(FH))}catch(e){} } fTag(li.querySelector('.name'));
+    if(ui.noheard!==true&&!FH.includes(it.id)){ FH.push(it.id); FH=FH.slice(-300); try{localStorage.setItem('freshmic:fheard',JSON.stringify(FH))}catch(e){} } fTag(li.querySelector('.name'));
     stopFree(); stopNow(); btn.textContent='Loading\u2026';
     fjsonp('https://archive.org/metadata/'+encodeURIComponent(it.id)+'?x=1',m=>{
       if(!m||!m.metadata){ btn.textContent='\u25B6 Play'; toast('Couldn\u2019t load this item from the Internet Archive.'); return }
@@ -2205,7 +2210,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const wn=document.getElementById('welcomeno'); if(wn) wn.addEventListener('click',()=>{ w.hidden=true; try{ localStorage.setItem('freshmic:welcome','1') }catch(x){} }) }
   { const eb=document.getElementById('erasebtn'); let armed=false, tm=0; if(eb) eb.addEventListener('click',()=>{ if(!armed){ armed=true; eb.textContent='Tap again to erase your shortlist, notes and settings'; clearTimeout(tm); tm=setTimeout(()=>{ armed=false; eb.textContent='Erase everything saved here' },6000); return }
       clearTimeout(tm); let n=0; try{ Object.keys(localStorage).filter(k=>k.indexOf('freshmic:')===0||k.indexOf('undertow:')===0).forEach(k=>{ localStorage.removeItem(k); n++ }) }catch(x){} eb.textContent='Erased '+n+' saved item'+(n===1?'':'s')+'. Reloading...'; setTimeout(()=>location.reload(),900) }) }
-  { const rb=document.getElementById('dispreset'); if(rb) rb.addEventListener('click',()=>{ let n=0; ['stillbtn','nopicbtn','hcbtn','compbtn','bigbtn','fontbtn','exactbtn','datebtn'].forEach(id=>{ const b=document.getElementById(id); if(b&&b.getAttribute('aria-pressed')==='true'){ b.click(); n++ } });
+  { const rb=document.getElementById('dispreset'); if(rb) rb.addEventListener('click',()=>{ let n=0; ['stillbtn','nopicbtn','hcbtn','compbtn','bigbtn','fontbtn','exactbtn','datebtn','histbtn'].forEach(id=>{ const b=document.getElementById(id); if(b&&b.getAttribute('aria-pressed')==='true'){ b.click(); n++ } });
       ['zseg','tseg','vseg'].forEach(id=>{ const g=document.getElementById(id); if(!g) return; const b=[...g.children].find(x=>/^(Normal|Auto|List)$/.test(x.textContent.trim())); if(b&&b.getAttribute('aria-pressed')!=='true'){ b.click(); n++ } });
       rb.textContent=n?'Display options reset ('+n+' changed)':'Already on the defaults'; setTimeout(()=>{ rb.textContent='Reset display options' },3000) }) }
   if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)) addEventListener('load',()=>{ try{ navigator.serviceWorker.register('sw.js').catch(()=>{}) }catch(e){} });

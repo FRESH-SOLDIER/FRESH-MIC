@@ -326,3 +326,4 @@
 - 2026-11-01: Display options has a Font switch, Plain, spaced font: uses your device's plain system font with a little extra letter and word spacing and taller lines, for easier reading (no outside fonts; remembered in this browser; Reset display options clears it)
 - 2026-11-01: Display options has a Numbers switch, Exact fan counts: shows 1,332 instead of 1.3K everywhere (updates the lists straight away; remembered in this browser; Reset display options clears it)
 - 2026-11-01: Display options has a Calendar dates switch (in Numbers): shows past release dates as Oct 30, 2026 instead of 2 days ago (updates the lists straight away; remembered in this browser; Reset display options clears it)
+- 2026-11-01: Display options has a Listening history switch, Don't track what I've heard: playing a preview or free song no longer adds the Heard or Played tag (the Mark heard button still works; remembered in this browser; Reset display options clears it)
