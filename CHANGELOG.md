@@ -314,3 +314,4 @@
 - 2026-10-31: Free music tab: a Sleep timer (stop after 15 minutes, 30 minutes or 1 hour) stops the playing song and turns Autoplay off when time is up, handy for listening in bed
 - 2026-10-31: Free music tab: the Sleep timer shows how many minutes are left (Stops in 10 min) next to the timer, and clears when the timer fires or is turned off
 - 2026-10-31: Free music tab: press G to scroll back to the song that is playing (listed in the shortcuts card)
+- 2026-11-01: The shortlist has a Copy artists I haven't heard button (shown when some but not all saved artists are heard): copies just the unheard names, with your notes, as text
