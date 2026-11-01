@@ -330,3 +330,4 @@
 - 2026-11-01: Display options has a Wider page switch (next to Compact rows): on screens wider than 900 pixels the lists use about 1040 pixels instead of 760 (no change on phones; remembered in this browser; Reset display options clears it)
 - 2026-11-01: Free music tab: the song player has a Speed button that cycles 1×, 1.25×, 1.5× and 0.75× (useful for long talks and mixes; resets with each new song)
 - 2026-11-01: Free music tab: the song player has Back 15s and Forward 15s buttons next to Speed, for skipping around in long talks and mixes
+- 2026-11-01: Free music tab: the Speed button's choice is now remembered for the next song and the next visit (in this browser)
