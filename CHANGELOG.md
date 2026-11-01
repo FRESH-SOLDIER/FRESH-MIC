@@ -317,3 +317,4 @@
 - 2026-11-01: The shortlist has a Copy artists I haven't heard button (shown when some but not all saved artists are heard): copies just the unheard names, with your notes, as text
 - 2026-11-01: Free music Sleep timer now also stops an artist preview that is playing when time is up (not only free songs)
 - 2026-11-01: Find similar has a Copy names I haven't heard button: copies only the shown artists you have not heard (numbered, with fan counts and the page link)
+- 2026-11-01: New releases and Hidden gems each have a Copy unheard as links button: a numbered Markdown list of only the shown artists you have not heard
