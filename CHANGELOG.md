@@ -336,3 +336,4 @@
 - 2026-11-01: Free music tab: Forget what I've played now also clears the saved resume positions, and Undo brings both back
 - 2026-11-01: Free music tab: a song with a saved resume spot shows 'Stopped at 1:00. Play picks up there.' under its title (updates when you stop a song; gone after Forget what I've played)
 - 2026-11-01: Back up my shortlist and notes now also saves your Free music resume spots, and Restore from a backup merges them back (checked: bad entries are skipped, your current spots win)
+- 2026-11-01: Free music tab: when a song has several tracks, each track in the list shows its length (for example 4:06) when the Internet Archive provides it
