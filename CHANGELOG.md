@@ -333,3 +333,4 @@
 - 2026-11-01: Free music tab: the Speed button's choice is now remembered for the next song and the next visit (in this browser)
 - 2026-11-01: Free music tab: press , or . to jump back or forward 15 seconds in the playing song (listed in the keyboard shortcuts)
 - 2026-11-01: Free music tab: a song you stop partway through (after the first 10 seconds) picks up where you left off the next time you play it, for up to 30 songs (saved only in this browser)
+- 2026-11-01: Free music tab: Forget what I've played now also clears the saved resume positions, and Undo brings both back
