@@ -319,3 +319,4 @@
 - 2026-11-01: Find similar has a Copy names I haven't heard button: copies only the shown artists you have not heard (numbered, with fan counts and the page link)
 - 2026-11-01: New releases and Hidden gems each have a Copy unheard as links button: a numbered Markdown list of only the shown artists you have not heard
 - 2026-11-01: Free music tab: the results line says how many of the songs shown you have already played, for example (2 played)
+- 2026-11-01: Free music tab: each song has a Copy link button that copies its Internet Archive page link
