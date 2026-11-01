@@ -43,6 +43,7 @@ html[data-nopics] .pic:empty{background-color:#4b4fb8}html[data-nopics] .pic:emp
 .bgcap{font-size:.8rem;color:var(--muted);margin:6px 0 0}
 main{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
 main.pagewide{max-width:1240px}
+@media (min-width:900px){html[data-wide] main:not(.pagewide){max-width:1040px}}
 h1{font:800 clamp(2.4rem,9vw,3.6rem)/0.95 var(--f-display);letter-spacing:-.02em;margin:0}
 .lede{margin:10px 0 0;color:var(--muted);max-width:56ch;text-wrap:pretty}
 .search{position:relative}
@@ -431,7 +432,7 @@ ul.res.grid .player{margin-inline:12px}
     </div>
     <div>
       <div class="cap" id="dlab">Density</div>
-      <div class="seg" role="group" aria-labelledby="dlab"><button type="button" id="compbtn" aria-pressed="false">Compact rows</button></div>
+      <div class="seg" role="group" aria-labelledby="dlab"><button type="button" id="compbtn" aria-pressed="false">Compact rows</button><button type="button" id="widebtn" aria-pressed="false">Wider page</button></div>
     </div>
     <div>
       <div class="cap" id="biglab">Buttons</div>
@@ -1358,6 +1359,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
   { const db=$('datebtn'); db.setAttribute('aria-pressed',DATEX); db.addEventListener('click',()=>{ DATEX=!DATEX; ui.datex=DATEX; saveUi(); db.setAttribute('aria-pressed',DATEX); refreshAll(); try{ renderList() }catch(e){} toast(DATEX?'Showing calendar dates (for example Oct 3, 2026).':'Showing short dates (for example 3 days ago).') }) }
   { const xb=$('exactbtn'); xb.setAttribute('aria-pressed',EXACT); xb.addEventListener('click',()=>{ EXACT=!EXACT; ui.exact=EXACT; saveUi(); xb.setAttribute('aria-pressed',EXACT); refreshAll(); try{ renderList() }catch(e){} toast(EXACT?'Showing exact fan counts (for example 25,201).':'Showing short fan counts (for example 25.2K).') }) }
   { const fb=$('fontbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-plainfont',''); else document.documentElement.removeAttribute('data-plainfont'); fb.setAttribute('aria-pressed',on) }; set(ui.plainfont===true); fb.addEventListener('click',()=>{ ui.plainfont=!(ui.plainfont===true); saveUi(); set(ui.plainfont); toast(ui.plainfont?'Plain, spaced font is on.':'Original fonts are back.') }) }
+  { const wb=$('widebtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-wide',''); else document.documentElement.removeAttribute('data-wide'); wb.setAttribute('aria-pressed',on) }; set(ui.wide===true); wb.addEventListener('click',()=>{ ui.wide=!(ui.wide===true); saveUi(); set(ui.wide); toast(ui.wide?'Wider page is on (on screens wider than 900 pixels).':'Page width is back to normal.') }) }
   { const bb=$('bigbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-big',''); else document.documentElement.removeAttribute('data-big'); bb.setAttribute('aria-pressed',on) }; set(ui.big===true); bb.addEventListener('click',()=>{ ui.big=!(ui.big===true); saveUi(); set(ui.big); toast(ui.big?'Bigger buttons are on.':'Buttons are back to normal size.') }) }
   { const cb=$('compbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-compact',''); else document.documentElement.removeAttribute('data-compact'); cb.setAttribute('aria-pressed',on) }; set(ui.compact===true); cb.addEventListener('click',()=>{ ui.compact=!(ui.compact===true); saveUi(); set(ui.compact); toast(ui.compact?'Compact rows are on.':'Rows are back to normal spacing.') }) }
   { const hb=$('hcbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-hc',''); else document.documentElement.removeAttribute('data-hc'); hb.setAttribute('aria-pressed',on) }; set(ui.hc===true); hb.addEventListener('click',()=>{ ui.hc=!(ui.hc===true); saveUi(); set(ui.hc); toast(ui.hc?'Higher contrast is on.':'Normal contrast.') }) }
@@ -2210,7 +2212,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
     const wn=document.getElementById('welcomeno'); if(wn) wn.addEventListener('click',()=>{ w.hidden=true; try{ localStorage.setItem('freshmic:welcome','1') }catch(x){} }) }
   { const eb=document.getElementById('erasebtn'); let armed=false, tm=0; if(eb) eb.addEventListener('click',()=>{ if(!armed){ armed=true; eb.textContent='Tap again to erase your shortlist, notes and settings'; clearTimeout(tm); tm=setTimeout(()=>{ armed=false; eb.textContent='Erase everything saved here' },6000); return }
       clearTimeout(tm); let n=0; try{ Object.keys(localStorage).filter(k=>k.indexOf('freshmic:')===0||k.indexOf('undertow:')===0).forEach(k=>{ localStorage.removeItem(k); n++ }) }catch(x){} eb.textContent='Erased '+n+' saved item'+(n===1?'':'s')+'. Reloading...'; setTimeout(()=>location.reload(),900) }) }
-  { const rb=document.getElementById('dispreset'); if(rb) rb.addEventListener('click',()=>{ let n=0; ['stillbtn','nopicbtn','hcbtn','compbtn','bigbtn','fontbtn','exactbtn','datebtn','histbtn'].forEach(id=>{ const b=document.getElementById(id); if(b&&b.getAttribute('aria-pressed')==='true'){ b.click(); n++ } });
+  { const rb=document.getElementById('dispreset'); if(rb) rb.addEventListener('click',()=>{ let n=0; ['stillbtn','nopicbtn','hcbtn','compbtn','bigbtn','widebtn','fontbtn','exactbtn','datebtn','histbtn'].forEach(id=>{ const b=document.getElementById(id); if(b&&b.getAttribute('aria-pressed')==='true'){ b.click(); n++ } });
       ['zseg','tseg','vseg'].forEach(id=>{ const g=document.getElementById(id); if(!g) return; const b=[...g.children].find(x=>/^(Normal|Auto|List)$/.test(x.textContent.trim())); if(b&&b.getAttribute('aria-pressed')!=='true'){ b.click(); n++ } });
       rb.textContent=n?'Display options reset ('+n+' changed)':'Already on the defaults'; setTimeout(()=>{ rb.textContent='Reset display options' },3000) }) }
   if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)) addEventListener('load',()=>{ try{ navigator.serviceWorker.register('sw.js').catch(()=>{}) }catch(e){} });
