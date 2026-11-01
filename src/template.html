@@ -31,6 +31,7 @@ html[data-still] #bgfx i{animation:none!important}
 html[data-nopics] .pic{background-image:none!important}
 @media (min-width:481px){html[data-compact] .row{grid-template-columns:40px minmax(0,1fr) auto;padding:8px 0;gap:3px 12px}html[data-compact] .pic{width:40px;font-size:.9rem}html[data-compact] ul.res.grid .row>.pic{width:100%}}
 @media (max-width:480px){html[data-compact] .row{padding:8px 0;row-gap:2px}}
+html[data-big] .shuf,html[data-big] .sim,html[data-big] .copy,html[data-big] .chip,html[data-big] .hide,html[data-big] .save,html[data-big] .play,html[data-big] .links a,html[data-big] .heardtag,html[data-big] select{min-height:44px;min-width:44px}
 :root[data-hc]{--muted:#343a52;--line:#7d84a0;--ctl:#454c68}
 @media (prefers-color-scheme:dark){:root[data-hc]:not([data-theme="light"]){--muted:#cfd4ec;--line:#5d6894;--ctl:#a3acd2}}
 :root[data-hc][data-theme="dark"]{--muted:#cfd4ec;--line:#5d6894;--ctl:#a3acd2}
@@ -430,6 +431,10 @@ ul.res.grid .player{margin-inline:12px}
     <div>
       <div class="cap" id="dlab">Density</div>
       <div class="seg" role="group" aria-labelledby="dlab"><button type="button" id="compbtn" aria-pressed="false">Compact rows</button></div>
+    </div>
+    <div>
+      <div class="cap" id="biglab">Buttons</div>
+      <div class="seg" role="group" aria-labelledby="biglab"><button type="button" id="bigbtn" aria-pressed="false">Bigger buttons</button></div>
     </div>
     <div>
       <div class="cap" id="zlab">Text size</div>
@@ -1333,6 +1338,7 @@ const G = /*DATA*/;
   if(G.embed){ const ab=$('autobtn'); $('autowrap').hidden=false; ab.setAttribute('aria-pressed',auto);
     ab.addEventListener('click',()=>{auto=!auto; ui.auto=auto; saveUi(); ab.setAttribute('aria-pressed',auto); showMini(); toast(auto?'Autoplay on: the next artist\u2019s preview starts when one ends.':'Autoplay off.')}); }
 
+  { const bb=$('bigbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-big',''); else document.documentElement.removeAttribute('data-big'); bb.setAttribute('aria-pressed',on) }; set(ui.big===true); bb.addEventListener('click',()=>{ ui.big=!(ui.big===true); saveUi(); set(ui.big); toast(ui.big?'Bigger buttons are on.':'Buttons are back to normal size.') }) }
   { const cb=$('compbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-compact',''); else document.documentElement.removeAttribute('data-compact'); cb.setAttribute('aria-pressed',on) }; set(ui.compact===true); cb.addEventListener('click',()=>{ ui.compact=!(ui.compact===true); saveUi(); set(ui.compact); toast(ui.compact?'Compact rows are on.':'Rows are back to normal spacing.') }) }
   { const hb=$('hcbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-hc',''); else document.documentElement.removeAttribute('data-hc'); hb.setAttribute('aria-pressed',on) }; set(ui.hc===true); hb.addEventListener('click',()=>{ ui.hc=!(ui.hc===true); saveUi(); set(ui.hc); toast(ui.hc?'Higher contrast is on.':'Normal contrast.') }) }
   { const pb=$('nopicbtn'), set=on=>{ if(on) document.documentElement.setAttribute('data-nopics',''); else document.documentElement.removeAttribute('data-nopics'); pb.setAttribute('aria-pressed',on) }; set(ui.nopics===true); pb.addEventListener('click',()=>{ ui.nopics=!(ui.nopics===true); saveUi(); set(ui.nopics); toast(ui.nopics?'Artist pictures hidden (initials shown).':'Artist pictures are back.') }) }
@@ -2184,7 +2190,7 @@ const G = /*DATA*/;
     const wn=document.getElementById('welcomeno'); if(wn) wn.addEventListener('click',()=>{ w.hidden=true; try{ localStorage.setItem('freshmic:welcome','1') }catch(x){} }) }
   { const eb=document.getElementById('erasebtn'); let armed=false, tm=0; if(eb) eb.addEventListener('click',()=>{ if(!armed){ armed=true; eb.textContent='Tap again to erase your shortlist, notes and settings'; clearTimeout(tm); tm=setTimeout(()=>{ armed=false; eb.textContent='Erase everything saved here' },6000); return }
       clearTimeout(tm); let n=0; try{ Object.keys(localStorage).filter(k=>k.indexOf('freshmic:')===0||k.indexOf('undertow:')===0).forEach(k=>{ localStorage.removeItem(k); n++ }) }catch(x){} eb.textContent='Erased '+n+' saved item'+(n===1?'':'s')+'. Reloading...'; setTimeout(()=>location.reload(),900) }) }
-  { const rb=document.getElementById('dispreset'); if(rb) rb.addEventListener('click',()=>{ let n=0; ['stillbtn','nopicbtn','hcbtn','compbtn'].forEach(id=>{ const b=document.getElementById(id); if(b&&b.getAttribute('aria-pressed')==='true'){ b.click(); n++ } });
+  { const rb=document.getElementById('dispreset'); if(rb) rb.addEventListener('click',()=>{ let n=0; ['stillbtn','nopicbtn','hcbtn','compbtn','bigbtn'].forEach(id=>{ const b=document.getElementById(id); if(b&&b.getAttribute('aria-pressed')==='true'){ b.click(); n++ } });
       ['zseg','tseg','vseg'].forEach(id=>{ const g=document.getElementById(id); if(!g) return; const b=[...g.children].find(x=>/^(Normal|Auto|List)$/.test(x.textContent.trim())); if(b&&b.getAttribute('aria-pressed')!=='true'){ b.click(); n++ } });
       rb.textContent=n?'Display options reset ('+n+' changed)':'Already on the defaults'; setTimeout(()=>{ rb.textContent='Reset display options' },3000) }) }
   if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)) addEventListener('load',()=>{ try{ navigator.serviceWorker.register('sw.js').catch(()=>{}) }catch(e){} });
