@@ -331,3 +331,4 @@
 - 2026-11-01: Free music tab: the song player has a Speed button that cycles 1×, 1.25×, 1.5× and 0.75× (useful for long talks and mixes; resets with each new song)
 - 2026-11-01: Free music tab: the song player has Back 15s and Forward 15s buttons next to Speed, for skipping around in long talks and mixes
 - 2026-11-01: Free music tab: the Speed button's choice is now remembered for the next song and the next visit (in this browser)
+- 2026-11-01: Free music tab: press , or . to jump back or forward 15 seconds in the playing song (listed in the keyboard shortcuts)
