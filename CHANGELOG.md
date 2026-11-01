@@ -323,3 +323,4 @@
 - 2026-11-01: Free music tab: an Only added in the last year toggle shows just songs added to the Internet Archive in the past 12 months (Reset filters clears it too)
 - 2026-11-01: Shortlist entries have Up and Down buttons that move an artist one place (next to Top and Bottom), with Undo
 - 2026-11-01: Display options has a Buttons switch, Bigger buttons: every button and link in the lists is at least 44 pixels tall for easier tapping (remembered in this browser; Reset display options clears it)
+- 2026-11-01: Display options has a Font switch, Plain, spaced font: uses your device's plain system font with a little extra letter and word spacing and taller lines, for easier reading (no outside fonts; remembered in this browser; Reset display options clears it)
