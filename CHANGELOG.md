@@ -315,3 +315,4 @@
 - 2026-10-31: Free music tab: the Sleep timer shows how many minutes are left (Stops in 10 min) next to the timer, and clears when the timer fires or is turned off
 - 2026-10-31: Free music tab: press G to scroll back to the song that is playing (listed in the shortcuts card)
 - 2026-11-01: The shortlist has a Copy artists I haven't heard button (shown when some but not all saved artists are heard): copies just the unheard names, with your notes, as text
+- 2026-11-01: Free music Sleep timer now also stops an artist preview that is playing when time is up (not only free songs)
