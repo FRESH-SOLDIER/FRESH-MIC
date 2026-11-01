@@ -321,3 +321,4 @@
 - 2026-11-01: Free music tab: the results line says how many of the songs shown you have already played, for example (2 played)
 - 2026-11-01: Free music tab: each song has a Copy link button that copies its Internet Archive page link
 - 2026-11-01: Free music tab: an Only added in the last year toggle shows just songs added to the Internet Archive in the past 12 months (Reset filters clears it too)
+- 2026-11-01: Shortlist entries have Up and Down buttons that move an artist one place (next to Top and Bottom), with Undo
