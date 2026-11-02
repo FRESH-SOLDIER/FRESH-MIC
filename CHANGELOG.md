@@ -348,3 +348,4 @@
 - 2026-11-02: Free music tab: number keys 0 to 9 jump to that tenth of the playing song (5 is halfway), and the shortcuts list now also shows that the arrow keys seek 5 seconds in a free song
 - 2026-11-02: Free music tab: press > (or <) to change the playback speed of the playing song (same four speeds as the Speed button; listed in the shortcuts)
 - 2026-11-02: Free music tab: the results line also says how many of the songs shown you stopped partway, for example (2 played, 1 stopped partway)
+- 2026-11-02: Free music tab: resuming a multi-track song says which track it picked up on, for example (track 3 of 4, 1:15)
