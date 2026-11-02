@@ -343,3 +343,4 @@
 - 2026-11-02: Free music Sleep timer has a Stop after this song option: playback stops when the current song (or its last track) ends, and Autoplay does not move on to the next song
 - 2026-11-02: Free music tab: an Only songs I stopped partway toggle shows just the songs in the results that have a saved resume spot (Reset filters clears it too)
 - 2026-11-02: Free music tab: the 'Stopped at ...' note has a Start over button that clears that song's saved resume spot (with Undo)
+- 2026-11-02: Free music tab: for multi-track songs the lock screen and headphone display now show the playing track's name (with the album as its title) and update when the track changes
