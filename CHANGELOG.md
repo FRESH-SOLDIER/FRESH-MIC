@@ -346,3 +346,4 @@
 - 2026-11-02: Free music tab: for multi-track songs the lock screen and headphone display now show the playing track's name (with the album as its title) and update when the track changes
 - 2026-11-02: Free music tab: the lock screen and headphone display get a progress bar for the playing track (position, length and speed are kept up to date) where the device supports it
 - 2026-11-02: Free music tab: number keys 0 to 9 jump to that tenth of the playing song (5 is halfway), and the shortcuts list now also shows that the arrow keys seek 5 seconds in a free song
+- 2026-11-02: Free music tab: press > (or <) to change the playback speed of the playing song (same four speeds as the Speed button; listed in the shortcuts)
