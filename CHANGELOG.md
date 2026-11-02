@@ -355,3 +355,4 @@
 - 2026-11-02: Data Saver: if your device or browser has Data Saver on, artist pictures start hidden (initials shown) to save data; the Pictures switch in Display options still turns them back on and your choice is remembered
 - 2026-11-02: Higher contrast starts on when your device asks for more contrast (the prefers-contrast setting); the Contrast switch in Display options still turns it off and your choice is remembered
 - 2026-11-02: The Background switch (Still background) now shows as on when your device asks to reduce motion, and says so if you turn it off (your device setting still wins, so nothing moves)
+- 2026-11-02: Free music tab: Only songs I stopped partway now also works in Show my kept songs (and says so when none match)
