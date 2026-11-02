@@ -350,3 +350,4 @@
 - 2026-11-02: Free music tab: the results line also says how many of the songs shown you stopped partway, for example (2 played, 1 stopped partway)
 - 2026-11-02: Free music tab: resuming a multi-track song says which track it picked up on, for example (track 3 of 4, 1:15)
 - 2026-11-02: Free music tab: the Speed button (and the > key) gains a 2× speed; the cycle is now 1×, 1.25×, 1.5×, 2×, 0.75×
+- 2026-11-02: Free music tab: pausing or stopping a song now saves the exact spot straight away (before, up to 5 seconds could be missed) and updates the 'Stopped at' note; pauses in the first 10 seconds or last 5 seconds are ignored
