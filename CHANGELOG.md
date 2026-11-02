@@ -357,3 +357,4 @@
 - 2026-11-02: The Background switch (Still background) now shows as on when your device asks to reduce motion, and says so if you turn it off (your device setting still wins, so nothing moves)
 - 2026-11-02: Free music tab: Only songs I stopped partway now also works in Show my kept songs (and says so when none match)
 - 2026-11-02: Free music tab: Esc stops the playing song (a pop-up message is dismissed first), and the spot is saved so Play picks up there; listed in the shortcuts
+- 2026-11-02: Free music tab: stopping a song by any route (Esc, Stop button, switching to another song or tab) now always saves the exact resume spot first, not only when the browser reports a pause
