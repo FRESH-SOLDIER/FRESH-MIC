@@ -2067,7 +2067,10 @@ const G = /*DATA*/;
   function fResume(li){ if(!li) return; const id=li.dataset.fid; let r=null; try{ const all=JSON.parse(localStorage.getItem('freshmic:fpos')||'{}'); r=all&&all[id] }catch(e){}
     let el=li.querySelector('.fresume'); if(!(r&&r.t>10)){ if(el) el.remove(); return }
     if(!el){ el=document.createElement('div'); el.className='why fresume'; const nm=li.querySelector('.name'); if(nm&&nm.parentNode) nm.parentNode.insertBefore(el,nm.nextSibling); else return }
-    el.textContent='Stopped at '+Math.floor(r.t/60)+':'+String(r.t%60).padStart(2,'0')+'. Play picks up there.' }
+    el.textContent='Stopped at '+Math.floor(r.t/60)+':'+String(r.t%60).padStart(2,'0')+'. Play picks up there. ';
+    const sb=document.createElement('button'); sb.type='button'; sb.className='linkbtn'; sb.textContent='Start over'; sb.setAttribute('aria-label','Forget the saved spot and start this song from the beginning');
+    sb.addEventListener('click',()=>{ let old=null; try{ const all=JSON.parse(localStorage.getItem('freshmic:fpos')||'{}')||{}; old=all[id]; delete all[id]; localStorage.setItem('freshmic:fpos',JSON.stringify(all)) }catch(e){} fResume(li); if(FREE.part) freeRender(); toast('Saved spot cleared. This song will start from the beginning.',()=>{ try{ const all=JSON.parse(localStorage.getItem('freshmic:fpos')||'{}')||{}; if(old) all[id]=old; localStorage.setItem('freshmic:fpos',JSON.stringify(all)) }catch(e){} if(li.isConnected) fResume(li); else freeRender() }) });
+    el.appendChild(sb) }
   function fTag(n){ if(n.querySelector('.fplayed')) return; const t=document.createElement('span'); t.className='fplayed'; t.textContent='Played'; n.appendChild(t) }
   function freePlay(it,li,btn){
     if(FA&&FA.btn===btn){ stopFree(); return }
