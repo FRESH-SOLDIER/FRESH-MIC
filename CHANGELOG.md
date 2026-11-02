@@ -353,3 +353,4 @@
 - 2026-11-02: Free music tab: pausing or stopping a song now saves the exact spot straight away (before, up to 5 seconds could be missed) and updates the 'Stopped at' note; pauses in the first 10 seconds or last 5 seconds are ignored
 - 2026-11-02: Free music tab: the note under the controls now lists the player keys (Space, arrows, comma and full stop, 0 to 9, >) so they are easy to find
 - 2026-11-02: Data Saver: if your device or browser has Data Saver on, artist pictures start hidden (initials shown) to save data; the Pictures switch in Display options still turns them back on and your choice is remembered
+- 2026-11-02: Higher contrast starts on when your device asks for more contrast (the prefers-contrast setting); the Contrast switch in Display options still turns it off and your choice is remembered
