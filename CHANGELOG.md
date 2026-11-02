@@ -340,3 +340,4 @@
 - 2026-11-02: Free music tab: a multi-track song shows a line above its track list with the track count and total length (for example '4 tracks, 1:09:14 in all'; 'at least' when some lengths are missing)
 - 2026-11-02: Free music tab: multi-track songs have Previous track and Next track buttons beside Speed (a toast says when you are on the first or last track)
 - 2026-11-02: Free music tab: headphone and lock-screen Next/Previous now move between the tracks of a multi-track song first (then to the next song), and Seek back/forward 15 seconds work from the lock screen where the device offers them
+- 2026-11-02: Free music Sleep timer has a Stop after this song option: playback stops when the current song (or its last track) ends, and Autoplay does not move on to the next song
