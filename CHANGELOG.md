@@ -344,3 +344,4 @@
 - 2026-11-02: Free music tab: an Only songs I stopped partway toggle shows just the songs in the results that have a saved resume spot (Reset filters clears it too)
 - 2026-11-02: Free music tab: the 'Stopped at ...' note has a Start over button that clears that song's saved resume spot (with Undo)
 - 2026-11-02: Free music tab: for multi-track songs the lock screen and headphone display now show the playing track's name (with the album as its title) and update when the track changes
+- 2026-11-02: Free music tab: the lock screen and headphone display get a progress bar for the playing track (position, length and speed are kept up to date) where the device supports it
