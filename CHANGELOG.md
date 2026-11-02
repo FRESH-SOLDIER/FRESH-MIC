@@ -351,3 +351,4 @@
 - 2026-11-02: Free music tab: resuming a multi-track song says which track it picked up on, for example (track 3 of 4, 1:15)
 - 2026-11-02: Free music tab: the Speed button (and the > key) gains a 2× speed; the cycle is now 1×, 1.25×, 1.5×, 2×, 0.75×
 - 2026-11-02: Free music tab: pausing or stopping a song now saves the exact spot straight away (before, up to 5 seconds could be missed) and updates the 'Stopped at' note; pauses in the first 10 seconds or last 5 seconds are ignored
+- 2026-11-02: Free music tab: the note under the controls now lists the player keys (Space, arrows, comma and full stop, 0 to 9, >) so they are easy to find
