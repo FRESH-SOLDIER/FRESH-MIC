@@ -349,3 +349,4 @@
 - 2026-11-02: Free music tab: press > (or <) to change the playback speed of the playing song (same four speeds as the Speed button; listed in the shortcuts)
 - 2026-11-02: Free music tab: the results line also says how many of the songs shown you stopped partway, for example (2 played, 1 stopped partway)
 - 2026-11-02: Free music tab: resuming a multi-track song says which track it picked up on, for example (track 3 of 4, 1:15)
+- 2026-11-02: Free music tab: the Speed button (and the > key) gains a 2× speed; the cycle is now 1×, 1.25×, 1.5×, 2×, 0.75×
