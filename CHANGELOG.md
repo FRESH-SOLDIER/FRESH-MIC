@@ -360,3 +360,4 @@
 - 2026-11-02: Free music tab: stopping a song by any route (Esc, Stop button, switching to another song or tab) now always saves the exact resume spot first, not only when the browser reports a pause
 - 2026-11-02: Free music tab: in a multi-track song, tracks you have already played in this listen show a tick after the title
 - 2026-11-03: Free music tab: saved resume spots now expire after 180 days (older spots are cleaned up when the page opens, so the stopped-partway list stays relevant)
+- 2026-11-03: Free music tab: screen readers now hear each track in a multi-track song as 'playing now' or 'already played' (the tick was only visual)
