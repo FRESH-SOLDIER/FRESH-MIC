@@ -377,3 +377,4 @@
 - 2026-11-03: Free music tab: press C to copy the credit line of the playing song (same as its Copy credit button; listed in the player keys note)
 - 2026-11-03: Free music tab: press U to play the next song further down the list that you have not played yet (skips songs you have played or marked played; listed in the player keys note)
 - 2026-11-03: The keyboard shortcuts card (press ?) now lists the newer Free music keys: M, R, L, - and +, U, O, C and H
+- 2026-11-03: Free music tab: press S to play a random song from the results shown (same as the Play a random free song button; S did nothing on this tab before; listed in the shortcuts card)
