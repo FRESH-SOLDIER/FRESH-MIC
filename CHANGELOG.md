@@ -364,3 +364,4 @@
 - 2026-11-03: Free music tab: each song has a Mark played / Unmark played button, so you can tag songs you have heard elsewhere (or undo a tag); works with Hide songs I have played
 - 2026-11-03: Free music tab: a Mark all shown as played button (hidden when everything shown is already marked) tags the songs on screen in one go, with Undo
 - 2026-11-03: Free music tab: when the Internet Archive can't be reached, a Try again button appears under the message and repeats the search without retyping
+- 2026-11-03: Free music tab: the volume you set on a song's player is remembered for the next song and the next visit (shared with the preview volume; muting does not change it)
