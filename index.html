@@ -308,7 +308,7 @@ body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area
 .fsearch .prow{display:flex;gap:8px;margin-top:6px}.fsearch input{flex:1;min-width:0;font:500 1rem var(--f-body);color:var(--fg);background:var(--surface);border:1px solid var(--ctl);border-radius:10px;padding:10px 12px}
 #fres .row{grid-template-columns:minmax(0,1fr) auto}.fres-lic a{color:inherit}.fres-lic{font:500 .8rem var(--f-data);margin-top:4px}
 #fres audio{width:100%;margin-top:8px;grid-column:1/-1}#fres .ftracks{grid-column:1/-1;margin:6px 0 0;padding-left:1.2em;font-size:.86rem}
-#fres .ftracks li.on{font-weight:700}.fnote{margin-top:14px}
+#fres .ftracks li.on{font-weight:700}#fres .ftracks li.seen:not(.on)::after{content:' \2713';color:var(--muted)}.fnote{margin-top:14px}
 .about{margin:14px 0 4px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
 .about h3{margin:0 0 8px;font:800 1rem var(--f-display)}
 .about dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;margin:0;font-size:.9rem}
@@ -2093,7 +2093,7 @@ const G = {"embed":true,"n":[[11152580,"Olivia Rodrigo",1839407,0],[12246,"Taylo
       if(!files.length){ btn.textContent='\u25B6 Play'; toast('No playable MP3 found in this item. Use the source page.'); return }
       const url=f=>'https://archive.org/download/'+encodeURIComponent(it.id)+'/'+f.name.split('/').map(encodeURIComponent).join('/');
       const au=document.createElement('audio'); au.controls=true; au.preload='none'; au.volume=((Number.isInteger(ui.vol)&&ui.vol>=0&&ui.vol<=100)?ui.vol:90)/100; au.setAttribute('aria-label','Playing '+it.title);
-      let tr=null, i=0; const mark=()=>{ if(tr) [...tr.children].forEach((x,j)=>x.classList.toggle('on',j===i)) };
+      let tr=null, i=0; const mark=()=>{ if(tr) [...tr.children].forEach((x,j)=>{ x.classList.toggle('on',j===i); if(j===i) x.classList.add('seen') }) };
       const go=j=>{ i=j; au.src=url(files[i]); au.play().catch(()=>{ toast('Tap play on the player to start.') }); mark(); try{ if(files.length>1&&'mediaSession' in navigator&&window.MediaMetadata&&navigator.mediaSession.metadata){ navigator.mediaSession.metadata=new MediaMetadata({title:String(files[i].title||files[i].name).slice(0,100),artist:it.who,album:it.title}) } }catch(e){} };
       if(files.length>1){ tr=document.createElement('ol'); tr.className='ftracks'; let tot=0, known=0; files.forEach((f,j)=>{ const t=document.createElement('li'); const b=document.createElement('button'); b.type='button'; b.className='hide'; b.textContent=String(f.title||f.name).slice(0,100); b.addEventListener('click',()=>go(j)); t.appendChild(b);
         { const L=String(f.length==null?'':f.length); let sec=NaN; if(/^\d+(\.\d+)?$/.test(L)) sec=Math.round(parseFloat(L)); else if(/^\d{1,3}:\d{2}(:\d{2})?$/.test(L)){ const q=L.split(':').map(Number); sec=q.length===3?q[0]*3600+q[1]*60+q[2]:q[0]*60+q[1] }
