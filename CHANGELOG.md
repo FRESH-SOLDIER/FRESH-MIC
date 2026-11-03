@@ -367,3 +367,4 @@
 - 2026-11-03: Free music tab: the volume you set on a song's player is remembered for the next song and the next visit (shared with the preview volume; muting does not change it)
 - 2026-11-03: Lock screen and headphone display (previews and Free music) now show the Fresh Mic icon as artwork instead of a blank square; no artist or album art is copied
 - 2026-11-03: Free music tab: press M to mute or unmute the playing song (it is listed in the player keys note); the muted state is not saved as your volume
+- 2026-11-03: Free music tab: press R to restart the playing song or track from the beginning (it also starts it playing if it was paused; listed in the player keys note)
