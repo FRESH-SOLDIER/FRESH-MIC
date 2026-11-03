@@ -376,3 +376,4 @@
 - 2026-11-03: Free music tab: press O to open the playing song's Internet Archive source page in a new tab (listed in the player keys note)
 - 2026-11-03: Free music tab: press C to copy the credit line of the playing song (same as its Copy credit button; listed in the player keys note)
 - 2026-11-03: Free music tab: press U to play the next song further down the list that you have not played yet (skips songs you have played or marked played; listed in the player keys note)
+- 2026-11-03: The keyboard shortcuts card (press ?) now lists the newer Free music keys: M, R, L, - and +, U, O, C and H
