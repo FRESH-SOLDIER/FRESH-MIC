@@ -380,3 +380,4 @@
 - 2026-11-03: Free music tab: press S to play a random song from the results shown (same as the Play a random free song button; S did nothing on this tab before; listed in the shortcuts card)
 - 2026-11-03: Free music tab: press V to show more songs in the list (same as the Show more button; listed in the shortcuts card)
 - 2026-11-03: Free music tab: press A to turn Autoplay (the next song starts by itself) on or off, shared with the Autoplay setting elsewhere; listed in the shortcuts card
+- 2026-11-03: Free music tab: press T to cycle the result order (Most popular, Newest added, A to Z, Shuffled); T did nothing on this tab before; listed in the shortcuts card
