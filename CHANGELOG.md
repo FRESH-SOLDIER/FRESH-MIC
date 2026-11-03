@@ -365,3 +365,4 @@
 - 2026-11-03: Free music tab: a Mark all shown as played button (hidden when everything shown is already marked) tags the songs on screen in one go, with Undo
 - 2026-11-03: Free music tab: when the Internet Archive can't be reached, a Try again button appears under the message and repeats the search without retyping
 - 2026-11-03: Free music tab: the volume you set on a song's player is remembered for the next song and the next visit (shared with the preview volume; muting does not change it)
+- 2026-11-03: Lock screen and headphone display (previews and Free music) now show the Fresh Mic icon as artwork instead of a blank square; no artist or album art is copied
