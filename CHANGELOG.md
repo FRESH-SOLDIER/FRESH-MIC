@@ -372,3 +372,4 @@
 - 2026-11-03: Free music tab: press L to repeat the playing song (a multi-track song starts again from its first track); it applies to that song only and is listed in the player keys note
 - 2026-11-03: Free music tab: press / to jump to the search box and select what is in it (before, / did nothing on this tab; it is listed in the player keys note)
 - 2026-11-03: Free music tab: press ? to open the keyboard shortcuts card (before, ? did nothing on this tab)
+- 2026-11-03: Free music tab: press H to hide or show the songs you have already played (same as the Hide songs I have played button; listed in the player keys note)
