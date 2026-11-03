@@ -541,6 +541,7 @@ ul.res.grid .player{margin-inline:12px}
       <p class="why" id="fstat" role="status" aria-live="polite"></p>
       <div><button class="shuf" id="frand" type="button" hidden>Play a random free song</button><button class="shuf" id="fplayall" type="button" hidden>Play these in order</button><select id="fsleep" aria-label="Sleep timer: stop free music after"><option value="">Sleep timer: off</option><option value="end">Stop after this song</option><option value="15">Stop after 15 minutes</option><option value="30">Stop after 30 minutes</option><option value="60">Stop after 1 hour</option></select><span class="why" id="fsleepleft" role="status" aria-live="off" style="align-self:center"></span><button class="shuf" id="fcopyall" type="button" hidden>Copy all credits</button><button class="shuf" id="fcopymd" type="button" hidden>Copy as links (Markdown)</button><button class="shuf" id="fdlall" type="button" hidden>Download credits (.txt)</button><button class="shuf" id="fcsv" type="button" hidden>Download as spreadsheet (CSV)</button><button class="shuf" id="fprint" type="button" hidden>Print this list</button><button class="shuf" id="fshare" type="button" hidden>Copy link to this search</button></div>
       <ul class="res" id="fres"></ul>
+      <button class="more" id="fretry" type="button" hidden>Try again</button>
       <button class="more" id="fmore" type="button" hidden>Show more</button><button class="more" id="fmoreall" type="button" hidden>Show all</button>
       <details class="fnote"><summary>Before you reuse a song</summary><p class="why" style="max-width:62ch">The licence shown is the one the uploader declared to the Internet Archive, and uploaders can be wrong. Keys while a song plays: Space pauses, the left and right arrows skip 5 seconds, the comma and full stop skip 15 seconds, the number keys 0 to 9 jump through the song, and &gt; changes the speed. Always open the source page and read the licence terms before using a song in your own release. CC BY needs credit to the artist (use Copy credit). CC BY-SA needs credit and that you share your new work under the same terms. CC0 and Public Domain need neither. A cover song can still carry the original songwriter&#8217;s rights. This is general information, not legal advice.</p></details>
     </section>
@@ -2020,6 +2021,7 @@ const G = /*DATA*/;
     if(typeof ui.fq==='string') $('fq').value=ui.fq.slice(0,60);
     $('fq').addEventListener('keydown',e=>{ if(e.key==='Escape'&&$('fq').value){ e.preventDefault(); e.stopPropagation(); $('fq').value=''; toast('Search box cleared. Press Enter to show the most popular songs.') } });
     $('fform').addEventListener('submit',e=>{ e.preventDefault(); freeSearch() });
+    $('fretry').addEventListener('click',()=>{ $('fretry').hidden=true; freeSearch() });
     $('fmore').addEventListener('click',()=>{ FREE.shown+=20; freeRender() });
     $('fmoreall').addEventListener('click',()=>{ FREE.shown=100000; freeRender(); toast('Showing every song found.') });
     freeSearch() }
@@ -2029,7 +2031,7 @@ const G = /*DATA*/;
     const q=(kw?'('+kw+') AND ':'')+'mediatype:audio AND licenseurl:*';
     const url='https://archive.org/advancedsearch.php?q='+encodeURIComponent(q)+'&fl[]=identifier&fl[]=title&fl[]=creator&fl[]=licenseurl&fl[]=publicdate&rows=100&sort[]='+encodeURIComponent('downloads desc')+'&output=json';
     const key=url; $('fstat').textContent='Searching\u2026'; $('fres').textContent=''; $('fmore').hidden=true; $('fmoreall').hidden=true;
-    const done=docs=>{ if(!docs){ $('fstat').textContent='Couldn\u2019t reach the Internet Archive. Check your connection (or an ad blocker) and try again.'; return }
+    const done=docs=>{ $('fretry').hidden=true; if(!docs){ $('fstat').textContent='Couldn\u2019t reach the Internet Archive. Check your connection (or an ad blocker) and try again.'; $('fretry').hidden=false; return }
       FREE.items=[]; docs.forEach(d=>{ const l=licOf(one(d.licenseurl)); if(l&&okId(d.identifier)) FREE.items.push({o:FREE.items.length,pd:/^\d{4}-\d{2}-\d{2}/.test(String(one(d.publicdate)||''))?String(one(d.publicdate)).slice(0,10):'',id:d.identifier,title:String(one(d.title)||d.identifier).slice(0,140),who:String(one(d.creator)||'Unknown artist').slice(0,100),lic:l}) });
       FREE.shown=20; freeRender() };
     if(FREE.cache.has(key)) return done(FREE.cache.get(key));
