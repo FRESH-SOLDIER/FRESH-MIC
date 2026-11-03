@@ -369,3 +369,4 @@
 - 2026-11-03: Free music tab: press M to mute or unmute the playing song (it is listed in the player keys note); the muted state is not saved as your volume
 - 2026-11-03: Free music tab: press R to restart the playing song or track from the beginning (it also starts it playing if it was paused; listed in the player keys note)
 - 2026-11-03: Free music tab: press - or + to turn the playing song's volume down or up in steps of 10% (it also unmutes, is remembered like the slider, and is listed in the player keys note)
+- 2026-11-03: Free music tab: press L to repeat the playing song (a multi-track song starts again from its first track); it applies to that song only and is listed in the player keys note
