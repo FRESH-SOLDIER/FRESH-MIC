@@ -397,3 +397,4 @@
 - 2026-11-04: While a 30-second preview plays, the browser tab title shows the artist's name (for example '▶ Keo – Fresh Mic'), like Free music songs already do; it goes back to the normal title when the preview stops
 - 2026-11-04: Free music tab: the lock screen and headphone Previous button restarts the current track when it is more than 3 seconds in (the usual music-player behavior), and only goes to the previous track or song when pressed in the first 3 seconds
 - 2026-11-04: 30-second previews: the lock screen and headphone Previous button restarts the preview when it is more than 3 seconds in, and only goes to the previous artist in the first 3 seconds (same as Free music)
+- 2026-11-04: Free music tab: when Autoplay moves on to the next song, a short message names it ('Autoplay: now playing ...'), so you know what started when you are not looking at the page
