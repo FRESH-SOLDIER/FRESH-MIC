@@ -399,3 +399,4 @@
 - 2026-11-04: 30-second previews: the lock screen and headphone Previous button restarts the preview when it is more than 3 seconds in, and only goes to the previous artist in the first 3 seconds (same as Free music)
 - 2026-11-04: Free music tab: when Autoplay moves on to the next song, a short message names it ('Autoplay: now playing ...'), so you know what started when you are not looking at the page
 - 2026-11-04: The lock screen, headphones and car display now get the correct Playing, Paused or Stopped state for previews and Free music songs (the page reports its play state to the system), so the play/pause button shows the right icon
+- 2026-11-04: 30-second previews now show a progress bar on the lock screen and headphone display (it already did for Free music songs), and the bar works with the drag-to-seek added earlier
