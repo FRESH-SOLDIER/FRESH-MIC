@@ -394,3 +394,4 @@
 - 2026-11-04: Lock screen, headphone and car Stop buttons now stop the playing preview or Free music song (before, only Play, Pause, Next, Previous and the 15-second skips were wired up)
 - 2026-11-04: Lock screen and headphone progress bars can now be dragged to seek (previews and Free music songs); before, the bar only showed progress
 - 2026-11-04: Lock screen and headphone Previous button now works for 30-second previews (it plays the previous artist in the list); before, only Next did
+- 2026-11-04: While a 30-second preview plays, the browser tab title shows the artist's name (for example '▶ Keo – Fresh Mic'), like Free music songs already do; it goes back to the normal title when the preview stops
