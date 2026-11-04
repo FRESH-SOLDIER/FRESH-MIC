@@ -384,3 +384,4 @@
 - 2026-11-04: Free music tab: press F to cycle the licence filter (all open licences, public domain, CC BY); F did nothing on this tab before; listed in the shortcuts card
 - 2026-11-04: Free music tab: press Z to press Undo on the message that is showing (for example after Forget what I've played); Z did nothing on this tab before; listed in the shortcuts card
 - 2026-11-04: Free music tab: press Y to copy the playing song's Internet Archive link (same as its Copy link button; listed in the shortcuts card)
+- 2026-11-04: Free music tab: press W to copy a link to the current search (same as Copy link to this search; listed in the shortcuts card)
