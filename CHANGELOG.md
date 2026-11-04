@@ -392,3 +392,4 @@
 - 2026-11-04: Free music tab: press P to play the songs shown in order (Autoplay turns on; if a song is already playing it keeps playing and Autoplay just turns on); listed in the shortcuts card
 - 2026-11-04: While a Free music song plays, the browser tab title shows its name (for example '▶ Song name – Free music | Fresh Mic'), so you can see what is playing from another tab; it goes back to the normal title when you pause or stop
 - 2026-11-04: Lock screen, headphone and car Stop buttons now stop the playing preview or Free music song (before, only Play, Pause, Next, Previous and the 15-second skips were wired up)
+- 2026-11-04: Lock screen and headphone progress bars can now be dragged to seek (previews and Free music songs); before, the bar only showed progress
