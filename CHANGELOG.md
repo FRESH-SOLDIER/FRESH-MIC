@@ -382,3 +382,4 @@
 - 2026-11-03: Free music tab: press A to turn Autoplay (the next song starts by itself) on or off, shared with the Autoplay setting elsewhere; listed in the shortcuts card
 - 2026-11-03: Free music tab: press T to cycle the result order (Most popular, Newest added, A to Z, Shuffled); T did nothing on this tab before; listed in the shortcuts card
 - 2026-11-04: Free music tab: press F to cycle the licence filter (all open licences, public domain, CC BY); F did nothing on this tab before; listed in the shortcuts card
+- 2026-11-04: Free music tab: press Z to press Undo on the message that is showing (for example after Forget what I've played); Z did nothing on this tab before; listed in the shortcuts card
