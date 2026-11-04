@@ -396,3 +396,4 @@
 - 2026-11-04: Lock screen and headphone Previous button now works for 30-second previews (it plays the previous artist in the list); before, only Next did
 - 2026-11-04: While a 30-second preview plays, the browser tab title shows the artist's name (for example '▶ Keo – Fresh Mic'), like Free music songs already do; it goes back to the normal title when the preview stops
 - 2026-11-04: Free music tab: the lock screen and headphone Previous button restarts the current track when it is more than 3 seconds in (the usual music-player behavior), and only goes to the previous track or song when pressed in the first 3 seconds
+- 2026-11-04: 30-second previews: the lock screen and headphone Previous button restarts the preview when it is more than 3 seconds in, and only goes to the previous artist in the first 3 seconds (same as Free music)
