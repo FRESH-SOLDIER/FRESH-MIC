@@ -390,3 +390,4 @@
 - 2026-11-04: Free music tab: press I to show only songs added in the last year, or all again (same as the Only added in the last year button; listed in the shortcuts card)
 - 2026-11-04: Free music tab: press B to cycle the sleep timer (off, stop after this song, 15 minutes, 30 minutes, 1 hour); Stop after this song is skipped when nothing is playing; listed in the shortcuts card
 - 2026-11-04: Free music tab: press P to play the songs shown in order (Autoplay turns on; if a song is already playing it keeps playing and Autoplay just turns on); listed in the shortcuts card
+- 2026-11-04: While a Free music song plays, the browser tab title shows its name (for example '▶ Song name – Free music | Fresh Mic'), so you can see what is playing from another tab; it goes back to the normal title when you pause or stop
