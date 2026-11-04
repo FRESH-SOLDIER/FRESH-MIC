@@ -532,7 +532,7 @@ ul.res.grid .player{margin-inline:12px}
     <section aria-labelledby="freeT">
       <h2 id="freeT" style="margin:0 0 6px;font:800 1.4rem var(--f-display)">Free music you can reuse</h2>
       <p class="why" style="max-width:62ch">Full songs shared by their makers under open licences, streamed from the <a href="https://archive.org/details/audio" target="_blank" rel="noopener">Internet Archive</a>. Only items marked CC0, Public Domain or Creative Commons BY / BY-SA appear. Nothing is copied to this site, and the Internet Archive sees your browser when you use this tab.</p>
-      <form class="fsearch" id="fform" role="search"><label class="cap" for="fq">Search free music</label><div class="prow"><input id="fq" type="search" autocomplete="off" maxlength="60" placeholder="A word, genre or artist (or leave empty)"><button type="submit" class="shuf">Search</button></div></form>
+      <form class="fsearch" id="fform" role="search"><label class="cap" for="fq">Search free music</label><div class="prow"><input id="fq" type="search" autocomplete="off" list="fsugg" maxlength="60" placeholder="A word, genre or artist (or leave empty)"><datalist id="fsugg"></datalist><button type="submit" class="shuf">Search</button></div></form>
       <div class="chips" id="fgen" role="group" aria-label="Quick genres"></div>
       <div class="chips" id="frecent" role="group" aria-label="Your recent searches" hidden></div>
       <div class="ctl"><div class="cap" id="flab">Licence</div><div class="seg" id="fseg" role="group" aria-labelledby="flab"></div></div>
@@ -2043,7 +2043,11 @@ const G = /*DATA*/;
     $('fhide').addEventListener('click',()=>{ FREE.hide=!FREE.hide; ui.fhide=FREE.hide; saveUi(); FREE.shown=20; stopFree(); freeRender() });
     if(typeof ui.fq==='string') $('fq').value=ui.fq.slice(0,60);
     $('fq').addEventListener('keydown',e=>{ if(e.key==='Escape'&&$('fq').value){ e.preventDefault(); e.stopPropagation(); $('fq').value=''; toast('Search box cleared. Press Enter to show the most popular songs.') } });
-    $('fform').addEventListener('submit',e=>{ e.preventDefault(); freeSearch() });
+    const fsRead=()=>{ try{ const a=JSON.parse(localStorage.getItem('freshmic:fsugg')||'[]'); return Array.isArray(a)?a.filter(x=>typeof x==='string').slice(0,8):[] }catch(e){ return [] } };
+    const fsDraw=()=>{ const dl=$('fsugg'); if(!dl) return; dl.textContent=''; fsRead().forEach(q=>{ const o=document.createElement('option'); o.value=q; dl.appendChild(o) }) };
+    const fsAdd=q=>{ q=(q||'').trim().slice(0,60); if(!q||ui.noheard===true) return; try{ const a=fsRead().filter(x=>x.toLowerCase()!==q.toLowerCase()); a.unshift(q); localStorage.setItem('freshmic:fsugg',JSON.stringify(a.slice(0,8))) }catch(e){} fsDraw() };
+    fsDraw();
+    $('fform').addEventListener('submit',e=>{ e.preventDefault(); fsAdd($('fq').value); freeSearch() });
     $('fretry').addEventListener('click',()=>{ $('fretry').hidden=true; freeSearch() });
     $('fmore').addEventListener('click',()=>{ FREE.shown+=20; freeRender() });
     $('fmoreall').addEventListener('click',()=>{ FREE.shown=100000; freeRender(); toast('Showing every song found.') });
