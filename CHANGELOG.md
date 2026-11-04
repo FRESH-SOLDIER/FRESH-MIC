@@ -387,3 +387,4 @@
 - 2026-11-04: Free music tab: press W to copy a link to the current search (same as Copy link to this search; listed in the shortcuts card)
 - 2026-11-04: Free music tab: press E to show only the songs you stopped partway, or all again (same as the Only songs I stopped partway button; listed in the shortcuts card)
 - 2026-11-04: Free music tab: press X to hide or show the songs you have kept (same as the Hide songs I have kept button; listed in the shortcuts card)
+- 2026-11-04: Free music tab: press I to show only songs added in the last year, or all again (same as the Only added in the last year button; listed in the shortcuts card)
