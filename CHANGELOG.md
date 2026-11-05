@@ -416,3 +416,4 @@
 - 2026-11-05: Free music tab: when a song ends and Autoplay is off, a message now says Finished and names the next song in the list (press N to play it, or A for autoplay); before, it just stopped quietly
 - 2026-11-05: In the keyboard shortcuts card, Esc inside the Filter shortcuts box first clears what you typed, and a second Esc closes the card
 - 2026-11-05: The keyboard shortcuts card shows how many shortcuts match your filter (for example '3 of 55 shortcuts shown')
+- 2026-11-05: Free music tab: after the first minute of listening, a small line under the song count shows 'Listened this visit: N min' and updates each minute (not saved anywhere; D shows the same figure)
