@@ -418,3 +418,4 @@
 - 2026-11-05: The keyboard shortcuts card shows how many shortcuts match your filter (for example '3 of 55 shortcuts shown')
 - 2026-11-05: Free music tab: after the first minute of listening, a small line under the song count shows 'Listened this visit: N min' and updates each minute (not saved anywhere; D shows the same figure)
 - 2026-11-05: The keyboard shortcuts card has a Copy shown shortcuts button: copies the shortcuts currently listed (all, or just the ones matching your filter) as plain text, and the button says 'Copied N!' for a moment
+- 2026-11-05: Free music tab: with Autoplay on, when the last song shown ends a message says Finished, that it was the last song shown, and (if more are waiting) to press V to show more; before, playback just stopped quietly
