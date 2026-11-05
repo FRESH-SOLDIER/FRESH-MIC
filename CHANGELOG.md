@@ -410,3 +410,4 @@
 - 2026-11-05: Free music tab: the playing song shows an Up next line (the title of the next song in the list) under its player; it moves along as songs change and goes away when you stop
 - 2026-11-05: Free music tab: the Up next line has a Play it now button that starts the next song (handy on a phone, with no keyboard)
 - 2026-11-05: Free music tab: the J message now also says what is up next (for example 'Up next: Song name'), and the shortcuts card describes it
+- 2026-11-05: In the keyboard shortcuts card, press / to jump to the Filter shortcuts box (it works on every tab, and no longer searches behind the card)
