@@ -422,3 +422,4 @@
 - 2026-11-05: Free music tab: the first time a song plays on a computer (mouse and keyboard), a one-time message says to press ? for the keyboard shortcuts; it is never shown on phones or tablets and is remembered in this browser
 - 2026-11-05: Free music tab: for a song with several tracks, the J message now also says which track is playing (for example 'Track 3 of 12.')
 - 2026-11-05: Free music tab: the J message also says when Repeat is on and when the playback speed is not normal (for example 'Repeat is on. Speed 1.25×.')
+- 2026-11-05: Free music tab: the J message also says when the song is muted (for example 'Muted.')
