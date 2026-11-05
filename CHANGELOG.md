@@ -407,3 +407,4 @@
 - 2026-11-05: Free music tab: press J to see what is playing in a message: the song name, how far along it is and its length, and whether it is paused (listed in the shortcuts card; J did nothing on this tab before)
 - 2026-11-05: Free music tab: press Q to see the playing song's licence in a message and whether it needs a credit (public domain does not; others do, and C copies the credit line); listed in the shortcuts card. Q still jumps to the Discover filter on the other tabs
 - 2026-11-05: The keyboard shortcuts card (press ?) has a Filter shortcuts box: type a word such as volume or copy and only the matching shortcuts show; it clears when the card closes
+- 2026-11-05: Free music tab: the playing song shows an Up next line (the title of the next song in the list) under its player; it moves along as songs change and goes away when you stop

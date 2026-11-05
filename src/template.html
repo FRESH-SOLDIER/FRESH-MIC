@@ -2143,6 +2143,7 @@ const G = /*DATA*/;
         if(known>1){ const h=Math.floor(tot/3600), m=Math.floor(tot%3600/60), c=String(tot%60).padStart(2,'0'); const tp=document.createElement('div'); tp.className='why ftotal'; tp.textContent=files.length+' tracks, '+(known<files.length?'at least ':'')+(h?h+':'+String(m).padStart(2,'0'):m)+':'+c+' in all'; li.appendChild(tp) }
         li.appendChild(tr) }
       li.appendChild(au);
+      { const ns=li.nextElementSibling, nn=ns&&ns.dataset&&ns.dataset.fid&&ns.querySelector('.name'), nt=nn&&nn.firstChild?nn.firstChild.textContent.trim():''; if(nt){ const nx=document.createElement('div'); nx.className='why ftotal fnext'; nx.textContent='Up next: '+nt.slice(0,80); li.appendChild(nx) } }
       { const RATES=[1,1.25,1.5,2,0.75]; let ri=Math.max(0,RATES.indexOf(ui.fspeed)); au.playbackRate=RATES[ri]; const sb=document.createElement('button'); sb.type='button'; sb.className='hide fspeed'; const lab=()=>{ sb.textContent='Speed: '+RATES[ri]+'\u00D7'; sb.setAttribute('aria-label','Playback speed '+RATES[ri]+' times. Press to change.') }; lab();
         sb.addEventListener('click',()=>{ ri=(ri+1)%RATES.length; au.playbackRate=RATES[ri]; ui.fspeed=RATES[ri]; saveUi(); au.defaultPlaybackRate=RATES[ri]; lab() });
         au.addEventListener('loadstart',()=>{ au.playbackRate=RATES[ri] }); li.appendChild(sb);
