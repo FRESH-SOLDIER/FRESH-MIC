@@ -412,3 +412,4 @@
 - 2026-11-05: Free music tab: the J message now also says what is up next (for example 'Up next: Song name'), and the shortcuts card describes it
 - 2026-11-05: In the keyboard shortcuts card, press / to jump to the Filter shortcuts box (it works on every tab, and no longer searches behind the card)
 - 2026-11-05: Free music tab: the D message now also says how long you have listened this visit (for example 'You have listened for 12 min this visit.'; shown after 30 seconds, counted in real time at your chosen speed, and not saved anywhere)
+- 2026-11-05: Free music tab: the playing song also shows a Previous in the list line with a Play it button that goes back to the song above it (the first song in the list has none)
