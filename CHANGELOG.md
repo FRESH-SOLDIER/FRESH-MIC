@@ -403,3 +403,4 @@
 - 2026-11-04: 30-second previews: headphone and lock-screen skip-back and skip-forward buttons now move the preview 5 seconds (before, only Free music songs responded, by 15 seconds)
 - 2026-11-04: Free music tab: your last 8 searches are offered as suggestions when you click the search box (kept only in this browser; not saved when Don't track what I've heard is on)
 - 2026-11-04: Free music tab: a Clear recent searches button (shown only when there are recent searches) removes the search suggestions, with Undo
+- 2026-11-05: Free music tab: press D for a quick count in a message: how many songs are shown, how many you have played and how many you have kept (listed in the shortcuts card)
