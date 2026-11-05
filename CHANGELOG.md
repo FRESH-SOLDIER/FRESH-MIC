@@ -409,3 +409,4 @@
 - 2026-11-05: The keyboard shortcuts card (press ?) has a Filter shortcuts box: type a word such as volume or copy and only the matching shortcuts show; it clears when the card closes
 - 2026-11-05: Free music tab: the playing song shows an Up next line (the title of the next song in the list) under its player; it moves along as songs change and goes away when you stop
 - 2026-11-05: Free music tab: the Up next line has a Play it now button that starts the next song (handy on a phone, with no keyboard)
+- 2026-11-05: Free music tab: the J message now also says what is up next (for example 'Up next: Song name'), and the shortcuts card describes it
