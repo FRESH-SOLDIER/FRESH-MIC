@@ -429,3 +429,4 @@
 - 2026-11-06: Free music tab: the kept-songs filter also matches the licence (for example type CC BY or public domain to see only those kept songs); the search box hint says so
 - 2026-11-06: Free music tab: with Show my kept songs on and something typed in the search box, Copy credits, Copy as links, Download credits and the CSV export now use only the kept songs that match (before: always all kept songs); with the box empty they still use all of them
 - 2026-11-06: Free music tab: with Show my kept songs on, the label above the search box changes from 'Search free music' to 'Filter your kept songs' (also read out by screen readers), and goes back when you turn it off
+- 2026-11-06: Free music tab: while the kept-songs filter has text in it, the Clear kept songs button says 'Clear all N kept songs (not just the matches)', so it is clear it removes every kept song (Undo still works)
