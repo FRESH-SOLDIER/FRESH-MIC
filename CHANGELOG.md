@@ -431,3 +431,4 @@
 - 2026-11-06: Free music tab: with Show my kept songs on, the label above the search box changes from 'Search free music' to 'Filter your kept songs' (also read out by screen readers), and goes back when you turn it off
 - 2026-11-06: Free music tab: while the kept-songs filter has text in it, the Clear kept songs button says 'Clear all N kept songs (not just the matches)', so it is clear it removes every kept song (Undo still works)
 - 2026-11-06: Free music tab: with Show my kept songs on, the first Order button reads 'Order kept' instead of 'Most popular' (it keeps your songs in the order you kept them), and goes back when you leave your kept songs
+- 2026-11-06: Free music tab: with Show my kept songs on, the controls that do not apply to your kept list (the licence chips, Hide songs I have played, Hide songs I have kept and Only added in the last year) are hidden, and F, H and X no longer do anything there; they come back when you leave your kept songs
