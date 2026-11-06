@@ -426,3 +426,4 @@
 - 2026-11-05: Free music tab: with Show my kept songs on, typing in the search box filters your kept songs by title or artist as you type (Enter does not search the Internet Archive then; Esc clears the box and shows them all again)
 - 2026-11-05: Free music tab: with Show my kept songs on, the search box placeholder changes to 'Filter your kept songs by title or artist' so the new filtering is easy to find, and goes back when you turn it off
 - 2026-11-05: Free music tab: when a search finds nothing, the message now names what you searched for and suggests a shorter word or a genre chip (before: 'Nothing to show. Try another word.')
+- 2026-11-06: Free music tab: the kept-songs filter also matches the licence (for example type CC BY or public domain to see only those kept songs); the search box hint says so
