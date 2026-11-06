@@ -436,3 +436,4 @@
 - 2026-11-06: Free music tab: with Show my kept songs on, the second Order button reads 'Newest kept' and shows the songs you kept most recently first (before it sorted kept songs by when they were added to the Internet Archive); it goes back to 'Newest added' when you leave your kept songs
 - 2026-11-06: Free music tab: the spreadsheet (CSV) download of your kept songs has a Kept on column with the day each song was kept (blank for songs kept before dates were saved)
 - 2026-11-06: Restoring from a backup now keeps the day each Free music song was kept (a malformed date is dropped)
+- 2026-11-06: Free music tab: with Show my kept songs on, the search box no longer offers your recent searches as suggestions (they do not apply to filtering kept songs); they come back with the search results
