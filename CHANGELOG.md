@@ -438,3 +438,4 @@
 - 2026-11-06: Restoring from a backup now keeps the day each Free music song was kept (a malformed date is dropped)
 - 2026-11-06: Free music tab: with Show my kept songs on, the search box no longer offers your recent searches as suggestions (they do not apply to filtering kept songs); they come back with the search results
 - 2026-11-10: Artist About box now shows friendly facts from MusicBrainz (who they are, where from, born or formed, style) for 59 artists so far, with a MusicBrainz credit in the box and footer. Facts are fetched ahead of time by tools/mb_fetch.py (exact Deezer id match, 1 request per 1.1 s) so visitors make no calls to MusicBrainz; coverage grows each hourly round. Owner approved after MetaBrainz replied that free use is fine with attribution.
+- 2026-11-10: More MusicBrainz artist facts: 179 artists now have who/where/born or formed/style in their About box (next rounds keep extending).
