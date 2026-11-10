@@ -34,3 +34,8 @@ Music data and similarity come from Deezer; this site is non-commercial because 
 - Always show the licence name linked to the official creativecommons.org page (built in code from the matched pattern, never copied from the data) and a link to the Internet Archive source page. Keep the "Before you reuse a song" notice and Copy credit.
 - All uploader-supplied text is inserted with textContent only. Identifiers are validated before use in URLs.
 - Do not add downloads, accounts or other sources without the owner's decision. Say plainly that the licence is declared by the uploader.
+
+## MusicBrainz artist facts (owner approved 2026-11-10)
+- MetaBrainz (MusicBrainz) said by email (2026-11-06) that using their data free is fine for a small project, with attribution and polite rate limits (stealth-startup account suggested). If income ever reaches about $500 per YEAR, the owner should contact them to agree on support.
+- Facts are fetched ahead of time by `python3 tools/mb_fetch.py N` (one request per 1.1 s, identifying User-Agent, resumable cache `src/mb_cache.json`) and matched by exact Deezer artist id. Visitors' browsers never call MusicBrainz.
+- Keep the MusicBrainz credit in the footer and under each About box. Never match artists by name alone.

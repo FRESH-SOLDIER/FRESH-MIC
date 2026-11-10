@@ -6,6 +6,12 @@ t = open('src/template.html').read()
 d = open('src/data.json').read()
 if SITE['embed']:
     d = '{"embed":true,' + d[1:]   # live site plays Deezer previews in the page
+import os
+if os.path.exists('src/mb_cache.json'):
+    # friendly artist facts from MusicBrainz (fetched ahead of time by tools/mb_fetch.py, so visitors make no calls to MusicBrainz)
+    _c = json.load(open('src/mb_cache.json'))
+    _mb = {k: [v['m'], v['t'] or '', v['c'] or '', v['b'] or '', v['y'], v['z'], v['g']] for k, v in _c.items() if v}
+    d = '{"mb":' + json.dumps(_mb, separators=(',', ':'), ensure_ascii=False) + ',' + d[1:]
 i = t.index('</style>') + len('</style>')
 head, body = t[:i], t[i:]
 ld = json.dumps({"@context": "https://schema.org", "@type": "WebSite", "name": SITE['ld_name'], "url": SITE['url'], "description": SITE['desc'], "inLanguage": "en"})

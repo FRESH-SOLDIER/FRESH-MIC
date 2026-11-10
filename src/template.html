@@ -264,6 +264,7 @@ body.hasmini{padding-bottom:70px}body.hasmini .top{bottom:calc(max(16px,env(safe
 .name{font:700 1.08rem/1.2 var(--f-body);overflow-wrap:anywhere}
 .why{color:var(--muted);font-size:.86rem;margin-top:2px;text-wrap:pretty}
 .fans{font:500 .86rem var(--f-data);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.mbcredit{margin:6px 0 0;font-size:.78rem;color:var(--muted)}.mbcredit a{color:inherit;text-decoration:underline}
 .fans small{display:block;color:var(--muted);font-weight:400;font-size:.7rem}
 .legend{margin:8px 0 14px;font-size:.82rem;color:var(--muted)}
 .sw{grid-column:2 / 4;display:flex;align-items:center;gap:10px;margin-top:8px}
@@ -614,6 +615,7 @@ ul.res.grid .player{margin-inline:12px}
   <button class="top" id="top" type="button" aria-label="Back to top" hidden>↑</button>
 
   <footer class="foot">
+    <span>Artist facts (who they are, where they are from, their style) come from <a href="https://musicbrainz.org/" target="_blank" rel="noopener">MusicBrainz</a>, a free community music database.</span>
     <span>Similarity and release data come from Deezer. The Free music tab streams openly licensed music from the Internet Archive. Fan counts are Deezer followers as of the snapshot date below, so an artist can be bigger elsewhere. A new release here may be missing if Deezer has not listed it.</span>
     <span id="snap"></span>
     <span>Your shortlist, notes and settings stay only in this browser. <button type="button" class="linkbtn" id="erasebtn">Erase everything saved here</button></span>
@@ -994,12 +996,26 @@ const G = /*DATA*/;
   $('mrep').addEventListener('click',()=>{ ui.rep=!ui.rep; saveUi(); $('mrep').setAttribute('aria-pressed',!!ui.rep); toast(ui.rep?'Repeat on: this preview plays again when it ends.':'Repeat off.') });
   $('mauto').addEventListener('click',()=>{ auto=!auto; ui.auto=auto; saveUi(); const ab=$('autobtn'); if(ab) ab.setAttribute('aria-pressed',auto); showMini(); toast(auto?'Autoplay on: the next artist\u2019s preview starts when one ends.':'Autoplay off.') });
   $('hopback').addEventListener('click',()=>{ if(hops.length) history.back() });
+  const MB=G.mb||{};
+  const cap1=s=>s.charAt(0).toUpperCase()+s.slice(1);
+  // Friendly facts from MusicBrainz (embedded at build time). Returns the MusicBrainz id when this artist has facts, else ''.
+  function mbRows(id,row){
+    const m=MB[id]; if(!m) return '';
+    const type=m[1], country=m[2], place=m[3], y=m[4], z=m[5], gen=m[6]||[];
+    const person=type==='Person', group=type==='Group'||type==='Orchestra'||type==='Choir';
+    row('Who',person?'A solo artist':group?'A band or group':type==='Character'?'A character':'');
+    row('From',place&&country&&place!==country?place+', '+country:(country||place));
+    if(y) row(person?'Born':group?'Formed':'Active',person?y:group?y+(z?' (split up in '+z+')':''):y+(z?' to '+z:' onwards'));
+    row('Style',gen.length?cap1(gen.join(', ')):'');
+    return m[0];
+  }
   let fanSorted=null, genreFans=null;
   function renderAbout(k){
     const box=$('about'); if(k>=0&&box.dataset.k===String(k)&&NOW&&NOW.li===box) return; box.dataset.k=String(k); box.textContent=''; if(k<0){ box.hidden=true; return }
     const a=N[k], r=RI.get(k), f=a[2]; box.hidden=false;
     const h=document.createElement('h3'); h.textContent='About '+a[1]; box.appendChild(h);
     const dl=document.createElement('dl'); const row=(t,v)=>{ if(v==null||v==='') return; const dt=document.createElement('dt'), dd=document.createElement('dd'); dt.textContent=t; dd.textContent=v; dl.appendChild(dt); dl.appendChild(dd) };
+    const mbm=mbRows(a[0],row);
     const tier=f==null?'':f<5000?'Very small (under 5K fans)':f<25000?'Small (under 25K fans)':f<100000?'Growing (under 100K fans)':f<500000?'Established (under 500K fans)':'Big name (500K+ fans)';
     row('Size',f==null?'':fmt(f)+' fans on Deezer. '+tier);
     if(f!=null){ if(!fanSorted){ fanSorted=N.filter(n=>n&&n[2]!=null).map(n=>n[2]).sort((x,y)=>x-y) } let lo=0,hi=fanSorted.length; while(lo<hi){ const m=(lo+hi)>>1; if(fanSorted[m]<f) lo=m+1; else hi=m } const below=lo, tot=fanSorted.length; if(tot>1){ const pct=Math.round(below/tot*100); row('Compared with others','Has more fans than '+pct+'% of the '+tot.toLocaleString('en-US')+' artists on Fresh Mic.') } }
@@ -1015,6 +1031,7 @@ const G = /*DATA*/;
     if(f!=null&&list.length>=2&&!list.includes(a[0])){ const fs=list.map(id=>{ const q=N.findIndex(z=>z[0]===id); return q<0?null:N[q][2] }).filter(v=>v!=null); if(fs.length>=2){ const sm=fs.filter(v=>v<f).length, bg=fs.filter(v=>v>f).length, eq=fs.length-sm-bg; row('Vs your shortlist','Bigger than '+sm+' of your '+fs.length+' saved artists'+(bg?', smaller than '+bg:'')+(eq?', same size as '+eq:'')) } }
     row('Similar artists',results.length+' found in this list');
     box.appendChild(dl);
+    if(mbm){ const cr=document.createElement('p'); cr.className='mbcredit'; cr.appendChild(document.createTextNode('The facts about who they are come from ')); const ma=document.createElement('a'); ma.href='https://musicbrainz.org/artist/'+mbm; ma.target='_blank'; ma.rel='noopener'; ma.textContent='MusicBrainz'; cr.appendChild(ma); cr.appendChild(document.createTextNode(', a free community music database.')); box.appendChild(cr) }
     { const others=list.filter(id=>id!==a[0]).map(id=>N.findIndex(q=>q[0]===id)).filter(q=>q>=0); if(others.length&&f!=null){ const wr=document.createElement('div'); wr.className='cmp'; wr.style.margin='8px 0'; const lb=document.createElement('label'); lb.className='cap'; lb.textContent='Compare with a saved artist '; const sel=document.createElement('select'); sel.setAttribute('aria-label','Compare '+a[1]+' with a saved artist'); const o0=document.createElement('option'); o0.value=''; o0.textContent='Choose\u2026'; sel.appendChild(o0); others.forEach(q=>{ const op=document.createElement('option'); op.value=q; op.textContent=N[q][1]; sel.appendChild(op) }); lb.appendChild(sel); wr.appendChild(lb); const out=document.createElement('p'); out.className='why'; out.setAttribute('role','status'); out.setAttribute('aria-live','polite'); wr.appendChild(out);
       sel.addEventListener('change',()=>{ out.textContent=''; if(sel.value==='') return; const q=+sel.value, g=N[q][2]; if(g==null){ out.textContent='No fan count for '+N[q][1]+'.'; return } const rA=RI.get(k), rB=RI.get(q); const ratio=f>=g?f/Math.max(g,1):g/Math.max(f,1); const parts=[]; parts.push(Math.abs(f-g)/Math.max(f,g)<.05?a[1]+' and '+N[q][1]+' have about the same number of fans ('+fmt(f)+' and '+fmt(g)+').':(f>g?a[1]:N[q][1])+' has about '+(ratio>=10?Math.round(ratio):ratio.toFixed(1))+'x the fans of '+(f>g?N[q][1]:a[1])+' ('+fmt(Math.max(f,g))+' vs '+fmt(Math.min(f,g))+').'); const la=rA&&rA[2], lb2=rB&&rB[2]; if(la&&lb2&&la!==lb2) parts.push((la>lb2?a[1]:N[q][1])+' released music more recently.'); const ga=rA&&gname(rA[1]), gb=rB&&gname(rB[1]); if(ga&&gb&&ga!=='Other'&&gb!=='Other') parts.push(ga===gb?'Both are '+ga+'.':a[1]+' is '+ga+', '+N[q][1]+' is '+gb+'.'); out.textContent=parts.join(' ') });
       box.appendChild(wr) } }
