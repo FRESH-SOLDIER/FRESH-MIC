@@ -440,3 +440,4 @@
 - 2026-11-10: Artist About box now shows friendly facts from MusicBrainz (who they are, where from, born or formed, style) for 59 artists so far, with a MusicBrainz credit in the box and footer. Facts are fetched ahead of time by tools/mb_fetch.py (exact Deezer id match, 1 request per 1.1 s) so visitors make no calls to MusicBrainz; coverage grows each hourly round. Owner approved after MetaBrainz replied that free use is fine with attribution.
 - 2026-11-10: More MusicBrainz artist facts: 179 artists now have who/where/born or formed/style in their About box (next rounds keep extending).
 - 2026-11-11: More MusicBrainz artist facts: 278 artists now have who/where/born or formed/style in their About box.
+- 2026-11-11: More MusicBrainz artist facts: 356 artists now have who/where/born or formed/style in their About box.
