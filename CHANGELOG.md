@@ -455,3 +455,4 @@
 - 2026-11-11: More MusicBrainz artist facts: 1861 artists now have who/where/born or formed/style in their About box.
 - 2026-11-11: More MusicBrainz artist facts: 1993 artists now have who/where/born or formed/style in their About box.
 - 2026-11-11: More MusicBrainz artist facts: 2049 artists now have who/where/born or formed/style in their About box.
+- 2026-11-11: More MusicBrainz artist facts: 2126 artists now have who/where/born or formed/style in their About box.
